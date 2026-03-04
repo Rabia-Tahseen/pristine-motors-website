@@ -1,19 +1,4 @@
-// =============================================================
-// HOW TO ADD YOUR REMAINING PRODUCT IMAGES:
-// =============================================================
-// 1. Place your image files in: src/assets/products/
-//    Name them: part-7.jpeg, part-8.jpeg, ... part-53.jpeg
-//
-// 2. Add an import line at the top of this file for each image:
-//    import part7 from "@/assets/products/part-7.jpeg";
-//
-// 3. In the products array below, update the `image` field:
-//    image: part7,
-//
-// 4. For products that don't have an image yet, they use
-//    a placeholder. Just replace the `image` field once you
-//    add the file.
-// =============================================================
+
 
 import part1 from "@/assets/products/part-1.jpeg";
 import part2 from "@/assets/products/part-2.jpeg";
