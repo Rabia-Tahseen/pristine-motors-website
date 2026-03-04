@@ -25,18 +25,19 @@ const RequestPart = () => {
   };
 
   const inputClass =
-    "w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all font-body text-sm";
+    "w-full bg-background border border-border/50 rounded-xl px-4 py-3.5 text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-all font-body text-sm";
 
   return (
-    <main className="pt-24 pb-20 bg-background min-h-screen">
+    <main className="pt-28 pb-24 bg-background min-h-screen">
       <div className="section-container max-w-2xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground">Request a Part</h1>
-          <p className="mt-3 text-muted-foreground text-lg">
+          <p className="text-accent text-xs font-body uppercase tracking-[0.2em] mb-4">Custom Request</p>
+          <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground section-heading">Request a Part</h1>
+          <p className="mt-6 text-muted-foreground text-base font-body">
             Can't find what you need? Tell us what part you're looking for and we'll source it for you.
           </p>
         </motion.div>
@@ -46,7 +47,7 @@ const RequestPart = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-card p-8 space-y-5"
+          className="glass-card p-8 md:p-10 space-y-5"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <input placeholder="Your Name *" className={inputClass} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />

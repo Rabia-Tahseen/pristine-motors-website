@@ -2,21 +2,25 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const Footer = () => (
-  <footer className="gradient-navy py-16">
+  <footer className="gradient-navy py-20 relative">
+    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
     <div className="section-container">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-14">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <img src={logo} alt="Pristine Auto Hub" className="h-10 w-auto" />
-            <h3 className="font-display text-xl font-bold text-cream">Pristine Auto Hub</h3>
+          <div className="flex items-center gap-3 mb-5">
+            <img src={logo} alt="Pristine Auto Hub" className="h-12 w-auto" />
+            <div className="flex flex-col leading-none">
+              <span className="font-display text-lg font-bold text-cream">Pristine</span>
+              <span className="text-[10px] font-body uppercase tracking-[0.2em] text-gold">Auto Hub</span>
+            </div>
           </div>
-          <p className="text-cream/60 text-sm leading-relaxed max-w-xs">
-            Your trusted source for genuine Japanese auto parts. Toyota, Daihatsu & more — quality you can rely on.
+          <p className="text-cream/50 text-sm leading-relaxed max-w-xs font-body">
+            Your trusted source for genuine Japanese auto parts. Quality you can rely on, prices you'll love.
           </p>
         </div>
         <div>
-          <h4 className="font-display font-semibold text-cream mb-4">Quick Links</h4>
-          <div className="flex flex-col gap-2">
+          <h4 className="font-body font-semibold text-cream text-sm uppercase tracking-wider mb-5">Quick Links</h4>
+          <div className="flex flex-col gap-3">
             {[
               { label: "Home", to: "/" },
               { label: "All Parts", to: "/parts" },
@@ -24,25 +28,25 @@ const Footer = () => (
               { label: "About", to: "/about" },
               { label: "Contact", to: "/contact" },
             ].map((l) => (
-              <Link key={l.to} to={l.to} className="text-cream/60 hover:text-cream text-sm transition-colors">
+              <Link key={l.to} to={l.to} className="text-cream/50 hover:text-gold text-sm transition-colors duration-300 font-body">
                 {l.label}
               </Link>
             ))}
           </div>
         </div>
         <div>
-          <h4 className="font-display font-semibold text-cream mb-4">Connect</h4>
-          <div className="flex gap-4">
+          <h4 className="font-body font-semibold text-cream text-sm uppercase tracking-wider mb-5">Connect With Us</h4>
+          <div className="flex flex-col gap-3">
             {["Facebook", "Instagram", "WhatsApp"].map((s) => (
-              <a key={s} href="#" className="text-cream/60 hover:text-cream text-sm transition-colors">
+              <a key={s} href="#" className="text-cream/50 hover:text-gold text-sm transition-colors duration-300 font-body">
                 {s}
               </a>
             ))}
           </div>
         </div>
       </div>
-      <div className="mt-12 pt-8 border-t border-cream/10 text-center">
-        <p className="text-cream/40 text-xs">© 2025 Pristine Auto Hub. Est. 2025. All rights reserved.</p>
+      <div className="mt-16 pt-8 border-t border-cream/10 text-center">
+        <p className="text-cream/30 text-xs font-body">© 2025 Pristine Auto Hub. All rights reserved.</p>
       </div>
     </div>
   </footer>

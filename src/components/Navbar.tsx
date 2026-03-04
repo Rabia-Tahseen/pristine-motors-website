@@ -27,22 +27,41 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "gradient-navy shadow-lg" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-navy-dark/95 backdrop-blur-xl shadow-[0_4px_30px_hsl(220_65%_18%/0.3)]"
+          : "bg-transparent"
       }`}
     >
       <div className="section-container flex items-center justify-between h-16 md:h-20">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Pristine Auto Hub" className="h-10 md:h-14 w-auto" />
-          <span className="font-display text-lg md:text-xl font-bold text-cream tracking-tight">
-            Pristine<span className="text-cream-dark"> Auto Hub</span>
-          </span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <img
+            src={logo}
+            alt="Pristine Auto Hub"
+            className="h-9 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="flex flex-col leading-none">
+            <span className="font-display text-base md:text-lg font-bold text-cream tracking-tight">
+              Pristine
+            </span>
+            <span className="text-[10px] md:text-xs font-body uppercase tracking-[0.2em] text-gold">
+              Auto Hub
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop nav */}
+        <div className="hidden lg:flex items-center gap-10">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} className="nav-link text-cream/90 hover:text-cream">
+            <Link
+              key={l.to}
+              to={l.to}
+              className={`nav-link transition-colors duration-300 ${
+                location.pathname === l.to
+                  ? "text-gold"
+                  : "text-cream/80 hover:text-cream"
+              }`}
+            >
               {l.label}
             </Link>
           ))}
@@ -51,27 +70,42 @@ const Navbar = () => {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-cream"
+          className="lg:hidden text-cream/90 hover:text-gold transition-colors"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - full screen overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden gradient-navy overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden fixed inset-0 top-16 bg-navy-dark/98 backdrop-blur-xl z-40"
           >
-            <div className="section-container py-4 flex flex-col gap-4">
-              {links.map((l) => (
-                <Link key={l.to} to={l.to} className="text-cream/90 hover:text-cream font-display text-lg">
-                  {l.label}
-                </Link>
+            <div className="flex flex-col items-center justify-center h-full gap-8 -mt-16">
+              {links.map((l, i) => (
+                <motion.div
+                  key={l.to}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.08 }}
+                >
+                  <Link
+                    to={l.to}
+                    className={`font-display text-2xl transition-colors duration-300 ${
+                      location.pathname === l.to
+                        ? "text-gold"
+                        : "text-cream/80 hover:text-cream"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </motion.div>
