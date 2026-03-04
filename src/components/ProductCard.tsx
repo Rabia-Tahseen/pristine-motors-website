@@ -13,10 +13,10 @@ const ProductCard = ({ product, index = 0 }: Props) => {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
     >
       <div className="product-card group">
-        <div className="overflow-hidden aspect-square bg-muted">
+        <div className="overflow-hidden aspect-square bg-muted rounded-t-2xl">
           <img
             src={product.image}
             alt={product.name}
@@ -29,14 +29,14 @@ const ProductCard = ({ product, index = 0 }: Props) => {
             <h3 className="font-display font-semibold text-foreground text-lg leading-tight">
               {product.name}
             </h3>
-            <span className="font-display font-bold text-foreground">{product.price}</span>
           </div>
+          <p className="font-display font-bold text-primary text-lg">{product.price}</p>
           <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
             {product.description}
           </p>
           <div className="flex items-center justify-between pt-1">
-            <span className={product.inStock ? "badge-in-stock" : "badge-out-of-stock"}>
-              {product.inStock ? "In Stock" : "Out of Stock"}
+            <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
+              {product.vehicle}
             </span>
             <Link
               to={`/parts/${product.id}`}

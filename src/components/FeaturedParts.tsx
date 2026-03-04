@@ -1,9 +1,12 @@
 import { products } from "@/data/products";
 import ProductCard from "./ProductCard";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const FeaturedParts = () => {
-  const featured = products.slice(0, 3);
+  // Show first 3 products that have real images (not placeholder)
+  const featured = products.filter((p) => !p.image.includes("placeholder")).slice(0, 3);
+  const fallback = featured.length < 3 ? products.slice(0, 3) : featured;
 
   return (
     <section className="py-20 md:py-28 bg-background">
@@ -18,14 +21,18 @@ const FeaturedParts = () => {
             Featured Parts
           </h2>
           <p className="mt-3 text-muted-foreground text-lg max-w-xl mx-auto">
-            Handpicked performance parts trusted by professionals and enthusiasts alike.
+            Genuine auto parts for Toyota Raize, Daihatsu Mira, Daihatsu Taft and more.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featured.map((p, i) => (
+          {fallback.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Link to="/parts" className="btn-primary">View All Parts</Link>
         </div>
       </div>
     </section>

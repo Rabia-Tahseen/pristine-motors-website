@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import Index from "./pages/Index";
 import AllParts from "./pages/AllParts";
 import ProductDetails from "./pages/ProductDetails";
-import Cars from "./pages/Cars";
+import RequestPart from "./pages/RequestPart";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -26,7 +26,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/parts" element={<AllParts />} />
           <Route path="/parts/:id" element={<ProductDetails />} />
-          <Route path="/cars" element={<Cars />} />
+          <Route path="/request-part" element={<RequestPart />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
