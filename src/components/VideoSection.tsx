@@ -10,10 +10,10 @@ const VideoSection = () => (
         className="text-center mb-12"
       >
         <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-          See Us in Action
+          Our Product Showcase
         </h2>
         <p className="mt-3 text-muted-foreground text-lg">
-          Watch how our parts perform under real-world conditions.
+          Watch our complete collection of genuine auto parts with pricing.
         </p>
       </motion.div>
 
@@ -24,14 +24,16 @@ const VideoSection = () => (
         className="max-w-4xl mx-auto rounded-2xl overflow-hidden"
         style={{ boxShadow: "var(--shadow-card-hover)" }}
       >
-        <div className="aspect-video">
-          <iframe
-            className="w-full h-full"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-            title="Pristine Motors video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+        <div className="aspect-video bg-muted">
+          <video
+            className="w-full h-full object-cover"
+            controls
+            playsInline
+            preload="metadata"
+          >
+            <source src="/videos/showcase.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
       </motion.div>
     </div>

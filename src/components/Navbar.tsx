@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const links = [
   { label: "Home", to: "/" },
   { label: "Parts", to: "/parts" },
-  { label: "Cars", to: "/cars" },
+  { label: "Request a Part", to: "/request-part" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
@@ -31,8 +32,11 @@ const Navbar = () => {
       }`}
     >
       <div className="section-container flex items-center justify-between h-16 md:h-20">
-        <Link to="/" className="font-display text-xl md:text-2xl font-bold text-cream tracking-tight">
-          Pristine<span className="text-cream-dark">Motors</span>
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="Pristine Auto Hub" className="h-10 md:h-14 w-auto" />
+          <span className="font-display text-lg md:text-xl font-bold text-cream tracking-tight">
+            Pristine<span className="text-cream-dark"> Auto Hub</span>
+          </span>
         </Link>
 
         {/* Desktop */}
