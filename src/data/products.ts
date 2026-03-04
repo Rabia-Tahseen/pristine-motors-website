@@ -54,6 +54,11 @@ import part51 from "@/assets/products/part-51.jpeg";
 import part52 from "@/assets/products/part-52.jpeg";
 import part53 from "@/assets/products/part-53.jpeg";
 
+// Create a dynamic array for all 53 product images
+const images = Array.from({ length: 53 }, (_, i) =>
+  require(`@/assets/products/part-${i + 1}.jpeg`)
+);
+
 export interface Product {
   id: string;
   name: string;
@@ -87,8 +92,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "3 minor dents",
     inStock: true,
-    image: part1,
-    images: [part1, part3, part4, part5, part6, part7, part8],
+    image: images[0],           // part1
+    images: images.slice(0, 8), // part1 to part8
     price: "Rs. 95,000",
     vehicle: "Toyota Raize",
   },
@@ -99,8 +104,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "Good",
     inStock: true,
-    image: part27,
-    images: [part27, part24, part25],
+    image: images[26],          // part27
+    images: [images[26], images[23], images[24]], // part27, part24, part25
     price: "Rs. 35,000",
     vehicle: "Toyota Raize",
   },
@@ -111,7 +116,7 @@ export const products: Product[] = [
     category: "Interior",
     condition: "Excellent",
     inStock: true,
-    image: part2,
+    image: images[1],           // part2
     price: "Rs. 25,000",
     vehicle: "Toyota Raize",
   },
@@ -122,8 +127,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "Good",
     inStock: true,
-    image: part17,
-    images: [part17, part16, part15],
+    image: images[16],          // part17
+    images: [images[16], images[15], images[14]], // part17, part16, part15
     price: "Rs. 65,000",
     vehicle: "Toyota Raize",
   },
@@ -134,8 +139,8 @@ export const products: Product[] = [
     category: "Bumpers",
     condition: "Good",
     inStock: true,
-    image: part20,
-    images: [part20, part18],
+    image: images[19],          // part20
+    images: [images[19], images[17]], // part20, part18
     price: "Rs. 28,000",
     vehicle: "Toyota Raize",
   },
@@ -146,8 +151,8 @@ export const products: Product[] = [
     category: "Lighting",
     condition: "Good",
     inStock: true,
-    image: part9,
-    images: [part9, part10],
+    image: images[8],           // part9
+    images: [images[8], images[9]], // part9, part10
     price: "Rs. 25,000",
     vehicle: "Toyota Raize",
   },
@@ -158,8 +163,8 @@ export const products: Product[] = [
     category: "Lighting",
     condition: "Good",
     inStock: true,
-    image: part19,
-    images: [part19, part23, part21, part22],
+    image: images[18],          // part19
+    images: [images[18], images[22], images[20], images[21]], // part19, part23, part21, part22
     price: "Rs. 35,000",
     vehicle: "Toyota Raize",
   },
@@ -170,8 +175,8 @@ export const products: Product[] = [
     category: "Bumpers",
     condition: "Good",
     inStock: true,
-    image: part26,
-    images: [part26, part30],
+    image: images[25],          // part26
+    images: [images[25], images[29]], // part26, part30
     price: "Rs. 25,000",
     vehicle: "Daihatsu Mira",
   },
@@ -182,8 +187,8 @@ export const products: Product[] = [
     category: "Mirrors",
     condition: "Good",
     inStock: true,
-    image: part12,
-    images: [part12, part13, part14],
+    image: images[11],          // part12
+    images: [images[11], images[12], images[13]], // part12, part13, part14
     price: "Rs. 18,000",
     vehicle: "Daihatsu Mira",
   },
@@ -194,8 +199,8 @@ export const products: Product[] = [
     category: "Lighting",
     condition: "Good",
     inStock: true,
-    image: part32,
-    images: [part32, part36, part34],
+    image: images[31],          // part32
+    images: [images[31], images[35], images[33]], // part32, part36, part34
     price: "Rs. 20,000",
     vehicle: "Daihatsu Mira",
   },
@@ -206,8 +211,8 @@ export const products: Product[] = [
     category: "Lighting",
     condition: "Good",
     inStock: true,
-    image: part33,
-    images: [part33, part31],
+    image: images[32],          // part33
+    images: [images[32], images[30]], // part33, part31
     price: "Rs. 20,000",
     vehicle: "Daihatsu Mira",
   },
@@ -218,8 +223,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "Good",
     inStock: true,
-    image: part28,
-    images: [part28, part29],
+    image: images[27],          // part28
+    images: [images[27], images[28]], // part28, part29
     price: "Rs. 55,000",
     vehicle: "Daihatsu Mira",
   },
@@ -230,8 +235,8 @@ export const products: Product[] = [
     category: "Lighting",
     condition: "Good",
     inStock: true,
-    image: part44,
-    images: [part44, part42, part43],
+    image: images[43],          // part44
+    images: [images[43], images[41], images[42]], // part44, part42, part43
     price: "Rs. 25,000",
     vehicle: "Daihatsu Mira",
   },
@@ -242,8 +247,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "Good",
     inStock: true,
-    image: part37,
-    images: [part37, part38, part40, part41],
+    image: images[36],          // part37
+    images: [images[36], images[37], images[39], images[40]], // part37, part38, part40, part41
     price: "Rs. 45,000",
     vehicle: "Daihatsu Mira",
   },
@@ -254,8 +259,8 @@ export const products: Product[] = [
     category: "Nose Cut",
     condition: "Good",
     inStock: true,
-    image: part46,
-    images: [part46, part45, part49],
+    image: images[45],          // part46
+    images: [images[45], images[44], images[48]], // part46, part45, part49
     price: "Rs. 75,000",
     vehicle: "Daihatsu Mira",
   },
@@ -266,8 +271,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "Good",
     inStock: true,
-    image: part35,
-    images: [part35, part39],
+    image: images[34],          // part35
+    images: [images[34], images[38]], // part35, part39
     price: "Rs. 55,000",
     vehicle: "Daihatsu Taft",
   },
@@ -278,8 +283,8 @@ export const products: Product[] = [
     category: "Bumpers",
     condition: "Good",
     inStock: true,
-    image: part47,
-    images: [part47, part48, part51],
+    image: images[46],          // part47
+    images: [images[46], images[47], images[50]], // part47, part48, part51
     price: "Rs. 35,000",
     vehicle: "Daihatsu Taft",
   },
@@ -290,8 +295,8 @@ export const products: Product[] = [
     category: "Body Parts",
     condition: "Good",
     inStock: true,
-    image: part50,
-    images: [part50, part52, part53],
+    image: images[49],          // part50
+    images: [images[49], images[51], images[52]], // part50, part52, part53
     price: "Rs. 35,000",
     vehicle: "Daihatsu Taft",
   },
