@@ -16,8 +16,8 @@ const Hero = () => {
       />
       
       {/* Multi-layer gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/90 via-navy/60 to-navy-dark/95" />
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/40 via-transparent to-navy-dark/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/70 via-navy/30 to-navy-dark/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/20 via-transparent to-navy-dark/20" />
       
       {/* Decorative gold line */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
