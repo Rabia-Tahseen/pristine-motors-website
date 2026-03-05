@@ -19,7 +19,7 @@ const FeaturedParts = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <p className="text-accent text-xs font-body uppercase tracking-[0.2em] mb-4">Our Catalog</p>
+          <p className="text-gold-dark text-xs font-body uppercase tracking-[0.2em] mb-4">Our Catalog</p>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground section-heading">
             Featured Parts
           </h2>

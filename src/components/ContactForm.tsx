@@ -28,7 +28,7 @@ const ContactForm = () => {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <p className="text-accent text-xs font-body uppercase tracking-[0.2em] mb-4">Contact Us</p>
+          <p className="text-gold-dark text-xs font-body uppercase tracking-[0.2em] mb-4">Contact Us</p>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground section-heading">Get in Touch</h2>
           <p className="mt-6 text-muted-foreground text-base font-body">
             Need a specific part? Send us a message and we'll help you find it.

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import heroBg from "@/assets/products/part-1.jpeg";
+import heroBg from "@/assets/hero-parts.png";
 
 const Hero = () => {
   return (
