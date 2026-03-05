@@ -12,6 +12,7 @@ import RequestPart from "./pages/RequestPart";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 const queryClient = new QueryClient();
 
