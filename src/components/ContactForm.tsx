@@ -14,7 +14,9 @@ const ContactForm = () => {
       toast.error("Please fill in Name, Email, and Message.");
       return;
     }
-    toast.success("Message sent! We'll get back to you shortly.");
+    const msg = `Name: ${form.name}%0APhone: ${form.phone}%0AEmail: ${form.email}%0APart: ${form.partRequired}%0AMessage: ${form.message}`;
+    window.open(`${WHATSAPP_LINK}?text=${msg}`, "_blank");
+    toast.success("Opening WhatsApp...");
     setForm({ name: "", phone: "", email: "", partRequired: "", message: "" });
   };
 

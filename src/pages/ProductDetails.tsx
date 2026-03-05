@@ -93,12 +93,17 @@ const ProductDetails = () => {
               ))}
             </div>
 
-            <button
-              onClick={() => toast.success("Request submitted! We'll contact you shortly.")}
-              className="btn-primary mt-10 self-start"
+            <motion.a
+              href={`${WHATSAPP_LINK}?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name} (${product.vehicle}) - ${product.price}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary mt-10 self-start inline-flex items-center gap-2"
             >
+              <MessageCircle size={18} />
               Request This Part
-            </button>
+            </motion.a>
           </motion.div>
         </div>
       </div>

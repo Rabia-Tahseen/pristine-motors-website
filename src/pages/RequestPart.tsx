@@ -23,7 +23,9 @@ const RequestPart = () => {
       toast.error("Please fill in Name, Phone, and Part Name.");
       return;
     }
-    toast.success("Part request submitted! We'll get back to you within 24 hours.");
+    const msg = `Name: ${form.name}%0APhone: ${form.phone}%0AEmail: ${form.email}%0AVehicle: ${form.vehicleMake} ${form.vehicleModel} ${form.vehicleYear}%0APart: ${form.partName}%0ADetails: ${form.details}`;
+    window.open(`${WHATSAPP_LINK}?text=${msg}`, "_blank");
+    toast.success("Opening WhatsApp...");
     setForm({ name: "", phone: "", email: "", vehicleMake: "", vehicleModel: "", vehicleYear: "", partName: "", details: "" });
   };
 
