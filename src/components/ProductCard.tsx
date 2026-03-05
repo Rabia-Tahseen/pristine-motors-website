@@ -18,14 +18,14 @@ const ProductCard = ({ product, index = 0 }: Props) => {
       transition={{ duration: 0.5, delay: index * 0.06 }}
     >
       <div className="product-card group cursor-pointer">
-        <div className="overflow-hidden aspect-[4/3] bg-muted relative">
+        <div className="overflow-hidden aspect-[4/3] bg-muted relative group/img">
           <img
             src={product.image}
             alt={product.name}
-            className={`product-image w-full h-full ${isPlaceholder ? 'object-contain p-8 opacity-30' : 'object-cover'}`}
+            className={`product-image w-full h-full transition-transform duration-500 group-hover/img:scale-110 ${isPlaceholder ? 'object-contain p-8 opacity-30' : 'object-cover'}`}
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-350" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-350" />
           <span className="absolute top-3 left-3 text-[10px] font-body font-semibold uppercase tracking-wider bg-navy-dark/80 backdrop-blur-sm text-cream/90 px-3 py-1.5 rounded-lg">
             {product.vehicle}
           </span>

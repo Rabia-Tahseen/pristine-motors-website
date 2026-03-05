@@ -65,7 +65,7 @@ const Hero = () => {
           <Link to="/parts" className="btn-primary text-sm md:text-base">
             Browse All Parts
           </Link>
-          <Link to="/request-part" className="btn-outline text-sm md:text-base">
+          <Link to="/request-part" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm uppercase tracking-wider font-body bg-[#1a3a8a] text-cream hover:bg-[#2250b8] hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl border border-white/10">
             Request a Part
           </Link>
         </motion.div>

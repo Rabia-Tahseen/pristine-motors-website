@@ -57,7 +57,7 @@ const RequestPart = () => {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2.5 mt-6 px-6 py-3 rounded-xl bg-[#25D366] text-white font-body font-semibold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl hover:bg-[#20bd5a] transition-all duration-300"
+            className="inline-flex items-center gap-2.5 mt-6 px-6 py-3 rounded-xl bg-[#25D366] text-white font-body font-semibold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl hover:bg-[#20bd5a] transition-all duration-300 hover:-translate-y-0.5"
           >
             <MessageCircle size={18} />
             Or message us on WhatsApp
