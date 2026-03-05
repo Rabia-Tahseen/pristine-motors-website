@@ -16,8 +16,8 @@ const Hero = () => {
       />
       
       {/* Multi-layer gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/90 via-navy/60 to-navy-dark/95" />
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/40 via-transparent to-navy-dark/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-navy-dark/70 via-navy/30 to-navy-dark/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/20 via-transparent to-navy-dark/20" />
       
       {/* Decorative gold line */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
@@ -65,7 +65,7 @@ const Hero = () => {
           <Link to="/parts" className="btn-primary text-sm md:text-base">
             Browse All Parts
           </Link>
-          <Link to="/request-part" className="btn-outline text-sm md:text-base">
+          <Link to="/request-part" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm uppercase tracking-wider font-body bg-[#1a3a8a] text-cream hover:bg-[#2250b8] hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl border border-white/10">
             Request a Part
           </Link>
         </motion.div>
