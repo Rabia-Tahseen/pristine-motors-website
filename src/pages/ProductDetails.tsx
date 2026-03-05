@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { products } from "@/data/products";
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, MessageCircle } from "lucide-react";
+
+const WHATSAPP_LINK = "https://wa.me/1234567890"; // Replace with actual owner's WhatsApp number
 
 const ProductDetails = () => {
   const { id } = useParams();
