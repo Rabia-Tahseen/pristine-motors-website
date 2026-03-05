@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { products } from "@/data/products";
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, MessageCircle } from "lucide-react";
+
+const WHATSAPP_LINK = "https://wa.me/1234567890"; // Replace with actual owner's WhatsApp number
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -92,12 +93,17 @@ const ProductDetails = () => {
               ))}
             </div>
 
-            <button
-              onClick={() => toast.success("Request submitted! We'll contact you shortly.")}
-              className="btn-primary mt-10 self-start"
+            <motion.a
+              href={`${WHATSAPP_LINK}?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name} (${product.vehicle}) - ${product.price}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary mt-10 self-start inline-flex items-center gap-2"
             >
+              <MessageCircle size={18} />
               Request This Part
-            </button>
+            </motion.a>
           </motion.div>
         </div>
       </div>
