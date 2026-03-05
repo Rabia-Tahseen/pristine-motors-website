@@ -35,7 +35,7 @@ const RequestPart = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-14"
         >
-          <p className="text-accent text-xs font-body uppercase tracking-[0.2em] mb-4">Custom Request</p>
+          <p className="text-gold-dark text-xs font-body uppercase tracking-[0.2em] mb-4">Custom Request</p>
           <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground section-heading">Request a Part</h1>
           <p className="mt-6 text-muted-foreground text-base font-body">
             Can't find what you need? Tell us what part you're looking for and we'll source it for you.
