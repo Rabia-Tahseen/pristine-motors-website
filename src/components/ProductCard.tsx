@@ -25,9 +25,7 @@ const ProductCard = ({ product, index = 0 }: Props) => {
             className={`product-image w-full h-full ${isPlaceholder ? 'object-contain p-8 opacity-30' : 'object-cover'}`}
             loading="lazy"
           />
-          {/* Hover overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-350" />
-          {/* Vehicle badge */}
           <span className="absolute top-3 left-3 text-[10px] font-body font-semibold uppercase tracking-wider bg-navy-dark/80 backdrop-blur-sm text-cream/90 px-3 py-1.5 rounded-lg">
             {product.vehicle}
           </span>
@@ -46,7 +44,7 @@ const ProductCard = ({ product, index = 0 }: Props) => {
             </span>
             <Link
               to={`/parts/${product.id}`}
-              className="text-sm font-body font-semibold text-accent hover:text-accent/80 transition-colors uppercase tracking-wider"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-body font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:bg-navy-light hover:scale-105 active:scale-95 transition-all duration-300 shadow-sm hover:shadow-md"
             >
               Details →
             </Link>
