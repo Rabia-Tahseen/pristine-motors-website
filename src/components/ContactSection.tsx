@@ -7,6 +7,7 @@ const CALL_NUMBER = "+92 301 3917380";
 const ContactSection = () => (
   <section id="contact" className="py-16 bg-background">
     <div className="section-container max-w-3xl">
+      {/* Section heading */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -21,7 +22,9 @@ const ContactSection = () => (
         </p>
       </motion.div>
 
+      {/* Contact cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* WhatsApp */}
         <motion.a
           href={`https://wa.me/${WHATSAPP_NUMBER}`}
           target="_blank"
@@ -39,6 +42,7 @@ const ContactSection = () => (
           <span className="text-muted-foreground text-xs font-body">+92 321 9454136</span>
         </motion.a>
 
+        {/* Call */}
         <motion.a
           href={`tel:${CALL_NUMBER.replace(/\s/g, "")}`}
           initial={{ opacity: 0, y: 15 }}
@@ -54,6 +58,7 @@ const ContactSection = () => (
           <span className="text-muted-foreground text-xs font-body">{CALL_NUMBER}</span>
         </motion.a>
 
+        {/* Email */}
         <motion.a
           href="mailto:hamzanaveed1@gmail.com"
           initial={{ opacity: 0, y: 15 }}
@@ -66,7 +71,7 @@ const ContactSection = () => (
             <Mail size={24} className="text-foreground" />
           </div>
           <span className="font-semibold text-foreground font-body text-sm">Email</span>
-          <span className="text-muted-foreground text-xs font-body">Coming Soon</span>
+          <span className="text-muted-foreground text-xs font-body">hamzanaveed1@gmail.com</span>
         </motion.a>
       </div>
     </div>
