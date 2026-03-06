@@ -27,22 +27,25 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background ${
-        scrolled ? "shadow-md" : ""
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 
+      bg-[#0A1F44]/80 backdrop-blur-md border-b border-white/10 ${
+        scrolled ? "shadow-lg" : ""
       }`}
     >
       <div className="section-container flex items-center justify-between h-16">
+
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
           <img
             src={logo}
             alt="Pristine Auto Hub"
-            className="h-10 w-10 rounded-full object-cover border-2 border-border transition-transform duration-300 group-hover:scale-105"
+            className="h-10 w-10 rounded-full object-cover border-2 border-white/20 transition-transform duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col leading-none">
-            <span className="font-display text-lg font-bold text-foreground">
+            <span className="font-display text-lg font-bold text-white">
               Pristine
             </span>
-            <span className="text-[10px] font-body text-muted-foreground uppercase tracking-[0.15em]">
+            <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">
               Auto Hub
             </span>
           </div>
@@ -54,10 +57,10 @@ const Navbar = () => {
             <Link
               key={l.to}
               to={l.to}
-              className={`nav-link transition-colors duration-200 ${
+              className={`transition-colors duration-200 ${
                 location.pathname === l.to
-                  ? "text-primary font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "text-white font-semibold"
+                  : "text-white/80 hover:text-blue-300"
               }`}
             >
               {l.label}
@@ -68,7 +71,7 @@ const Navbar = () => {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden text-foreground hover:text-primary transition-colors"
+          className="lg:hidden text-white hover:text-blue-300 transition-colors"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -83,7 +86,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden bg-background border-t border-border overflow-hidden"
+            className="lg:hidden bg-[#0A1F44]/95 backdrop-blur-md border-t border-white/10 overflow-hidden"
           >
             <div className="section-container py-4 flex flex-col gap-1">
               {links.map((l) => (
@@ -92,8 +95,8 @@ const Navbar = () => {
                   to={l.to}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                     location.pathname === l.to
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? "bg-blue-500/20 text-white"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {l.label}
