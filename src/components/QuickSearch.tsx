@@ -53,7 +53,7 @@ const QuickSearch = () => {
             />
 
             <input
-              placeholder="Search by part name, vehicle, category, color..."
+              placeholder="Search by part name, vehicle, color..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full border-2 border-gray-300 rounded-lg pl-11 pr-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-body text-sm bg-white shadow-sm"
