@@ -16,11 +16,10 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
-  // Close mobile menu on route change
   const handleLinkClick = () => setMobileOpen(false);
 
   return (
-    <nav className="bg-[#0A1F44] border-b border-white/10">
+    <nav className="bg-[#1D2A55] border-b border-white/10">
       <div className="section-container flex items-center justify-between h-16">
 
         {/* Logo */}
@@ -75,7 +74,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden bg-[#0A1F44] border-t border-white/10 overflow-hidden"
+            className="lg:hidden bg-[#1D2A55] border-t border-white/10 overflow-hidden"
           >
             <div className="section-container py-4 flex flex-col gap-1">
               {links.map((l) => (
