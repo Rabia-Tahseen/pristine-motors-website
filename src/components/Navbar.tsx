@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,25 +13,14 @@ const links = [
 ];
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => setMobileOpen(false), [location]);
+  // Close mobile menu on route change
+  const handleLinkClick = () => setMobileOpen(false);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 
-      bg-[#0A1F44]/80 backdrop-blur-md border-b border-white/10 ${
-        scrolled ? "shadow-lg" : ""
-      }`}
-    >
+    <nav className="bg-[#0A1F44] border-b border-white/10">
       <div className="section-container flex items-center justify-between h-16">
 
         {/* Logo */}
@@ -57,10 +46,10 @@ const Navbar = () => {
             <Link
               key={l.to}
               to={l.to}
-              className={`transition-colors duration-200 ${
+              className={`text-white font-medium transition-all duration-200 ${
                 location.pathname === l.to
-                  ? "text-white font-semibold"
-                  : "text-white/80 hover:text-blue-300"
+                  ? "underline"
+                  : "hover:underline"
               }`}
             >
               {l.label}
@@ -71,7 +60,7 @@ const Navbar = () => {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden text-white hover:text-blue-300 transition-colors"
+          className="lg:hidden text-white hover:text-gray-300 transition-colors"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -86,17 +75,18 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden bg-[#0A1F44]/95 backdrop-blur-md border-t border-white/10 overflow-hidden"
+            className="lg:hidden bg-[#0A1F44] border-t border-white/10 overflow-hidden"
           >
             <div className="section-container py-4 flex flex-col gap-1">
               {links.map((l) => (
                 <Link
                   key={l.to}
                   to={l.to}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  onClick={handleLinkClick}
+                  className={`px-4 py-3 rounded-lg text-sm font-medium text-white transition-all duration-200 ${
                     location.pathname === l.to
-                      ? "bg-blue-500/20 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                      ? "underline"
+                      : "hover:underline hover:bg-white/10"
                   }`}
                 >
                   {l.label}
