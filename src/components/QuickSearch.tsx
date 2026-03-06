@@ -1,45 +1,59 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import type { Product } from "@/data/products";
 
-const QuickSearch = () => {
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
+interface Props {
+  product: Product;
+  index?: number;
+}
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      navigate(`/parts?search=${encodeURIComponent(query.trim())}`);
-    }
-  };
+const ProductCard = ({ product, index = 0 }: Props) => (
+  <motion.div
+    initial={{ opacity: 0, y: 15 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.3, delay: index * 0.04 }}
+  >
+    <div className="product-card group h-full flex flex-col">
 
-  return (
-    <section className="py-8 bg-background">
-      <div className="section-container">
-        <motion.form
-          onSubmit={handleSearch}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          className="flex gap-3 max-w-2xl mx-auto"
-        >
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-            <input
-              placeholder="Search by part name, vehicle, category..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
-            />
-          </div>
-          <button type="submit" className="btn-primary">
-            Search
-          </button>
-        </motion.form>
+      {/* Image */}
+      <div className="overflow-hidden aspect-[4/3] rounded-t-lg relative">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+
+        <span className="absolute top-2 left-2 text-[10px] font-medium bg-background/90 backdrop-blur-sm text-foreground px-2 py-0.5 rounded">
+          {product.vehicle}
+        </span>
       </div>
-    </section>
-  );
-};
 
-export default QuickSearch;
+      {/* Content */}
+      <div className="p-3 flex flex-col flex-1">
+        <h3 className="font-semibold text-sm text-foreground mb-1 leading-tight">
+          {product.name}
+        </h3>
+
+        <p className="text-muted-foreground text-xs line-clamp-2 mb-2 flex-1">
+          {product.description}
+        </p>
+
+        <div className="flex items-center justify-between mt-auto">
+          <p className="font-bold text-primary text-sm">{product.price}</p>
+
+          <Link
+            to={`/parts/${product.id}`}
+            className="btn-primary text-[11px] py-1.5 px-3"
+          >
+            View
+          </Link>
+        </div>
+      </div>
+
+    </div>
+  </motion.div>
+);
+
+export default ProductCard;
