@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { products } from "@/data/products";
 import { motion } from "framer-motion";
-import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 
 const WHATSAPP_NUMBER = "923219454136";
 const CALL_NUMBER = "+923013917380";
@@ -23,6 +23,9 @@ const ProductDetails = () => {
 
   const allImages = product.images?.length ? product.images : [product.image];
 
+  const prevImage = () => setSelectedImage((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  const nextImage = () => setSelectedImage((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
@@ -39,34 +42,32 @@ const ProductDetails = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
+            className="relative"
           >
-            {/* Main Image */}
-            <div className="rounded-xl overflow-hidden bg-muted border border-border max-h-[400px]">
+            <div className="rounded-xl overflow-hidden bg-muted border border-border max-h-[400px] relative">
               <img
                 src={allImages[selectedImage]}
                 alt={product.name}
                 className="w-full h-full object-contain"
               />
-            </div>
 
-            {/* Thumbnails */}
-            {allImages.length > 1 && (
-              <div className="flex gap-2 mt-4 overflow-x-auto pb-1">
-                {allImages.map((img, i) => (
+              {allImages.length > 1 && (
+                <>
                   <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === i
-                        ? "border-primary"
-                        : "border-border hover:border-primary/40"
-                    }`}
+                    onClick={prevImage}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/20 text-white rounded-full p-1 hover:bg-black/40 transition"
                   >
-                    <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
+                    <ChevronLeft size={20} />
                   </button>
-                ))}
-              </div>
-            )}
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/20 text-white rounded-full p-1 hover:bg-black/40 transition"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
+            </div>
           </motion.div>
 
           {/* Details Section */}
@@ -106,17 +107,17 @@ const ProductDetails = () => {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-whatsapp flex items-center gap-2 justify-center text-base py-3.5 px-6 w-full sm:w-auto"
+                className="flex items-center gap-2 justify-center px-4 py-2 border border-green-500 text-green-500 rounded-lg hover:bg-green-500 hover:text-white transition text-sm w-full sm:w-auto"
               >
-                <MessageCircle size={20} />
-                WhatsApp: +92 321 9454136
+                <MessageCircle size={18} />
+                +92 321 9454136
               </a>
               <a
                 href={`tel:${CALL_NUMBER.replace(/\s/g, "")}`}
-                className="btn-secondary flex items-center gap-2 justify-center text-base py-3.5 px-6 w-full sm:w-auto"
+                className="flex items-center gap-2 justify-center px-4 py-2 border border-blue-800 text-blue-800 rounded-lg hover:bg-blue-800 hover:text-white transition text-sm w-full sm:w-auto"
               >
-                <Phone size={20} />
-                Call: +92 301 3917380
+                <Phone size={18} />
+                +92 301 3917380
               </a>
             </div>
           </motion.div>
