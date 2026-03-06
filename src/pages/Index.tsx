@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import QuickSearch from "@/components/QuickSearch";
-import SuggestedCarousel from "@/components/SuggestedCarousel";
 import BrowseByCategory from "@/components/BrowseByCategory";
 import FeaturedCars from "@/components/FeaturedCars";
 import FeaturedParts from "@/components/FeaturedParts";
