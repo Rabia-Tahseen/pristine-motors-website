@@ -1,13 +1,18 @@
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
-import { ShieldCheck, Award, Clock } from "lucide-react";
+import { ShieldCheck, Truck, CheckCircle } from "lucide-react";
 
 const About = () => (
   <main className="pt-24 pb-20 bg-background min-h-screen">
     <div className="section-container max-w-3xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        {/* Logo and heading */}
         <div className="flex justify-center mb-8">
-          <img src={logo} alt="Pristine Auto Hub" className="h-20 w-20 rounded-full object-cover border-2 border-border" />
+          <img
+            src={logo}
+            alt="Pristine Auto Hub"
+            className="h-20 w-20 rounded-full object-cover border-2 border-border"
+          />
         </div>
         <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center">
           About Pristine Auto Hub
@@ -16,6 +21,7 @@ const About = () => (
           Est. 2025 — Genuine Japanese Auto Parts
         </p>
 
+        {/* About text */}
         <div className="mt-10 space-y-5 text-muted-foreground leading-relaxed font-body">
           <p>
             Established in 2025, Pristine Auto Hub is your trusted source for genuine Japanese auto parts in Pakistan.
@@ -30,16 +36,20 @@ const About = () => (
           </p>
         </div>
 
+        {/* Core strengths / genuine highlights */}
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { icon: ShieldCheck, label: "Parts Available", value: "50+" },
-            { icon: Award, label: "Happy Customers", value: "200+" },
-            { icon: Clock, label: "Established", value: "2025" },
+            { icon: ShieldCheck, label: "Trusted Source", description: "Genuine parts sourced directly from Japan." },
+            { icon: Truck, label: "Fast Shipping", description: "Quick delivery across Pakistan." },
+            { icon: CheckCircle, label: "Quality Assured", description: "Every part inspected and graded for condition." },
           ].map((s) => (
-            <div key={s.label} className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
+            <div
+              key={s.label}
+              className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:shadow-md transition-shadow"
+            >
               <s.icon size={24} className="text-primary mb-3" />
-              <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>
-              <p className="text-muted-foreground text-xs mt-1 font-body uppercase tracking-wider">{s.label}</p>
+              <p className="font-display text-lg font-semibold text-foreground text-center">{s.label}</p>
+              <p className="text-muted-foreground text-xs mt-1 font-body text-center">{s.description}</p>
             </div>
           ))}
         </div>
