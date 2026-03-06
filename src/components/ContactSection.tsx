@@ -55,7 +55,7 @@ const ContactSection = () => (
         </motion.a>
 
         <motion.a
-          href="mailto:contact@pristineautohub.com"
+          href="mailto:hamzanaveed1@gmail.com"
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
