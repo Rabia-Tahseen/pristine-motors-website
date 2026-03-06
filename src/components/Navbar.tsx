@@ -19,9 +19,8 @@ const Navbar = () => {
   const handleLinkClick = () => setMobileOpen(false);
 
   return (
-    <nav className="bg-[#1D2A55] border-b border-white/10">
+    <nav className="bg-[#1D2A55] border-b border-white/10 sticky top-0 z-50">
       <div className="section-container flex items-center justify-between h-16">
-
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
           <img
@@ -46,9 +45,7 @@ const Navbar = () => {
               key={l.to}
               to={l.to}
               className={`text-white font-medium transition-all duration-200 ${
-                location.pathname === l.to
-                  ? "underline"
-                  : "hover:underline"
+                location.pathname === l.to ? "underline" : "hover:underline"
               }`}
             >
               {l.label}
