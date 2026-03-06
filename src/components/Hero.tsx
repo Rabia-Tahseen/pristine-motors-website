@@ -31,7 +31,7 @@ const Hero = () => (
           <Car size={18} />
           Browse Cars
         </Link>
-        <Link to="/parts" className="btn-secondary text-base px-8 py-3.5">
+        <Link to="/parts" className="btn-primary text-base px-8 py-3.5">
           <Wrench size={18} />
           Browse Car Parts
         </Link>
