@@ -10,7 +10,6 @@ const Index = () => (
   <main>
     <Hero />
     <QuickSearch />
-    <SuggestedCarousel />
     <BrowseByCategory />
     <FeaturedCars />
     <FeaturedParts />
