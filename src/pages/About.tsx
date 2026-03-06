@@ -1,16 +1,22 @@
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
+import { ShieldCheck, Award, Clock } from "lucide-react";
 
 const About = () => (
-  <main className="pt-28 pb-24 bg-background min-h-screen">
+  <main className="pt-24 pb-20 bg-background min-h-screen">
     <div className="section-container max-w-3xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex justify-center mb-10">
-          <img src={logo} alt="Pristine Auto Hub" className="h-28 w-auto" />
+        <div className="flex justify-center mb-8">
+          <img src={logo} alt="Pristine Auto Hub" className="h-20 w-20 rounded-full object-cover border-2 border-border" />
         </div>
-        <p className="text-accent text-xs font-body uppercase tracking-[0.2em] mb-4 text-center">About Us</p>
-        <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground text-center section-heading">Pristine Auto Hub</h1>
-        <div className="mt-12 space-y-6 text-muted-foreground leading-relaxed font-body">
+        <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center">
+          About Pristine Auto Hub
+        </h1>
+        <p className="text-center text-muted-foreground text-sm font-body mt-2 uppercase tracking-wider">
+          Est. 2025 — Genuine Japanese Auto Parts
+        </p>
+
+        <div className="mt-10 space-y-5 text-muted-foreground leading-relaxed font-body">
           <p>
             Established in 2025, Pristine Auto Hub is your trusted source for genuine Japanese auto parts in Pakistan.
             We specialize in sourcing high-quality parts for Toyota Raize, Daihatsu Mira, Daihatsu Taft, and other popular Japanese vehicles.
@@ -20,19 +26,20 @@ const About = () => (
             We believe in transparency, fair pricing, and helping our customers find the exact part they need.
           </p>
           <p>
-            Can't find a part in our catalog? Use our "Request a Part" service and our team will source it for you.
+            We also deal in premium Japanese cars, providing reliable vehicles at competitive prices. Whether you need a part or a whole car, Pristine Auto Hub has you covered.
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { label: "Parts Available", value: "50+" },
-            { label: "Happy Customers", value: "200+" },
-            { label: "Established", value: "2025" },
+            { icon: ShieldCheck, label: "Parts Available", value: "50+" },
+            { icon: Award, label: "Happy Customers", value: "200+" },
+            { icon: Clock, label: "Established", value: "2025" },
           ].map((s) => (
-            <div key={s.label} className="glass-card p-8 text-center">
-              <p className="font-display text-3xl font-bold text-foreground">{s.value}</p>
-              <p className="text-muted-foreground text-sm mt-2 font-body uppercase tracking-wider">{s.label}</p>
+            <div key={s.label} className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:shadow-md transition-shadow">
+              <s.icon size={24} className="text-primary mb-3" />
+              <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>
+              <p className="text-muted-foreground text-xs mt-1 font-body uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </div>
