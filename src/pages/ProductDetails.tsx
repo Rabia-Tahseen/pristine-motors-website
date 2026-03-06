@@ -4,7 +4,7 @@ import { products } from "@/data/products";
 import { motion } from "framer-motion";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 
-const WHATSAPP_LINK = "https://wa.me/1234567890"; // Replace with actual owner's WhatsApp number
+const WHATSAPP_NUMBER = "923219454136";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -21,41 +21,37 @@ const ProductDetails = () => {
   }
 
   const allImages = product.images?.length ? product.images : [product.image];
-  const isPlaceholder = product.image.includes("placeholder");
 
   return (
-    <main className="pt-28 pb-24 bg-background min-h-screen">
+    <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
-        <Link to="/parts" className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors mb-10 font-body text-sm uppercase tracking-wider">
+        <Link to="/parts" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 font-body text-sm">
           <ArrowLeft size={16} /> Back to Parts
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
           >
-            <div
-              className="rounded-2xl overflow-hidden bg-muted aspect-square"
-              style={{ boxShadow: "var(--shadow-card-hover)" }}
-            >
+            <div className="rounded-xl overflow-hidden bg-muted aspect-square border border-border">
               <img
                 src={allImages[selectedImage]}
                 alt={product.name}
-                className={`w-full h-full ${isPlaceholder ? 'object-contain p-12 opacity-30' : 'object-cover'}`}
+                className="w-full h-full object-cover"
               />
             </div>
             {allImages.length > 1 && (
-              <div className="flex gap-3 mt-5 overflow-x-auto pb-2">
+              <div className="flex gap-2 mt-4 overflow-x-auto pb-1">
                 {allImages.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImage === i
-                        ? "border-accent shadow-md"
-                        : "border-border/50 hover:border-accent/50"
+                        ? "border-primary"
+                        : "border-border hover:border-primary/40"
                     }`}
                   >
                     <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
@@ -66,20 +62,20 @@ const ProductDetails = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
             className="flex flex-col justify-center"
           >
-            <span className="text-xs font-body font-semibold uppercase tracking-[0.15em] text-accent mb-3">
+            <span className="text-xs font-body font-medium text-muted-foreground mb-2">
               {product.vehicle}
             </span>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground leading-tight">{product.name}</h1>
-            <p className="text-3xl font-display font-bold text-accent mt-4">{product.price}</p>
-            <p className="mt-6 text-muted-foreground leading-relaxed font-body">{product.description}</p>
+            <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">{product.name}</h1>
+            <p className="text-2xl font-body font-bold text-primary mt-3">{product.price}</p>
+            <p className="mt-4 text-muted-foreground leading-relaxed font-body">{product.description}</p>
 
-            <div className="mt-8 glass-card p-6 space-y-4">
-              <h3 className="font-body font-semibold text-foreground text-sm uppercase tracking-wider mb-2">Details</h3>
+            <div className="mt-6 rounded-xl border border-border p-5 space-y-3">
+              <h3 className="font-body font-semibold text-foreground text-sm">Details</h3>
               {[
                 { label: "Category", value: product.category },
                 { label: "Condition", value: product.condition },
@@ -93,17 +89,15 @@ const ProductDetails = () => {
               ))}
             </div>
 
-            <motion.a
-              href={`${WHATSAPP_LINK}?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name} (${product.vehicle}) - ${product.price}`)}`}
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name} (${product.vehicle}) - ${product.price}`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary mt-10 self-start inline-flex items-center gap-2"
+              className="btn-whatsapp mt-8 self-start text-base py-3.5 px-8"
             >
-              <MessageCircle size={18} />
+              <MessageCircle size={20} />
               Request This Part
-            </motion.a>
+            </a>
           </motion.div>
         </div>
       </div>

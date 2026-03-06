@@ -11,6 +11,7 @@ import ProductDetails from "./pages/ProductDetails";
 import RequestPart from "./pages/RequestPart";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Cars from "./pages/Cars";
 import NotFound from "./pages/NotFound";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/request-part" element={<RequestPart />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cars" element={<Cars />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

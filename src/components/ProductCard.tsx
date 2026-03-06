@@ -7,52 +7,44 @@ interface Props {
   index?: number;
 }
 
-const ProductCard = ({ product, index = 0 }: Props) => {
-  const isPlaceholder = product.image.includes("placeholder");
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.06 }}
-    >
-      <div className="product-card group cursor-pointer">
-        <div className="overflow-hidden aspect-[4/3] bg-muted relative group/img">
-          <img
-            src={product.image}
-            alt={product.name}
-            className={`product-image w-full h-full transition-transform duration-500 group-hover/img:scale-110 ${isPlaceholder ? 'object-contain p-8 opacity-30' : 'object-cover'}`}
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-350" />
-          <span className="absolute top-3 left-3 text-[10px] font-body font-semibold uppercase tracking-wider bg-navy-dark/80 backdrop-blur-sm text-cream/90 px-3 py-1.5 rounded-lg">
-            {product.vehicle}
-          </span>
-        </div>
-        <div className="p-5 space-y-3">
-          <h3 className="font-display font-semibold text-foreground text-lg leading-tight group-hover:text-accent transition-colors duration-300">
-            {product.name}
-          </h3>
-          <p className="font-body font-bold text-accent text-xl">{product.price}</p>
-          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 font-body">
-            {product.description}
-          </p>
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-xs font-body font-medium text-muted-foreground bg-muted px-3 py-1.5 rounded-lg">
-              {product.category}
-            </span>
-            <Link
-              to={`/parts/${product.id}`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-body font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:bg-navy-light hover:scale-105 active:scale-95 transition-all duration-300 shadow-sm hover:shadow-md"
-            >
-              Details →
-            </Link>
-          </div>
+const ProductCard = ({ product, index = 0 }: Props) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.4, delay: index * 0.05 }}
+  >
+    <div className="product-card group h-full flex flex-col">
+      <div className="overflow-hidden aspect-[4/3] rounded-t-xl relative">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          loading="lazy"
+        />
+        <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
+          {product.vehicle}
+        </span>
+      </div>
+      <div className="p-4 flex flex-col flex-1">
+        <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1">
+          {product.name}
+        </h3>
+        <p className="text-muted-foreground text-sm font-body line-clamp-2 mb-3 flex-1">
+          {product.description}
+        </p>
+        <div className="flex items-center justify-between mt-auto">
+          <p className="font-body font-bold text-primary text-lg">{product.price}</p>
+          <Link
+            to={`/parts/${product.id}`}
+            className="btn-primary text-xs py-2 px-4"
+          >
+            View Details
+          </Link>
         </div>
       </div>
-    </motion.div>
-  );
-};
+    </div>
+  </motion.div>
+);
 
 export default ProductCard;

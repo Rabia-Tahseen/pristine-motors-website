@@ -1,12 +1,22 @@
 import Hero from "@/components/Hero";
+import QuickSearch from "@/components/QuickSearch";
+import SuggestedCarousel from "@/components/SuggestedCarousel";
+import BrowseByCategory from "@/components/BrowseByCategory";
+import FeaturedCars from "@/components/FeaturedCars";
 import FeaturedParts from "@/components/FeaturedParts";
-import ContactForm from "@/components/ContactForm";
+import TrustIndicators from "@/components/TrustIndicators";
+import ContactSection from "@/components/ContactSection";
 
 const Index = () => (
   <main>
     <Hero />
+    <QuickSearch />
+    <SuggestedCarousel />
+    <BrowseByCategory />
+    <FeaturedCars />
     <FeaturedParts />
-    <ContactForm />
+    <TrustIndicators />
+    <ContactSection />
   </main>
 );
 
