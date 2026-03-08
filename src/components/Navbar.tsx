@@ -26,7 +26,7 @@ const Navbar = () => {
           <img
             src={logo}
             alt="Pristine Auto Hub"
-            className="h-10 w-10 rounded-full object-cover border-2 border-white/20 transition-transform duration-300 group-hover:scale-105"
+            className="h-10 w-10 object-contain transition-transform duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col leading-none">
             <span className="font-display text-lg font-bold text-white">
