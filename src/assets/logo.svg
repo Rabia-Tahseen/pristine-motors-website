@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 175" width="130" height="175">
+  <defs>
+    <linearGradient id="navy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0C2258"/>
+      <stop offset="100%" stop-color="#1A3E8C"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A87C20"/>
+      <stop offset="50%" stop-color="#DFB84A"/>
+      <stop offset="100%" stop-color="#A87C20"/>
+    </linearGradient>
+    <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DFB84A"/>
+      <stop offset="100%" stop-color="#A87C20"/>
+    </linearGradient>
+    <linearGradient id="carShine" x1="0%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#B8CEF0"/>
+    </linearGradient>
+    <filter id="outerShadow" x="-18%" y="-10%" width="136%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#0B1F4B" flood-opacity="0.32"/>
+    </filter>
+    <filter id="innerGlow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#4A80E0" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- ── OUTER SHIELD ── -->
+  <path d="M65,4 L120,30 L120,100 Q120,142 65,162 Q10,142 10,100 L10,30 Z"
+    fill="url(#navy)" filter="url(#outerShadow)"/>
+
+  <!-- ── WHITE INSET RING ── -->
+  <path d="M65,11 L113,35 L113,99 Q113,137 65,155 Q17,137 17,99 L17,35 Z"
+    fill="#FFFFFF"/>
+
+  <!-- ── INNER NAVY FIELD ── -->
+  <path d="M65,18 L106,40 L106,98 Q106,132 65,148 Q24,132 24,98 L24,40 Z"
+    fill="url(#navy)" filter="url(#innerGlow)"/>
+
+  <!-- ══════ CAR ICON — top zone ══════ -->
+  <!-- Car body / chassis -->
+  <rect x="28" y="80" width="74" height="17" rx="6" fill="url(#carShine)"/>
+  <!-- Cabin / roof -->
+  <path d="M38,80 Q42,66 51,62 L79,62 Q88,66 92,80 Z" fill="url(#carShine)"/>
+  <!-- Windshield cutout (dark tint) -->
+  <path d="M43,80 Q46,69 53,66 L77,66 Q84,69 87,80 Z" fill="#0C2258" opacity="0.48"/>
+  <!-- Headlight strip -->
+  <rect x="28" y="81" width="11" height="5" rx="2.5" fill="url(#goldShine)" opacity="0.95"/>
+  <!-- Tail light strip -->
+  <rect x="91" y="81" width="11" height="5" rx="2.5" fill="url(#goldShine)" opacity="0.75"/>
+  <!-- Left wheel -->
+  <circle cx="42" cy="97" r="10" fill="#060E22" stroke="#FFFFFF" stroke-width="2.5"/>
+  <circle cx="42" cy="97" r="5"  fill="#FFFFFF" opacity="0.18"/>
+  <circle cx="42" cy="97" r="2"  fill="url(#goldShine)"/>
+  <!-- Wheel spokes left -->
+  <line x1="42" y1="90" x2="42" y2="104" stroke="#FFFFFF" stroke-width="1" opacity="0.25"/>
+  <line x1="35" y1="97" x2="49" y2="97" stroke="#FFFFFF" stroke-width="1" opacity="0.25"/>
+  <!-- Right wheel -->
+  <circle cx="88" cy="97" r="10" fill="#060E22" stroke="#FFFFFF" stroke-width="2.5"/>
+  <circle cx="88" cy="97" r="5"  fill="#FFFFFF" opacity="0.18"/>
+  <circle cx="88" cy="97" r="2"  fill="url(#goldShine)"/>
+  <!-- Wheel spokes right -->
+  <line x1="88" y1="90" x2="88" y2="104" stroke="#FFFFFF" stroke-width="1" opacity="0.25"/>
+  <line x1="81" y1="97" x2="95" y2="97" stroke="#FFFFFF" stroke-width="1" opacity="0.25"/>
+
+  <!-- ── GOLD DIVIDER ── -->
+  <line x1="26" y1="111" x2="104" y2="111" stroke="url(#gold)" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- ══════ GEAR ICON — bottom zone ══════ -->
+  <g transform="translate(65, 132)">
+    <!-- 8-tooth gear -->
+    <path d="
+      M-6,-19 L6,-19
+      L7.5,-13.5 Q12,-15.5 16,-12.5
+      L21,-15 L25.5,-7 L20,-4
+      Q22,0 21,4
+      L26,7 L22,15 L16.5,12.5
+      Q13,17 9,18.5
+      L9,24 L-1,24 L-1,18.5
+      Q-5,17 -9,12.5
+      L-14.5,15 L-19,7 L-13.5,4
+      Q-14.5,0 -13.5,-4
+      L-19,-7 L-14.5,-15 L-9,-12.5
+      Q-5,-15.5 0,-18 Z"
+      fill="url(#goldShine)" opacity="0.96"/>
+    <!-- Center hub circle -->
+    <circle cx="0" cy="0" r="8.5" fill="#0C2258"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="4" fill="url(#gold)" opacity="0.65"/>
+    <!-- Spoke lines on gear center -->
+    <line x1="0" y1="-7" x2="0" y2="7" stroke="#FFFFFF" stroke-width="1" opacity="0.2"/>
+    <line x1="-7" y1="0" x2="7" y2="0" stroke="#FFFFFF" stroke-width="1" opacity="0.2"/>
+  </g>
+
+  <!-- ── BOTTOM GOLD RULE ── -->
+  <line x1="10" y1="167" x2="120" y2="167" stroke="url(#gold)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- ── PAH MONOGRAM ── -->
+  <text x="65" y="175"
+    font-family="'Montserrat', 'Trebuchet MS', Arial, sans-serif"
+    font-size="8" font-weight="500" letter-spacing="6"
+    fill="#0C2258" text-anchor="middle">P A H</text>
+</svg>
