@@ -7,7 +7,7 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 rounded-full object-cover" />
+            <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 object-contain" />
             <div className="flex flex-col leading-none">
               <span className="font-display text-lg font-bold text-white">Pristine</span>
               <span className="text-[10px] font-body uppercase tracking-[0.15em] text-white/50">Auto Hub</span>
