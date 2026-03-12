@@ -12,17 +12,14 @@ interface Props {
 const ProductCard = ({ product, index = 0 }: Props) => {
   const { addToCart } = useCart();
 
-  const phoneNumber = "923001234567"; // replace with your WhatsApp number
-
+  const phoneNumber = "923219454136"; 
   const message = `Hello, I'm interested in this part:
 
 Name: ${product.name}
 Vehicle: ${product.vehicle}
-Price: ${product.price}
+Price: ${product.price};
 
-Is it available?`;
-
-  const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
     <motion.div
