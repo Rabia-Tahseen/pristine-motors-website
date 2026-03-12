@@ -3,23 +3,41 @@ import { motion } from "framer-motion";
 import { Car, Wrench } from "lucide-react";
 
 const Hero = () => (
-  <section className="relative pt-24 pb-12 bg-background overflow-hidden">
-    {/* Abstract pattern / geometric shapes */}
-    <div className="absolute inset-0 pointer-events-none">
-      {/* Example pattern 1: faint gear shapes */}
-      <svg className="absolute top-0 left-1/4 w-72 h-72 opacity-10" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="48" stroke="gray" strokeWidth="2" fill="none" />
-        <line x1="50" y1="2" x2="50" y2="98" stroke="gray" strokeWidth="1" />
-        <line x1="2" y1="50" x2="98" y2="50" stroke="gray" strokeWidth="1" />
-      </svg>
-      {/* Example pattern 2: diagonal lines */}
-      <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.02),rgba(0,0,0,0.02) 1px,transparent 1px,transparent 10px)]"></div>
-      {/* Example pattern 3: subtle car outline */}
-      <svg className="absolute bottom-0 right-0 w-64 h-32 opacity-5" viewBox="0 0 200 100" fill="none" stroke="gray" strokeWidth="2">
-        <path d="M10 70 Q30 10 90 40 Q140 60 190 40" />
-      </svg>
+  <section className="relative pt-28 pb-16 overflow-hidden bg-background">
+
+  {/* Premium gradient glow */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[900px] h-[500px] 
+    bg-blue-500/10 blur-[120px] rounded-full"></div>
+  </div>
+
+  {/* subtle grid pattern */}
+  <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+
+  <div className="section-container relative z-10 text-center">
+
+    <h1 className="font-display font-bold text-5xl md:text-6xl text-foreground">
+      Pristine
+    </h1>
+
+    <p className="mt-3 text-muted-foreground text-lg md:text-xl">
+      Premium Japanese Cars & Auto Parts
+    </p>
+
+    <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+      <Link to="/cars" className="btn-primary px-8 py-3.5 flex items-center gap-2">
+        <Car size={18} />
+        Browse Cars
+      </Link>
+
+      <Link to="/parts" className="btn-primary px-8 py-3.5 flex items-center gap-2">
+        <Wrench size={18} />
+        Browse Car Parts
+      </Link>
     </div>
 
+  </div>
+</section>
     {/* Main content */}
     <div className="section-container relative z-10 text-center">
       <motion.h1
