@@ -3,34 +3,33 @@ import { motion } from "framer-motion";
 import { Car, Wrench } from "lucide-react";
 
 const Hero = () => (
-  <section className="relative pt-28 pb-16 overflow-hidden bg-background">
+  <section className="relative pt-32 pb-24 overflow-hidden bg-background">
 
-    {/* Premium gradient glow */}
+    {/* soft gradient glow */}
     <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[900px] h-[500px] 
-      bg-blue-500/10 blur-[120px] rounded-full"></div>
+      <div className="absolute top-[-250px] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] 
+      bg-blue-500/15 blur-[140px] rounded-full"></div>
+
+      <div className="absolute bottom-[-200px] right-[-200px] w-[700px] h-[400px]
+      bg-indigo-500/10 blur-[120px] rounded-full"></div>
     </div>
 
-    {/* subtle grid pattern */}
-    <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:60px_60px]"></div>
-
-    {/* Main content */}
     <div className="section-container relative z-10 text-center">
 
       <motion.h1
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6 }}
         className="font-display font-bold text-5xl md:text-6xl text-foreground"
       >
         Pristine
       </motion.h1>
 
       <motion.p
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-3 text-muted-foreground text-lg md:text-xl"
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="mt-4 text-lg md:text-xl text-muted-foreground"
       >
         Premium Japanese Cars & Auto Parts
       </motion.p>
@@ -38,8 +37,8 @@ const Hero = () => (
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
       >
         <Link to="/cars" className="btn-primary px-8 py-3.5 flex items-center gap-2">
           <Car size={18} />
@@ -53,7 +52,6 @@ const Hero = () => (
       </motion.div>
 
     </div>
-
   </section>
 );
 
