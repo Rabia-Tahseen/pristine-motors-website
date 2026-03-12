@@ -5,14 +5,18 @@ import { Car, Wrench } from "lucide-react";
 const Hero = () => (
   <section className="relative pt-32 pb-24 overflow-hidden bg-background">
 
-    {/* soft gradient glow */}
-    <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute top-[-250px] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] 
-      bg-blue-500/15 blur-[140px] rounded-full"></div>
-
-      <div className="absolute bottom-[-200px] right-[-200px] w-[700px] h-[400px]
-      bg-indigo-500/10 blur-[120px] rounded-full"></div>
-    </div>
+    {/* car silhouette */}
+    <svg
+      className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[900px] opacity-[0.06]"
+      viewBox="0 0 800 200"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+    >
+      <path d="M50 120 Q150 30 350 80 Q550 120 750 70" />
+      <circle cx="250" cy="130" r="25" />
+      <circle cx="550" cy="130" r="25" />
+    </svg>
 
     <div className="section-container relative z-10 text-center">
 
