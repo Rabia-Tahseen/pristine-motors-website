@@ -11,8 +11,6 @@ const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 // EmailCard component
 const EmailCard = () => {
   const email = "hamzanaveed1@gmail.com";
-  const subject = "Hello";
-  const body = "Hi, I wanted to contact you regarding...";
 
   const gmailDesktop = `https://mail.google.com/mail/?view=cm&to=${email}&su=${encodeURIComponent(
     subject
