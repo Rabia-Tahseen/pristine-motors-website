@@ -2,23 +2,19 @@ import { motion } from "framer-motion";
 import { MessageCircle, Phone, Mail } from "lucide-react";
 
 // Contact numbers
+
 const WHATSAPP_NUMBER = "923219454136";
 const CALL_NUMBER = "+92 301 3917380";
 
 // Utility to detect mobile
 const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-// EmailCard component
 const EmailCard = () => {
   const email = "hamzanaveed1@gmail.com";
 
-  const gmailDesktop = `https://mail.google.com/mail/?view=cm&to=${email}&su=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
-
-  const gmailMobile = `googlegmail://co?to=${email}&subject=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
+  // Gmail links without subject/body
+  const gmailDesktop = `https://mail.google.com/mail/?view=cm&to=${email}`;
+  const gmailMobile = `googlegmail://co?to=${email}`;
 
   return (
     <motion.a
@@ -33,7 +29,7 @@ const EmailCard = () => {
       onClick={(e) => {
         if (isMobile()) {
           e.preventDefault();
-          window.location.href = gmailMobile; // open Gmail app
+          window.location.href = gmailMobile; // open Gmail app on mobile
         }
       }}
     >
@@ -45,6 +41,8 @@ const EmailCard = () => {
     </motion.a>
   );
 };
+
+export default EmailCard;
 
 // Main ContactSection component
 const ContactSection = () => (
