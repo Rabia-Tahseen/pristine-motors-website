@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "@/contexts/CartContext";
 import logo from "@/assets/logo.svg";
 
 const links = [
@@ -15,6 +16,7 @@ const links = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { totalItems } = useCart();
 
   const handleLinkClick = () => setMobileOpen(false);
 
@@ -51,16 +53,34 @@ const Navbar = () => {
               {l.label}
             </Link>
           ))}
+          <Link to="/cart" className="relative text-white hover:text-white/80 transition-colors">
+            <ShoppingCart size={22} />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-destructive text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            )}
+          </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden text-white hover:text-gray-300 transition-colors"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile right side */}
+        <div className="flex items-center gap-3 lg:hidden">
+          <Link to="/cart" className="relative text-white hover:text-white/80 transition-colors">
+            <ShoppingCart size={22} />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-destructive text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            )}
+          </Link>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="text-white hover:text-gray-300 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

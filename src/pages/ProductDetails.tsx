@@ -122,8 +122,17 @@ const ProductDetails = () => {
               ))}
             </div>
 
+            {/* Add to Cart */}
+            <button
+              onClick={() => addToCart(product)}
+              className="btn-primary w-full sm:w-auto mt-6 gap-2"
+            >
+              <ShoppingCart size={18} />
+              Add to Cart
+            </button>
+
             {/* Contact Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                   `Hi, I'm interested in: ${product.name} (${product.vehicle}) - ${product.price}`
