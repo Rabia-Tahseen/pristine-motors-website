@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, SlidersHorizontal, ArrowUpDown } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const categories = ["Lighting", "Bumper", "Interior", "Body Parts", "Mirrors", "Nose Cut"];
 
@@ -26,11 +26,9 @@ const QuickSearch = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!query.trim() && selectedCategories.length === 0) return; // prevent empty search
+    if (!query.trim() && selectedCategories.length === 0) return;
 
     const params = new URLSearchParams();
-
     if (query.trim()) params.append("search", query.trim());
     if (selectedCategories.length > 0) params.append("category", selectedCategories.join(","));
     if (sortOption) params.append("sort", sortOption);
@@ -43,15 +41,10 @@ const QuickSearch = () => {
       <div className="section-container">
 
         {/* Search Row */}
-        <div className="flex flex-wrap gap-2 max-w-3xl mx-auto items-center">
+        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 max-w-4xl mx-auto">
 
-          <motion.form
-            onSubmit={handleSearch}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-1 gap-2 min-w-[250px]"
-          >
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="flex flex-1 gap-2 min-w-[250px]">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input
@@ -61,84 +54,97 @@ const QuickSearch = () => {
                 className="w-full border rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
               />
             </div>
-
             <button
               type="submit"
               className="bg-[#0A1F44] text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm"
             >
               Search
             </button>
-          </motion.form>
+          </form>
 
-          {/* Filter Button */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setShowFilters(!showFilters);
-                setShowSort(false);
-              }}
-              className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
-            >
-              <SlidersHorizontal size={16} /> Filter
-            </button>
+          {/* Filter & Sort Buttons */}
+          <div className="flex gap-2 relative">
 
-            {showFilters && (
-              <div className="absolute mt-1 bg-white border rounded-lg shadow-md p-2 flex flex-wrap gap-2 z-10">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => toggleCategory(cat)}
-                    className={`px-3 py-1.5 rounded-full border text-sm transition ${
-                      selectedCategories.includes(cat)
-                        ? "bg-[#0A1F44] text-white border-[#0A1F44]"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                    }`}
+            {/* Filter */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowFilters(!showFilters);
+                  setShowSort(false);
+                }}
+                className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
+              >
+                <SlidersHorizontal size={16} /> Filter
+              </button>
+
+              <AnimatePresence>
+                {showFilters && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20"
                   >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+                    {categories.map((cat, idx) => (
+                      <div key={cat}>
+                        <button
+                          onClick={() => toggleCategory(cat)}
+                          className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
+                            selectedCategories.includes(cat) ? "bg-blue-50" : ""
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                        {idx < categories.length - 1 && <hr className="border-gray-200" />}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-          {/* Sort Button */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setShowSort(!showSort);
-                setShowFilters(false);
-              }}
-              className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
-            >
-              <ArrowUpDown size={16} /> Sort
-            </button>
+            {/* Sort */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowSort(!showSort);
+                  setShowFilters(false);
+                }}
+                className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
+              >
+                <ArrowUpDown size={16} /> Sort
+              </button>
 
-            {showSort && (
-              <div className="absolute mt-1 bg-white border rounded-lg shadow-md p-2 z-10">
-                <button
-                  onClick={() => {
-                    setSortOption("price-low");
-                    setShowSort(false);
-                  }}
-                  className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-100 ${
-                    sortOption === "price-low" ? "bg-blue-100" : ""
-                  }`}
-                >
-                  Price: Low → High
-                </button>
-                <button
-                  onClick={() => {
-                    setSortOption("price-high");
-                    setShowSort(false);
-                  }}
-                  className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-100 ${
-                    sortOption === "price-high" ? "bg-blue-100" : ""
-                  }`}
-                >
-                  Price: High → Low
-                </button>
-              </div>
-            )}
+              <AnimatePresence>
+                {showSort && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20"
+                  >
+                    <button
+                      onClick={() => { setSortOption("price-low"); setShowSort(false); }}
+                      className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
+                        sortOption === "price-low" ? "bg-blue-50" : ""
+                      }`}
+                    >
+                      Price: Low → High
+                    </button>
+                    <hr className="border-gray-200" />
+                    <button
+                      onClick={() => { setSortOption("price-high"); setShowSort(false); }}
+                      className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
+                        sortOption === "price-high" ? "bg-blue-50" : ""
+                      }`}
+                    >
+                      Price: High → Low
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
           </div>
         </div>
 
