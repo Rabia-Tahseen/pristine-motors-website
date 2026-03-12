@@ -38,10 +38,13 @@ const QuickSearch = () => {
       <div className="section-container max-w-4xl mx-auto">
 
         {/* Search Row */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-center">
 
           {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex flex-1 gap-2 min-w-[200px]">
+          <form 
+            onSubmit={handleSearch} 
+            className="flex flex-1 max-w-2xl gap-2"
+          >
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input
@@ -74,7 +77,7 @@ const QuickSearch = () => {
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
-                  className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20"
+                  className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20 sm:left-0 left-auto right-0"
                 >
                   {categories.map((cat, idx) => (
                     <div key={cat}>
