@@ -60,10 +60,9 @@ const ContactSection = () => (
 
         {/* Email */}
         {/* Email */}
+{/* Email */}
 <motion.a
-  href="https://mail.google.com/mail/?view=cm&fs=1&to=hamzanaveed1@gmail.com"
-  target="_blank"
-  rel="noopener noreferrer"
+  href="mailto:hamzanaveed1@gmail.com"
   initial={{ opacity: 0, y: 15 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
