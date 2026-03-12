@@ -12,6 +12,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
+  const { addToCart } = useCart();
 
   if (!product) {
     return (
