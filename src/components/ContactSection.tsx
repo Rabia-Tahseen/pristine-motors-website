@@ -60,19 +60,27 @@ const ContactSection = () => (
 
         {/* Email */}
         <motion.a
-          href="mailto:hamzanaveed1@gmail.com"
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.16 }}
-          className="flex flex-col items-center gap-3 p-6 rounded-xl bg-muted border border-border hover:bg-muted/80 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
-        >
-          <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
-            <Mail size={24} className="text-foreground" />
-          </div>
-          <span className="font-semibold text-foreground font-body text-sm">Email</span>
-          <span className="text-muted-foreground text-xs font-body">hamzanaveed1@gmail.com</span>
-        </motion.a>
+  href="https://mail.google.com/mail/?view=cm&fs=1&to=hamzanaveed1@gmail.com&su=Inquiry%20about%20car%20part&body=Hello%20Pristine%20Team,%0A%0AI%20am%20interested%20in%20the%20following%20car%20part:%20[Part%20Name]%0A%0APlease%20provide%20more%20details%20about%20availability%20and%20pricing.%0A%0AThank%20you."
+  target="_blank"
+  rel="noopener noreferrer"
+  initial={{ opacity: 0, y: 15 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ delay: 0.16 }}
+  className="flex flex-col items-center gap-3 p-6 rounded-xl bg-muted border border-border hover:bg-muted/80 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+>
+  <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
+    <Mail size={24} className="text-foreground" />
+  </div>
+
+  <span className="font-semibold text-foreground font-body text-sm">
+    Email
+  </span>
+
+  <span className="text-muted-foreground text-xs font-body">
+    hamzanaveed1@gmail.com
+  </span>
+</motion.a>
       </div>
     </div>
   </section>
