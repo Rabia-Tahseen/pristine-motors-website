@@ -26,21 +26,27 @@ const ContactSection = () => (
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* WhatsApp */}
         <motion.a
-          href={`https://wa.me/${WHATSAPP_NUMBER}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0 }}
-          className="flex flex-col items-center gap-3 p-6 rounded-xl bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/15 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
-        >
-          <div className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center">
-            <MessageCircle size={24} className="text-white" />
-          </div>
-          <span className="font-semibold text-foreground font-body text-sm">WhatsApp</span>
-          <span className="text-muted-foreground text-xs font-body">+92 321 9454136</span>
-        </motion.a>
+  href="https://mail.google.com/mail/?view=cm&fs=1&to=hamzanaveed1@gmail.com&su=Inquiry%20about%20cars%20or%20parts&body=Hello%20Pristine%20Team,%0A%0AI%20would%20like%20to%20ask%20about%20a%20car%20or%20auto%20part%20listed%20on%20your%20website.%0A%0APlease%20let%20me%20know%20the%20details.%0A%0AThank%20you."
+  target="_blank"
+  rel="noopener noreferrer"
+  initial={{ opacity: 0, y: 15 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ delay: 0.16 }}
+  className="flex flex-col items-center gap-3 p-6 rounded-xl bg-muted border border-border hover:bg-muted/80 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+>
+  <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
+    <Mail size={24} className="text-foreground" />
+  </div>
+
+  <span className="font-semibold text-foreground font-body text-sm">
+    Email
+  </span>
+
+  <span className="text-muted-foreground text-xs font-body">
+    hamzanaveed1@gmail.com
+  </span>
+</motion.a>
 
         {/* Call */}
         <motion.a
