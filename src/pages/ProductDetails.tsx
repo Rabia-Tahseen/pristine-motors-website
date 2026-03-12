@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { products } from "@/data/products";
 import { motion } from "framer-motion";
-import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const WHATSAPP_NUMBER = "923219454136";
 const CALL_NUMBER = "+923013917380";
@@ -11,6 +12,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
+  const { addToCart } = useCart();
 
   if (!product) {
     return (
@@ -120,8 +122,17 @@ const ProductDetails = () => {
               ))}
             </div>
 
+            {/* Add to Cart */}
+            <button
+              onClick={() => addToCart(product)}
+              className="btn-primary w-full sm:w-auto mt-6 gap-2"
+            >
+              <ShoppingCart size={18} />
+              Add to Cart
+            </button>
+
             {/* Contact Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                   `Hi, I'm interested in: ${product.name} (${product.vehicle}) - ${product.price}`
