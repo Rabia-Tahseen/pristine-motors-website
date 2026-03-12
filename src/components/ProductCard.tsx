@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, MessageCircle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import type { Product } from "@/data/products";
 
@@ -11,6 +11,18 @@ interface Props {
 
 const ProductCard = ({ product, index = 0 }: Props) => {
   const { addToCart } = useCart();
+
+  const phoneNumber = "923001234567"; // replace with your WhatsApp number
+
+  const message = `Hello, I'm interested in this part:
+
+Name: ${product.name}
+Vehicle: ${product.vehicle}
+Price: ${product.price}
+
+Is it available?`;
+
+  const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
     <motion.div
@@ -31,16 +43,24 @@ const ProductCard = ({ product, index = 0 }: Props) => {
             {product.vehicle}
           </span>
         </div>
+
         <div className="p-4 flex flex-col flex-1">
           <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1">
             {product.name}
           </h3>
+
           <p className="text-muted-foreground text-sm font-body line-clamp-2 mb-3 flex-1">
             {product.description}
           </p>
+
           <div className="flex items-center justify-between mt-auto gap-2">
-            <p className="font-body font-bold text-primary text-lg">{product.price}</p>
+            <p className="font-body font-bold text-primary text-lg">
+              {product.price}
+            </p>
+
             <div className="flex items-center gap-2">
+
+              {/* Add to cart */}
               <button
                 onClick={() => addToCart(product)}
                 className="p-2 rounded-lg border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
@@ -48,12 +68,26 @@ const ProductCard = ({ product, index = 0 }: Props) => {
               >
                 <ShoppingCart size={16} />
               </button>
+
+              {/* WhatsApp Button */}
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg border border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors"
+                aria-label="Chat on WhatsApp"
+              >
+                <MessageCircle size={16} />
+              </a>
+
+              {/* View Details */}
               <Link
                 to={`/parts/${product.id}`}
                 className="btn-primary text-xs py-2 px-4"
               >
                 View Details
               </Link>
+
             </div>
           </div>
         </div>
