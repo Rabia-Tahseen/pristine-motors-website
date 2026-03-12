@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, X, SlidersHorizontal, ArrowUpDown } from "lucide-react";
+import { Search, X, SlidersHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const categories = ["Lighting", "Bumper", "Interior", "Body Parts", "Mirrors", "Nose Cut"];
@@ -9,8 +9,6 @@ const QuickSearch = () => {
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
-  const [showSort, setShowSort] = useState(false);
-  const [sortOption, setSortOption] = useState("");
 
   const navigate = useNavigate();
 
@@ -31,17 +29,16 @@ const QuickSearch = () => {
     const params = new URLSearchParams();
     if (query.trim()) params.append("search", query.trim());
     if (selectedCategories.length > 0) params.append("category", selectedCategories.join(","));
-    if (sortOption) params.append("sort", sortOption);
 
     navigate(`/parts?${params.toString()}`);
   };
 
   return (
-    <section className="py-4 bg-background">
-      <div className="section-container">
+    <section className="py-6 md:py-10 bg-background">
+      <div className="section-container max-w-4xl mx-auto">
 
         {/* Search Row */}
-        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center gap-3">
 
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="flex flex-1 gap-2 min-w-[250px]">
@@ -62,16 +59,11 @@ const QuickSearch = () => {
             </button>
           </form>
 
-          {/* Filter & Sort Buttons */}
-          <div className="flex gap-2 relative">
-
-            {/* Filter */}
+          {/* Filter Button */}
+          <div className="flex gap-2 relative mt-2 md:mt-0">
             <div className="relative">
               <button
-                onClick={() => {
-                  setShowFilters(!showFilters);
-                  setShowSort(false);
-                }}
+                onClick={() => setShowFilters(!showFilters)}
                 className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
               >
                 <SlidersHorizontal size={16} /> Filter
@@ -80,9 +72,9 @@ const QuickSearch = () => {
               <AnimatePresence>
                 {showFilters && (
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    exit={{ opacity: 0, y: -5 }}
                     className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20"
                   >
                     {categories.map((cat, idx) => (
@@ -102,49 +94,6 @@ const QuickSearch = () => {
                 )}
               </AnimatePresence>
             </div>
-
-            {/* Sort */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowSort(!showSort);
-                  setShowFilters(false);
-                }}
-                className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
-              >
-                <ArrowUpDown size={16} /> Sort
-              </button>
-
-              <AnimatePresence>
-                {showSort && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20"
-                  >
-                    <button
-                      onClick={() => { setSortOption("price-low"); setShowSort(false); }}
-                      className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
-                        sortOption === "price-low" ? "bg-blue-50" : ""
-                      }`}
-                    >
-                      Price: Low → High
-                    </button>
-                    <hr className="border-gray-200" />
-                    <button
-                      onClick={() => { setSortOption("price-high"); setShowSort(false); }}
-                      className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
-                        sortOption === "price-high" ? "bg-blue-50" : ""
-                      }`}
-                    >
-                      Price: High → Low
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
           </div>
         </div>
 
