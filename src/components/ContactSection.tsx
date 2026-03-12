@@ -9,12 +9,13 @@ const CALL_NUMBER = "+92 301 3917380";
 const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // EmailCard (no export)
+// EmailCard (no export)
 const EmailCard = () => {
   const email = "hamzanaveed1@gmail.com";
 
-  // Gmail links
-  const gmailDesktop = `https://mail.google.com/mail/?view=cm&to=${email}`;
-  const gmailMobile = `googlegmail://co?to=${email}`;
+  // Links
+  const gmailDesktop = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`;
+  const mailtoLink = `mailto:${email}`;
 
   return (
     <motion.a
@@ -29,18 +30,24 @@ const EmailCard = () => {
       onClick={(e) => {
         if (isMobile()) {
           e.preventDefault();
-          window.location.href = gmailMobile;
+          window.location.href = mailtoLink; // opens phone mail composer
         }
       }}
     >
       <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
         <Mail size={24} className="text-foreground" />
       </div>
-      <span className="font-semibold text-foreground font-body text-sm">Email</span>
-      <span className="text-muted-foreground text-xs font-body">{email}</span>
+
+      <span className="font-semibold text-foreground font-body text-sm">
+        Email
+      </span>
+
+      <span className="text-muted-foreground text-xs font-body">
+        {email}
+      </span>
     </motion.a>
   );
-};
+};;
 
 // Main ContactSection (export only this)
 const ContactSection = () => (
