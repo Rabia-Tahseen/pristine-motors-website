@@ -1,9 +1,54 @@
 import { motion } from "framer-motion";
 import { MessageCircle, Phone, Mail } from "lucide-react";
 
+// Contact numbers
 const WHATSAPP_NUMBER = "923219454136";
 const CALL_NUMBER = "+92 301 3917380";
 
+// Utility to detect mobile
+const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+// EmailCard component
+const EmailCard = () => {
+  const email = "hamzanaveed1@gmail.com";
+  const subject = "Hello";
+  const body = "Hi, I wanted to contact you regarding...";
+
+  const gmailDesktop = `https://mail.google.com/mail/?view=cm&to=${email}&su=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;
+
+  const gmailMobile = `googlegmail://co?to=${email}&subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;
+
+  return (
+    <motion.a
+      href={gmailDesktop} // fallback for desktop
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.16 }}
+      className="flex flex-col items-center gap-3 p-6 rounded-xl bg-muted border border-border hover:bg-muted/80 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+      onClick={(e) => {
+        if (isMobile()) {
+          e.preventDefault();
+          window.location.href = gmailMobile; // open Gmail app
+        }
+      }}
+    >
+      <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
+        <Mail size={24} className="text-foreground" />
+      </div>
+      <span className="font-semibold text-foreground font-body text-sm">Email</span>
+      <span className="text-muted-foreground text-xs font-body">{email}</span>
+    </motion.a>
+  );
+};
+
+// Main ContactSection component
 const ContactSection = () => (
   <section id="contact" className="py-16 bg-background">
     <div className="section-container max-w-3xl">
@@ -57,57 +102,9 @@ const ContactSection = () => (
           <span className="font-semibold text-foreground font-body text-sm">Call Owner</span>
           <span className="text-muted-foreground text-xs font-body">{CALL_NUMBER}</span>
         </motion.a>
-import { Mail } from "lucide-react";
-import { motion } from "framer-motion";
 
-// Utility to detect mobile
-const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-const EmailCard = () => {
-  const email = "hamzanaveed1@gmail.com";
-  const subject = "Hello";
-  const body = "Hi, I wanted to contact you regarding...";
-
-  // Gmail URLs
-  const gmailDesktop = `https://mail.google.com/mail/?view=cm&to=${email}&su=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
-
-  const gmailMobile = `googlegmail://co?to=${email}&subject=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
-
-  return (
-    <motion.a
-      href={gmailDesktop} // fallback for desktop
-      target="_blank"
-      rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: 0.16 }}
-      className="flex flex-col items-center gap-3 p-6 rounded-xl bg-muted border border-border hover:bg-muted/80 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
-      onClick={(e) => {
-        if (isMobile()) {
-          e.preventDefault(); // prevent default mailto
-          window.location.href = gmailMobile; // open Gmail app
-        }
-      }}
-    >
-      <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
-        <Mail size={24} className="text-foreground" />
-      </div>
-
-      <span className="font-semibold text-foreground font-body text-sm">
-        Email
-      </span>
-
-      <span className="text-muted-foreground text-xs font-body">{email}</span>
-    </motion.a>
-  );
-};
-
-export default EmailCard;
+        {/* Email */}
+        <EmailCard />
       </div>
     </div>
   </section>
