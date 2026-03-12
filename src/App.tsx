@@ -22,6 +22,7 @@ import WhatsAppFloat from "@/components/WhatsAppFloat";
 const queryClient = new QueryClient();
 
 const App = () => (
+
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CartProvider>
