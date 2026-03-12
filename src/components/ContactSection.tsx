@@ -59,8 +59,9 @@ const ContactSection = () => (
         </motion.a>
 
         {/* Email */}
-        <motion.a
-  href="https://mail.google.com/mail/?view=cm&fs=1&to=hamzanaveed1@gmail.com&su=Inquiry%20about%20car%20part&body=Hello%20Pristine%20Team,%0A%0AI%20am%20interested%20in%20the%20following%20car%20part:%20[Part%20Name]%0A%0APlease%20provide%20more%20details%20about%20availability%20and%20pricing.%0A%0AThank%20you."
+        {/* Email */}
+<motion.a
+  href="https://mail.google.com/mail/?view=cm&fs=1&to=hamzanaveed1@gmail.com"
   target="_blank"
   rel="noopener noreferrer"
   initial={{ opacity: 0, y: 15 }}
