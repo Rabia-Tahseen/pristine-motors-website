@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { products } from "@/data/products";
 import { motion } from "framer-motion";
-import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const WHATSAPP_NUMBER = "923219454136";
 const CALL_NUMBER = "+923013917380";
