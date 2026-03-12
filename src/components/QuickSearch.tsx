@@ -3,14 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Search, X, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { motion } from "framer-motion";
 
-const categories = [
-  "Lighting",
-  "Bumper",
-  "Interior",
-  "Body Parts",
-  "Mirrors",
-  "Nose Cut",
-];
+const categories = ["Lighting", "Bumper", "Interior", "Body Parts", "Mirrors", "Nose Cut"];
 
 const QuickSearch = () => {
   const [query, setQuery] = useState("");
@@ -34,124 +27,124 @@ const QuickSearch = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!query.trim() && selectedCategories.length === 0) return; // prevent empty search
+
     const params = new URLSearchParams();
 
-    if (query.trim()) {
-      params.append("search", query.trim());
-    }
-
-    if (selectedCategories.length > 0) {
-      params.append("category", selectedCategories.join(","));
-    }
-
-    if (sortOption) {
-      params.append("sort", sortOption);
-    }
+    if (query.trim()) params.append("search", query.trim());
+    if (selectedCategories.length > 0) params.append("category", selectedCategories.join(","));
+    if (sortOption) params.append("sort", sortOption);
 
     navigate(`/parts?${params.toString()}`);
   };
 
   return (
-    <section className="py-8 bg-background">
+    <section className="py-4 bg-background">
       <div className="section-container">
 
         {/* Search Row */}
-        <div className="flex gap-3 max-w-3xl mx-auto items-center">
+        <div className="flex flex-wrap gap-2 max-w-3xl mx-auto items-center">
 
           <motion.form
             onSubmit={handleSearch}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex flex-1 gap-3"
+            className="flex flex-1 gap-2 min-w-[250px]"
           >
-
             <div className="relative flex-1">
-              <Search
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
-                size={18}
-              />
-
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               <input
-                placeholder="Search by part name or vehicle..."
+                placeholder="Search by part or vehicle..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full border-2 border-gray-300 rounded-lg pl-11 pr-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm bg-white shadow-sm"
+                className="w-full border rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
               />
             </div>
 
             <button
               type="submit"
-              className="bg-[#0A1F44] text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition"
+              className="bg-[#0A1F44] text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm"
             >
               Search
             </button>
-
           </motion.form>
 
           {/* Filter Button */}
-          <button
-            onClick={() => {
-              setShowFilters(!showFilters);
-              setShowSort(false);
-            }}
-            className="flex items-center gap-2 border px-4 py-3 rounded-lg hover:bg-gray-100"
-          >
-            <SlidersHorizontal size={18} />
-            Filter
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => {
+                setShowFilters(!showFilters);
+                setShowSort(false);
+              }}
+              className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
+            >
+              <SlidersHorizontal size={16} /> Filter
+            </button>
+
+            {showFilters && (
+              <div className="absolute mt-1 bg-white border rounded-lg shadow-md p-2 flex flex-wrap gap-2 z-10">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => toggleCategory(cat)}
+                    className={`px-3 py-1.5 rounded-full border text-sm transition ${
+                      selectedCategories.includes(cat)
+                        ? "bg-[#0A1F44] text-white border-[#0A1F44]"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Sort Button */}
-          <button
-            onClick={() => {
-              setShowSort(!showSort);
-              setShowFilters(false);
-            }}
-            className="flex items-center gap-2 border px-4 py-3 rounded-lg hover:bg-gray-100"
-          >
-            <ArrowUpDown size={18} />
-            Sort
-          </button>
-
-        </div>
-
-        {/* Filter Dropdown */}
-        {showFilters && (
-          <div className="flex flex-wrap gap-2 justify-center mt-6">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => toggleCategory(cat)}
-                className={`px-4 py-1.5 rounded-full border text-sm transition ${
-                  selectedCategories.includes(cat)
-                    ? "bg-[#0A1F44] text-white border-[#0A1F44]"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Sort Dropdown */}
-        {showSort && (
-          <div className="flex justify-center mt-6">
-            <select
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className="border px-4 py-2 rounded-lg"
+          <div className="relative">
+            <button
+              onClick={() => {
+                setShowSort(!showSort);
+                setShowFilters(false);
+              }}
+              className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
             >
-              <option value="">Sort</option>
-              <option value="price-low">Price: Lowest to Highest</option>
-              <option value="price-high">Price: Highest to Lowest</option>
-            </select>
+              <ArrowUpDown size={16} /> Sort
+            </button>
+
+            {showSort && (
+              <div className="absolute mt-1 bg-white border rounded-lg shadow-md p-2 z-10">
+                <button
+                  onClick={() => {
+                    setSortOption("price-low");
+                    setShowSort(false);
+                  }}
+                  className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-100 ${
+                    sortOption === "price-low" ? "bg-blue-100" : ""
+                  }`}
+                >
+                  Price: Low → High
+                </button>
+                <button
+                  onClick={() => {
+                    setSortOption("price-high");
+                    setShowSort(false);
+                  }}
+                  className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-100 ${
+                    sortOption === "price-high" ? "bg-blue-100" : ""
+                  }`}
+                >
+                  Price: High → Low
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Selected Filters */}
         {selectedCategories.length > 0 && (
-          <div className="flex flex-wrap gap-2 justify-center mt-4">
+          <div className="flex flex-wrap gap-2 justify-center mt-3">
             {selectedCategories.map((cat) => (
               <span
                 key={cat}
