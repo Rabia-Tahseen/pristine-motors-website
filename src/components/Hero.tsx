@@ -3,15 +3,12 @@ import { motion } from "framer-motion";
 import { Car, Wrench } from "lucide-react";
 
 const Hero = () => (
-  <section className="relative pt-28 pb-28 bg-white overflow-hidden">
+  <section className="relative pt-28 pb-28 overflow-hidden bg-gradient-to-b from-white to-blue-50">
 
-    {/* dark blue diagonal */}
-    <div className="absolute inset-0 bg-blue-900 opacity-10 
-    [clip-path:polygon(0_0,50%_0,35%_100%,0_100%)]"></div>
-
-    {/* light blue diagonal */}
-    <div className="absolute inset-0 bg-blue-400 opacity-20 
-    [clip-path:polygon(0_0,70%_0,50%_100%,0_100%)]"></div>
+    {/* subtle radial highlight */}
+    <div className="absolute inset-0 flex justify-center pointer-events-none">
+      <div className="w-[700px] h-[400px] bg-blue-100 opacity-30 blur-3xl rounded-full"></div>
+    </div>
 
     <div className="section-container text-center relative z-10">
 
@@ -40,20 +37,26 @@ const Hero = () => (
         transition={{ delay: 0.2 }}
         className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
       >
-        <Link to="/cars" className="btn-primary px-8 py-3 flex items-center gap-2">
+        <Link
+          to="/cars"
+          className="bg-blue-900 hover:bg-blue-800 text-white px-8 py-3.5 rounded-lg flex items-center gap-2 transition"
+        >
           <Car size={18} />
           Browse Cars
         </Link>
 
-        <Link to="/parts" className="btn-primary px-8 py-3 flex items-center gap-2">
+        <Link
+          to="/parts"
+          className="bg-blue-700 hover:bg-blue-600 text-white px-8 py-3.5 rounded-lg flex items-center gap-2 transition"
+        >
           <Wrench size={18} />
           Browse Car Parts
         </Link>
       </motion.div>
 
-      {/* search bar inside hero */}
+      {/* search bar */}
       <div className="mt-12 flex justify-center">
-        <div className="flex w-full max-w-3xl bg-white rounded-xl shadow-lg border">
+        <div className="flex w-full max-w-3xl bg-white rounded-xl shadow-md border">
           <input
             type="text"
             placeholder="Search by part name, vehicle, color..."
