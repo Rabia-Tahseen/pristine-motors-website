@@ -64,9 +64,36 @@ const Checkout = () => {
 
     setSubmitting(true);
     try {
-      // Build order summary for localStorage (will integrate with Cloud later)
+      const orderItems = items.map((i) => ({
+        id: i.product.id,
+        name: i.product.name,
+        vehicle: i.product.vehicle,
+        price: parsePrice(i.product.price),
+        quantity: i.quantity,
+      }));
+
+      const orderPayload = {
+        customer_name: result.data.fullName,
+        phone: result.data.phone,
+        email: result.data.email,
+        address: result.data.address,
+        city: result.data.city,
+        notes: result.data.notes ?? "",
+        items_ordered: orderItems,
+        total_price: subtotal,
+        payment_method: "Cash on Delivery",
+        order_status: "new",
+      };
+
+      const { data: savedOrder, error } = await supabase.from("orders").insert(orderPayload).select().single();
+
+      if (error) {
+        console.error("Order save error:", error);
+        // Fallback to localStorage
+      }
+
       const order = {
-        id: `ORD-${Date.now()}`,
+        id: savedOrder?.id ?? `ORD-${Date.now()}`,
         customer: result.data,
         items: items.map((i) => ({
           id: i.product.id,
