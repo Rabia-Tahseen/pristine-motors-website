@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState } from "react";
 
-// Only parts
+// Only car parts
 const parts = [
   "left side mirror",
   "right side mirror",
@@ -21,13 +21,17 @@ const Hero = () => {
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
 
+  // When the user submits search (Enter or Search button)
   const handleSearch = (searchQuery) => {
     const trimmedQuery = searchQuery.trim().toLowerCase();
     if (!trimmedQuery) return;
 
+    // Navigate to parts page with search query
+    // Backend or front-end filter should match anywhere in the part name
     navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
   };
 
+  // Auto-suggest while typing
   const handleInputChange = (e) => {
     const value = e.target.value;
     setQuery(value);
@@ -39,9 +43,9 @@ const Hero = () => {
 
     const lowerValue = value.toLowerCase();
 
-    // Filter parts that **contain** the typed query anywhere
+    // Auto-suggest: only parts that START with the typed letters
     const filtered = parts.filter(part =>
-      part.toLowerCase().includes(lowerValue)
+      part.toLowerCase().startsWith(lowerValue)
     );
 
     setSuggestions(filtered.slice(0, 5)); // max 5 suggestions
@@ -116,6 +120,13 @@ const Hero = () => {
                 placeholder="Search car parts..."
                 value={query}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearch(query);
+                    setSuggestions([]);
+                  }
+                }}
                 className="flex-1 px-4 py-4 outline-none"
               />
 
