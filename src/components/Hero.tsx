@@ -29,6 +29,7 @@ const Hero = () => {
     return parts.filter((part) => part.toLowerCase().startsWith(value));
   }, [query]);
 
+  // Handle search (Enter or button click)
   const handleSearch = (searchQuery: string) => {
     const trimmedQuery = searchQuery.trim();
     if (!trimmedQuery) return;
@@ -75,8 +76,9 @@ const Hero = () => {
         </motion.div>
 
         {/* Search Bar */}
-        <div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
-          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
+        <div className="mt-12 flex flex-col items-center w-full max-w-3xl mx-auto relative">
+          {/* Input container must be relative */}
+          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full relative z-10">
             <div className="flex items-center pl-4 text-gray-400">
               <Search size={18} />
             </div>
@@ -102,9 +104,9 @@ const Hero = () => {
             </button>
           </div>
 
-          {/* Suggestions below input */}
+          {/* Suggestions dropdown */}
           {suggestions.length > 0 && (
-            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto">
+            <ul className="absolute top-full left-0 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto z-20">
               {suggestions.map((sug, index) => (
                 <li
                   key={index}
