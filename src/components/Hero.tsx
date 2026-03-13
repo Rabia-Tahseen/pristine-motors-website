@@ -1,116 +1,114 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
-import { useState, useMemo } from "react";
-
-// Parts list
-const parts = [
-  "left side mirror",
-  "right side mirror",
-  "front bumper",
-  "rear bumper",
-  "headlight",
-  "bonnet",
-  "fender",
-  "steering wheel",
-  "nose cut",
-  "trunk",
-  "bumper",
-];
+import { useState } from "react";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Suggestions: include all parts that match anywhere in name
-  const suggestions = useMemo(() => {
-    const q = query.toLowerCase().trim();
-    if (!q) return [];
-    return parts.filter((part) => part.toLowerCase().includes(q)).slice(0, 5);
-  }, [query]);
+  const handleSearch = () => {
+    const q = query.trim().toLowerCase();
+    if (!q) return;
 
-  const handleSearch = (searchQuery: string) => {
-    const trimmedQuery = searchQuery.trim();
-    if (!trimmedQuery) return;
-    navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
+    navigate(`/parts?search=${encodeURIComponent(q)}`);
   };
 
   return (
-    <section className="relative pt-28 pb-28 overflow-hidden bg-gradient-to-b from-white to-blue-50">
+    <section className="relative pt-32 pb-32 overflow-hidden bg-gradient-to-b from-white to-blue-50">
+
+      {/* Background Glow (premium hero effect) */}
       <div className="absolute inset-0 flex justify-center pointer-events-none">
-        <div className="w-[700px] h-[400px] bg-blue-100 opacity-30 blur-3xl rounded-full"></div>
+        <div className="w-[750px] h-[420px] bg-blue-200 opacity-30 blur-3xl rounded-full"></div>
       </div>
 
       <div className="section-container text-center relative z-10">
-        <motion.h1 className="font-display font-bold text-5xl sm:text-6xl md:text-7xl text-gray-900">
+
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="font-display font-bold text-5xl sm:text-6xl md:text-7xl text-gray-900"
+        >
           Pristine
         </motion.h1>
-        <motion.p className="mt-4 text-lg md:text-xl text-gray-600">
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="mt-4 text-lg md:text-xl text-gray-600"
+        >
           Premium Japanese Cars & Auto Parts
         </motion.p>
 
-        <motion.div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        {/* Browse Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
+        >
           <Link
             to="/cars"
-            className="bg-blue-900 hover:bg-blue-800 hover:scale-105 transition text-white px-8 py-3.5 rounded-lg flex items-center gap-2 shadow-md"
+            className="bg-blue-900 text-white px-8 py-3 rounded-lg flex items-center gap-2 
+            transition-all duration-200 hover:bg-blue-800 hover:shadow-lg hover:-translate-y-0.5"
           >
-            <Car size={18} /> Browse Cars
+            <Car size={18} />
+            Browse Cars
           </Link>
 
           <Link
             to="/parts"
-            className="bg-blue-900 hover:bg-blue-800 hover:scale-105 transition text-white px-8 py-3.5 rounded-lg flex items-center gap-2 shadow-md"
+            className="bg-blue-900 text-white px-8 py-3 rounded-lg flex items-center gap-2 
+            transition-all duration-200 hover:bg-blue-800 hover:shadow-lg hover:-translate-y-0.5"
           >
-            <Wrench size={18} /> Browse Car Parts
+            <Wrench size={18} />
+            Browse Car Parts
           </Link>
         </motion.div>
 
         {/* Search Bar */}
-        <div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
-          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
-            <div className="flex items-center pl-4 text-gray-400">
-              <Search size={18} />
-            </div>
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="mt-12 flex max-w-3xl mx-auto bg-white border rounded-xl shadow-md overflow-hidden"
+        >
 
-            <input
-              placeholder="Search car parts..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleSearch(query);
-                }
-              }}
-              className="flex-1 px-4 py-4 outline-none"
-            />
-
-            <button
-              onClick={() => handleSearch(query)}
-              className="bg-blue-900 text-white px-8 hover:bg-blue-800 transition"
-            >
-              Search
-            </button>
+          {/* Icon */}
+          <div className="flex items-center pl-4 text-gray-400">
+            <Search size={18} />
           </div>
 
-          {/* Suggestions below input */}
-          {suggestions.length > 0 && (
-            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto">
-              {suggestions.map((sug, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleSearch(sug)}
-                  className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
-                >
-                  {sug}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+          {/* Input */}
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
+            placeholder="Search parts (mirror, bumper, bonnet...)"
+            className="flex-1 px-4 py-4 outline-none"
+          />
+
+          {/* Search Button */}
+          <button
+            onClick={handleSearch}
+            className="bg-blue-900 text-white px-8 transition-all duration-200 hover:bg-blue-800 hover:shadow-lg"
+          >
+            Search
+          </button>
+
+        </motion.div>
+
       </div>
     </section>
   );
 };
 
 export default Hero;
+
