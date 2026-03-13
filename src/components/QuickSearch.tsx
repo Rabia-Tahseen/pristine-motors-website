@@ -3,68 +3,55 @@ import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 
-const parts = [
-  "left side mirror",
-  "right side mirror",
-  "front bumper",
-  "rear bumper",
-  "headlight",
-  "bonnet",
-  "fender",
-  "steering wheel",
-  "nose cut",
-  "trunk",
-  "bumper",
-];
-
 const QuickSearch = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.FormEvent | string) => {
-    let searchQuery: string;
-    if (typeof e === "string") searchQuery = e;
-    else {
-      e.preventDefault();
-      searchQuery = query;
-    }
-    const trimmedQuery = searchQuery.trim();
-    if (!trimmedQuery) return;
-    navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
+  const handleSearch = () => {
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+
+    navigate(`/parts?search=${encodeURIComponent(q)}`);
   };
 
   return (
     <section className="py-8 bg-background">
       <div className="section-container">
-        <motion.form
-          onSubmit={handleSearch}
+
+        <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
           className="flex gap-3 max-w-2xl mx-auto"
         >
+
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+
+            <Search
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+              size={18}
+            />
 
             <input
-              placeholder="Search by part name..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearch(query);
+                if (e.key === "Enter") handleSearch();
               }}
-              className="w-full border-2 border-gray-300 rounded-lg pl-11 pr-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-body text-sm bg-white shadow-sm"
+              placeholder="Search parts..."
+              className="w-full border rounded-lg pl-11 pr-4 py-3 outline-none"
             />
+
           </div>
 
           <button
-            type="button"
-            onClick={() => handleSearch(query)}
-            className="bg-[#0A1F44] text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition"
+            onClick={handleSearch}
+            className="bg-blue-900 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition"
           >
             Search
           </button>
-        </motion.form>
+
+        </motion.div>
+
       </div>
     </section>
   );
