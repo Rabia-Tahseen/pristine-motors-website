@@ -2,13 +2,13 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { products, categories } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
-import { motion } from "framer-motion";
-import { Search } from "lucide-react";
 
 const AllParts = () => {
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
+  const [activeCategory, setActiveCategory] = useState(
+    searchParams.get("category") || "All"
+  );
 
   useEffect(() => {
     const s = searchParams.get("search");
@@ -17,18 +17,14 @@ const AllParts = () => {
     if (c) setActiveCategory(c);
   }, [searchParams]);
 
-  // Filter products
+  // Only match part name (starts-with)
   const filtered = useMemo(() => {
-    const searchLower = search.toLowerCase().trim();
-
+    const q = search.toLowerCase().trim();
     return products.filter((p) => {
-      const matchCat = activeCategory === "All" || p.category === activeCategory;
-      const matchSearch =
-        !searchLower || // empty search matches all
-        p.name.toLowerCase().includes(searchLower) ||
-        p.description.toLowerCase().includes(searchLower);
-
-      return matchCat && matchSearch;
+      const catMatch = activeCategory === "All" || p.category === activeCategory;
+      const nameMatch =
+        !q || p.name.toLowerCase().startsWith(q); // title only
+      return catMatch && nameMatch;
     });
   }, [search, activeCategory]);
 
@@ -42,33 +38,33 @@ const AllParts = () => {
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">All Parts</h1>
-          <p className="mt-2 text-muted-foreground text-sm font-body">Browse our complete catalog of genuine auto parts.</p>
-        </motion.div>
+        <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
+          All Parts
+        </h1>
+        <p className="text-muted-foreground text-sm mb-6">
+          Browse our complete catalog of genuine auto parts.
+        </p>
 
-        {/* Search */}
-        <div className="relative w-full mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" size={18} />
-          <input
-            placeholder="Search by part name..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => { if(e.key === "Enter") e.preventDefault(); }}
-            className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
-          />
-        </div>
+        <input
+          placeholder="Search by part name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full border border-border rounded-lg pl-4 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 mb-5"
+        />
 
-        {/* Category Filters */}
-        <div className="flex gap-2 flex-wrap mb-8">
+        <div className="flex flex-wrap gap-2 mb-5">
           {categories.map((cat) => (
-            <button key={cat} onClick={() => setActiveCategory(cat)} className={filterBtn(activeCategory === cat)}>
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={filterBtn(activeCategory === cat)}
+            >
               {cat}
             </button>
           ))}
         </div>
 
-        <p className="text-sm text-muted-foreground font-body mb-5">
+        <p className="text-sm text-muted-foreground mb-5">
           Showing {filtered.length} {filtered.length === 1 ? "part" : "parts"}
         </p>
 
@@ -80,10 +76,15 @@ const AllParts = () => {
 
         {filtered.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg font-body">No parts found matching your filters.</p>
+            <p className="text-muted-foreground text-lg">
+              No parts found matching your filters.
+            </p>
             <button
-              onClick={() => { setSearch(""); setActiveCategory("All"); }}
-              className="mt-3 text-primary hover:underline font-body text-sm font-medium"
+              onClick={() => {
+                setSearch("");
+                setActiveCategory("All");
+              }}
+              className="mt-3 text-primary hover:underline text-sm font-medium"
             >
               Clear all filters
             </button>
