@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState, useMemo } from "react";
 
-// Parts list
+// Only part names
 const parts = [
   "left side mirror",
   "right side mirror",
@@ -22,13 +22,13 @@ const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Suggestions: parts that start with typed words (Google style)
+  // Suggestions that start with the query (title only)
   const suggestions = useMemo(() => {
-    const value = query.toLowerCase().trim();
-    if (!value) return [];
-    return parts.filter((part) =>
-      part.toLowerCase().startsWith(value)
-    ).slice(0, 5); // max 5 suggestions
+    const q = query.toLowerCase().trim();
+    if (!q) return [];
+    return parts
+      .filter((part) => part.toLowerCase().startsWith(q))
+      .slice(0, 5); // max 5 suggestions
   }, [query]);
 
   const handleSearch = (searchQuery: string) => {
@@ -37,17 +37,8 @@ const Hero = () => {
     navigate(`/parts?search=${encodeURIComponent(trimmed)}`);
   };
 
-  const handleSuggestionClick = (sug: string) => {
-    setQuery(sug);
-    handleSearch(sug);
-  };
-
   return (
-    <section className="relative pt-28 pb-28 overflow-hidden bg-gradient-to-b from-white to-blue-50">
-      <div className="absolute inset-0 flex justify-center pointer-events-none">
-        <div className="w-[700px] h-[400px] bg-blue-100 opacity-30 blur-3xl rounded-full"></div>
-      </div>
-
+    <section className="relative pt-28 pb-28 bg-gradient-to-b from-white to-blue-50">
       <div className="section-container text-center relative z-10">
         <motion.h1 className="font-display font-bold text-5xl sm:text-6xl md:text-7xl text-gray-900">
           Pristine
@@ -72,13 +63,12 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        {/* Search Bar */}
-        <div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
-          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
+        {/* Search */}
+        <div className="mt-12 flex flex-col items-center w-full max-w-3xl mx-auto relative">
+          <div className="flex bg-white rounded-xl shadow-md border w-full overflow-hidden">
             <div className="flex items-center pl-4 text-gray-400">
               <Search size={18} />
             </div>
-
             <input
               placeholder="Search car parts..."
               value={query}
@@ -91,7 +81,6 @@ const Hero = () => {
               }}
               className="flex-1 px-4 py-4 outline-none"
             />
-
             <button
               onClick={() => handleSearch(query)}
               className="bg-blue-900 text-white px-8 hover:bg-blue-800 transition"
@@ -100,13 +89,13 @@ const Hero = () => {
             </button>
           </div>
 
-          {/* Suggestions below input */}
+          {/* Suggestions below input (never overlap) */}
           {suggestions.length > 0 && (
-            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto">
-              {suggestions.map((sug, index) => (
+            <ul className="absolute top-full mt-1 w-full bg-white border rounded-b-xl shadow-md z-20 max-h-60 overflow-y-auto">
+              {suggestions.map((sug, i) => (
                 <li
-                  key={index}
-                  onClick={() => handleSuggestionClick(sug)}
+                  key={i}
+                  onClick={() => handleSearch(sug)}
                   className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
                 >
                   {sug}
