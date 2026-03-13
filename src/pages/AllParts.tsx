@@ -18,13 +18,19 @@ const AllParts = () => {
   }, [searchParams]);
 
   const filtered = useMemo(() => {
-    const q = search.toLowerCase().trim();
-    return products.filter((p) => {
-      const catMatch = activeCategory === "All" || p.category === activeCategory;
-      const nameMatch = !q || p.name.toLowerCase().includes(q); // only name matching
-      return catMatch && nameMatch;
-    });
-  }, [search, activeCategory]);
+  const q = search.toLowerCase().trim();
+
+  return products.filter((p) => {
+    const matchCat = activeCategory === "All" || p.category === activeCategory;
+    const matchVehicle = activeVehicle === "All" || p.vehicle === activeVehicle;
+
+    const matchSearch =
+      !q || p.name.toLowerCase().includes(q);
+
+    return matchCat && matchVehicle && matchSearch;
+  });
+
+}, [search, activeCategory, activeVehicle]);
 
   const filterBtn = (active: boolean) =>
     `px-4 py-2 rounded-lg text-xs font-body font-medium transition-all duration-200 ${
