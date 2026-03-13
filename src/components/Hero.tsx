@@ -3,19 +3,17 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState } from "react";
 
-// Categories and example parts/vehicles
-const categories = ["lighting", "bumper", "interior", "body parts", "mirrors", "nose cut"];
-const partsAndVehicles = [
+// Only parts
+const parts = [
   "left side mirror",
   "right side mirror",
   "front bumper",
   "rear bumper",
   "headlight",
   "taillight",
-  "Toyota Corolla",
-  "Honda Civic",
-  "Nissan Altima",
   "bonnet",
+  "fender",
+  "steering wheel",
 ];
 
 const Hero = () => {
@@ -27,19 +25,7 @@ const Hero = () => {
     const trimmedQuery = searchQuery.trim().toLowerCase();
     if (!trimmedQuery) return;
 
-    let url = "/parts";
-
-    const categoryMatch = categories.find(cat =>
-      cat.toLowerCase().includes(trimmedQuery)
-    );
-
-    if (categoryMatch) {
-      url += `?category=${encodeURIComponent(categoryMatch)}`;
-    } else {
-      url += `?search=${encodeURIComponent(trimmedQuery)}`;
-    }
-
-    navigate(url);
+    navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
   };
 
   const handleInputChange = (e) => {
@@ -52,11 +38,10 @@ const Hero = () => {
     }
 
     const lowerValue = value.toLowerCase();
-    const combined = [...categories, ...partsAndVehicles];
 
-    // Only suggest items that START with the query (case-insensitive)
-    const filtered = combined.filter(item =>
-      item.toLowerCase().startsWith(lowerValue)
+    // Filter parts that **contain** the typed query anywhere
+    const filtered = parts.filter(part =>
+      part.toLowerCase().includes(lowerValue)
     );
 
     setSuggestions(filtered.slice(0, 5)); // max 5 suggestions
@@ -66,24 +51,6 @@ const Hero = () => {
     setQuery(suggestion);
     setSuggestions([]);
     handleSearch(suggestion);
-  };
-
-  // Helper to highlight matching part
-  const highlightMatch = (text, query) => {
-    const index = text.toLowerCase().indexOf(query.toLowerCase());
-    if (index === -1) return text;
-
-    const before = text.slice(0, index);
-    const match = text.slice(index, index + query.length);
-    const after = text.slice(index + query.length);
-
-    return (
-      <>
-        {before}
-        <span className="font-bold bg-yellow-200">{match}</span>
-        {after}
-      </>
-    );
   };
 
   return (
@@ -146,7 +113,7 @@ const Hero = () => {
               </div>
 
               <input
-                placeholder="Search by part name or vehicle..."
+                placeholder="Search car parts..."
                 value={query}
                 onChange={handleInputChange}
                 className="flex-1 px-4 py-4 outline-none"
@@ -169,7 +136,7 @@ const Hero = () => {
                     onClick={() => handleSuggestionClick(sug)}
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
                   >
-                    {highlightMatch(sug, query)}
+                    {sug}
                   </li>
                 ))}
               </ul>
