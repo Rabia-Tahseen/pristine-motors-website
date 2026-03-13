@@ -48,7 +48,7 @@ const QuickSearch = () => {
       <div className="relative flex-1">
         <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18}/>
         <input
-          placeholder="Search by vehicle name or part name"
+          placeholder="Search by vehicle or part name"
           value={query}
           onChange={(e) => handleInputChange(e.target.value)}
           className="w-full border-none pl-11 pr-4 py-3 text-sm bg-white focus:outline-none focus:ring-0"
