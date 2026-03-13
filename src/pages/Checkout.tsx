@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart, formatPrice, parsePrice } from "@/contexts/CartContext";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Truck } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
