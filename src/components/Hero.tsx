@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState, useMemo } from "react";
 
-// Only car parts
+// Parts list
 const parts = [
   "left side mirror",
   "right side mirror",
@@ -22,13 +22,11 @@ const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Compute suggestions dynamically while typing
+  // Suggestions: only parts that start with what user types
   const suggestions = useMemo(() => {
     const value = query.toLowerCase().trim();
     if (!value) return [];
-    return parts
-      .filter((part) => part.toLowerCase().startsWith(value))
-      .slice(0, 5); // max 5 suggestions
+    return parts.filter((part) => part.toLowerCase().startsWith(value));
   }, [query]);
 
   const handleSearch = (searchQuery: string) => {
@@ -104,9 +102,9 @@ const Hero = () => {
             </button>
           </div>
 
-          {/* Suggestions below the input */}
+          {/* Suggestions below input */}
           {suggestions.length > 0 && (
-            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1">
+            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto">
               {suggestions.map((sug, index) => (
                 <li
                   key={index}
