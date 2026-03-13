@@ -19,13 +19,23 @@ const AllParts = () => {
   }, [searchParams]);
 
   const filtered = useMemo(() => {
+    const queryWords = search
+      .toLowerCase()
+      .split(" ")
+      .filter((w) => w.trim().length > 0);
+
     return products.filter((p) => {
       const matchCat = activeCategory === "All" || p.category === activeCategory;
       const matchVehicle = activeVehicle === "All" || p.vehicle === activeVehicle;
-      const matchSearch =
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.description.toLowerCase().includes(search.toLowerCase()) ||
-        p.vehicle.toLowerCase().includes(search.toLowerCase());
+
+      // Multi-word search: each word must appear in name, description, or vehicle
+      const matchSearch = queryWords.every(
+        (word) =>
+          p.name.toLowerCase().includes(word) ||
+          p.description.toLowerCase().includes(word) ||
+          p.vehicle.toLowerCase().includes(word)
+      );
+
       return matchCat && matchVehicle && matchSearch;
     });
   }, [search, activeCategory, activeVehicle]);
