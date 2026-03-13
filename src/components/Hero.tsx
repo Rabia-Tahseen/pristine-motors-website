@@ -22,22 +22,19 @@ const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Suggestions: only parts that start with what user types
+  // Suggestions: parts that start with typed words (Google style)
   const suggestions = useMemo(() => {
     const value = query.toLowerCase().trim();
     if (!value) return [];
-    return parts.filter((part) => part.toLowerCase().startsWith(value));
+    return parts.filter((part) =>
+      part.toLowerCase().startsWith(value)
+    ).slice(0, 5); // max 5 suggestions
   }, [query]);
 
-  // Handle search (Enter or button click)
   const handleSearch = (searchQuery: string) => {
-    const trimmedQuery = searchQuery.trim();
-    if (!trimmedQuery) return;
-    navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    const trimmed = searchQuery.trim();
+    if (!trimmed) return;
+    navigate(`/parts?search=${encodeURIComponent(trimmed)}`);
   };
 
   const handleSuggestionClick = (sug: string) => {
@@ -76,9 +73,8 @@ const Hero = () => {
         </motion.div>
 
         {/* Search Bar */}
-        <div className="mt-12 flex flex-col items-center w-full max-w-3xl mx-auto relative">
-          {/* Input container must be relative */}
-          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full relative z-10">
+        <div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
+          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
             <div className="flex items-center pl-4 text-gray-400">
               <Search size={18} />
             </div>
@@ -86,7 +82,7 @@ const Hero = () => {
             <input
               placeholder="Search car parts..."
               value={query}
-              onChange={handleInputChange}
+              onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
@@ -104,9 +100,9 @@ const Hero = () => {
             </button>
           </div>
 
-          {/* Suggestions dropdown */}
+          {/* Suggestions below input */}
           {suggestions.length > 0 && (
-            <ul className="absolute top-full left-0 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto z-20">
+            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1 max-h-56 overflow-y-auto">
               {suggestions.map((sug, index) => (
                 <li
                   key={index}
