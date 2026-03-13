@@ -18,7 +18,7 @@ const AllParts = () => {
     if (c) setActiveCategory(c);
   }, [searchParams]);
 
-  // Filter products: starts-with logic for search
+  // Filter products using **starts-with logic**
   const filtered = useMemo(() => {
     const searchLower = search.toLowerCase().trim();
 
@@ -46,22 +46,23 @@ const AllParts = () => {
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">All Parts</h1>
-          <p className="mt-2 text-muted-foreground text-sm font-body">Browse our complete catalog of genuine auto parts.</p>
+          <p className="mt-2 text-muted-foreground text-sm font-body">
+            Browse our complete catalog of genuine auto parts.
+          </p>
         </motion.div>
 
         {/* Search */}
         <div className="relative w-full mb-6">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" size={18} />
           <input
-            placeholder="Search by part name, vehicle..."
+            placeholder="Search by part name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") e.preventDefault();
+            }}
             className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
           />
         </div>
@@ -78,6 +79,7 @@ const AllParts = () => {
               ))}
             </div>
           </div>
+
           <div className="flex-1">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Category</p>
             <div className="flex gap-2 flex-wrap">
@@ -104,7 +106,11 @@ const AllParts = () => {
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg font-body">No parts found matching your filters.</p>
             <button
-              onClick={() => { setSearch(""); setActiveCategory("All"); setActiveVehicle("All"); }}
+              onClick={() => {
+                setSearch("");
+                setActiveCategory("All");
+                setActiveVehicle("All");
+              }}
               className="mt-3 text-primary hover:underline font-body text-sm font-medium"
             >
               Clear all filters
