@@ -5,13 +5,16 @@ import { Car, Wrench } from "lucide-react";
 const Hero = () => (
   <section className="relative pt-24 pb-16 bg-white overflow-hidden">
 
-    {/* Dark Blue Diagonal */}
-    <div className="absolute top-0 left-0 w-full h-full bg-blue-900 clip-path-diagonal"></div>
+    {/* Dark blue diagonal */}
+    <div className="absolute top-0 left-0 w-full h-full bg-blue-900 opacity-10 
+    [clip-path:polygon(0_0,35%_0,20%_100%,0_100%)]"></div>
 
-    {/* Light Blue Diagonal */}
-    <div className="absolute top-0 left-0 w-full h-full bg-blue-500 clip-path-diagonal-light"></div>
+    {/* Light blue diagonal */}
+    <div className="absolute top-0 left-0 w-full h-full bg-blue-400 opacity-20 
+    [clip-path:polygon(0_0,55%_0,35%_100%,0_100%)]"></div>
 
     <div className="section-container text-center relative z-10">
+      
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -46,6 +49,7 @@ const Hero = () => (
           Browse Car Parts
         </Link>
       </motion.div>
+
     </div>
   </section>
 );
