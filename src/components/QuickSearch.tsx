@@ -1,119 +1,111 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, X, SlidersHorizontal } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Search } from "lucide-react";
+import { motion } from "framer-motion";
 
-const categories = ["Lighting", "Bumper", "Interior", "Body Parts", "Mirrors", "Nose Cut"];
+const categories = ["lighting", "bumper", "interior", "body parts", "mirrors", "nose cut"];
 
 const QuickSearch = () => {
   const [query, setQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(false);
-
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const toggleCategory = (cat: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+
+    const trimmed = value.toLowerCase().trim();
+
+    if (!trimmed) {
+      setSuggestions([]);
+      return;
+    }
+
+    const matches = categories.filter((cat) =>
+      cat.toLowerCase().includes(trimmed)
     );
+
+    setSuggestions(matches);
   };
 
-  const removeCategory = (cat: string) => {
-    setSelectedCategories((prev) => prev.filter((c) => c !== cat));
-  };
+  const handleSearch = (searchValue?: string) => {
+    const trimmedQuery = (searchValue || query).trim().toLowerCase();
+    if (!trimmedQuery) return;
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim() && selectedCategories.length === 0) return;
+    let url = "/parts";
 
-    const params = new URLSearchParams();
-    if (query.trim()) params.append("search", query.trim());
-    if (selectedCategories.length > 0) params.append("category", selectedCategories.join(","));
+    const categoryMatch = categories.find(
+      (cat) => cat.toLowerCase() === trimmedQuery
+    );
 
-    navigate(`/parts?${params.toString()}`);
+    if (categoryMatch) {
+      url += `?category=${encodeURIComponent(categoryMatch)}`;
+    } else {
+      url += `?search=${encodeURIComponent(trimmedQuery)}`;
+    }
+
+    setSuggestions([]);
+    navigate(url);
   };
 
   return (
-    <section className="py-6 md:py-10 bg-background">
-      <div className="section-container max-w-4xl mx-auto">
+    <section className="py-8 bg-background">
+      <div className="max-w-2xl mx-auto px-4">
 
-        {/* Search Row */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-center">
+        <motion.form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex relative w-full"
+        >
 
-          {/* Search Bar */}
-          <form 
-            onSubmit={handleSearch} 
-            className="flex flex-1 max-w-2xl gap-2"
+          {/* Search Input */}
+          <div className="relative flex-1">
+
+            <Search
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+              size={18}
+            />
+
+            <input
+              placeholder="Search parts..."
+              value={query}
+              onChange={(e) => handleInputChange(e.target.value)}
+              className="w-full border border-gray-300 rounded-l-lg pl-11 pr-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-200"
+            />
+
+            {/* Suggestions Dropdown */}
+            {suggestions.length > 0 && (
+              <div className="absolute left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg z-20">
+
+                {suggestions.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => handleSearch(item)}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    {item}
+                  </button>
+                ))}
+
+              </div>
+            )}
+
+          </div>
+
+          {/* Search Button */}
+          <button
+            type="submit"
+            className="bg-[#0A1F44] text-white px-6 py-3 rounded-r-lg hover:bg-blue-800 transition"
           >
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-              <input
-                placeholder="Search by part or vehicle..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full border rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-              />
-            </div>
-            <button
-              type="submit"
-              className="bg-[#0A1F44] text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition text-sm"
-            >
-              Search
-            </button>
-          </form>
+            Search
+          </button>
 
-          {/* Filter Button */}
-          <div className="relative mt-2 sm:mt-0">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-1 border px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
-            >
-              <SlidersHorizontal size={16} /> Filter
-            </button>
-
-            <AnimatePresence>
-              {showFilters && (
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  className="absolute top-full mt-1 w-48 bg-white border rounded-lg shadow-md z-20 sm:left-0 left-auto right-0"
-                >
-                  {categories.map((cat, idx) => (
-                    <div key={cat}>
-                      <button
-                        onClick={() => toggleCategory(cat)}
-                        className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
-                          selectedCategories.includes(cat) ? "bg-blue-50" : ""
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                      {idx < categories.length - 1 && <hr className="border-gray-200" />}
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* Selected Filters */}
-        {selectedCategories.length > 0 && (
-          <div className="flex flex-wrap gap-2 justify-center mt-3">
-            {selectedCategories.map((cat) => (
-              <span
-                key={cat}
-                className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-              >
-                {cat}
-                <button onClick={() => removeCategory(cat)}>
-                  <X size={14} />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
+        </motion.form>
 
       </div>
     </section>
