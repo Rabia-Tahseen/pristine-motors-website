@@ -19,21 +19,15 @@ const AllParts = () => {
   }, [searchParams]);
 
   const filtered = useMemo(() => {
-    const queryWords = search
-      .toLowerCase()
-      .split(" ")
-      .filter((w) => w.trim().length > 0);
+    const queryWords = search.toLowerCase().trim().split(" ").filter(Boolean);
 
     return products.filter((p) => {
       const matchCat = activeCategory === "All" || p.category === activeCategory;
       const matchVehicle = activeVehicle === "All" || p.vehicle === activeVehicle;
 
-      // Multi-word search: each word must appear in name, description, or vehicle
-      const matchSearch = queryWords.every(
-        (word) =>
-          p.name.toLowerCase().includes(word) ||
-          p.description.toLowerCase().includes(word) ||
-          p.vehicle.toLowerCase().includes(word)
+      const matchSearch = queryWords.every((word) =>
+        p.name.toLowerCase().includes(word) ||
+        p.description.toLowerCase().includes(word)
       );
 
       return matchCat && matchVehicle && matchSearch;
@@ -50,11 +44,7 @@ const AllParts = () => {
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">All Parts</h1>
           <p className="mt-2 text-muted-foreground text-sm font-body">Browse our complete catalog of genuine auto parts.</p>
         </motion.div>
@@ -63,7 +53,7 @@ const AllParts = () => {
         <div className="relative w-full mb-6">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" size={18} />
           <input
-            placeholder="Search by part name, vehicle..."
+            placeholder="Search by part name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
