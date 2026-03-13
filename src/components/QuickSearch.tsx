@@ -10,9 +10,11 @@ const parts = [
   "front bumper",
   "rear bumper",
   "headlight",
-  "taillight",
   "bonnet",
+  "trunk",
   "fender",
+  "nose cut",
+  "bumper",
   "steering wheel",
 ];
 
