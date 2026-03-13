@@ -26,9 +26,9 @@ const Hero = () => {
   const suggestions = useMemo(() => {
     const value = query.toLowerCase().trim();
     if (!value) return [];
-    return parts.filter((part) =>
-      part.toLowerCase().startsWith(value)
-    ).slice(0, 5);
+    return parts
+      .filter((part) => part.toLowerCase().startsWith(value))
+      .slice(0, 5);
   }, [query]);
 
   // Search function (Enter key or button)
@@ -79,47 +79,51 @@ const Hero = () => {
         </motion.div>
 
         {/* Search Bar */}
-<div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
-  <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
-    <div className="flex items-center pl-4 text-gray-400">
-      <Search size={18} />
-    </div>
+        <div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
+          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
+            <div className="flex items-center pl-4 text-gray-400">
+              <Search size={18} />
+            </div>
 
-    <input
-      placeholder="Search car parts..."
-      value={query}
-      onChange={handleInputChange}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          handleSearch(query);
-        }
-      }}
-      className="flex-1 px-4 py-4 outline-none"
-    />
+            <input
+              placeholder="Search car parts..."
+              value={query}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSearch(query);
+                }
+              }}
+              className="flex-1 px-4 py-4 outline-none"
+            />
 
-    <button
-      onClick={() => handleSearch(query)}
-      className="bg-blue-900 text-white px-8 hover:bg-blue-800 transition"
-    >
-      Search
-    </button>
-  </div>
+            <button
+              onClick={() => handleSearch(query)}
+              className="bg-blue-900 text-white px-8 hover:bg-blue-800 transition"
+            >
+              Search
+            </button>
+          </div>
 
-  {/* Google-style suggestions dropdown */}
-  {suggestions.length > 0 && (
-    <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1">
-      {suggestions.map((sug, index) => (
-        <li
-          key={index}
-          onClick={() => handleSuggestionClick(sug)}
-          className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
-        >
-          {sug}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
+          {/* Google-style suggestions dropdown */}
+          {suggestions.length > 0 && (
+            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1">
+              {suggestions.map((sug, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSuggestionClick(sug)}
+                  className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
+                >
+                  {sug}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default Hero;
