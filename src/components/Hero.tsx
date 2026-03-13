@@ -1,55 +1,51 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
-// Only car parts
+// Updated parts list
 const parts = [
   "left side mirror",
   "right side mirror",
   "front bumper",
   "rear bumper",
   "headlight",
-  "taillight",
   "bonnet",
   "fender",
   "steering wheel",
+  "nose cut",
+  "trunk",
+  "bumper",
 ];
 
 const Hero = () => {
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
 
-  // Navigate to parts page with search query
+  // Compute suggestions dynamically while typing
+  const suggestions = useMemo(() => {
+    const value = query.toLowerCase().trim();
+    if (!value) return [];
+    return parts.filter((part) =>
+      part.toLowerCase().startsWith(value)
+    ).slice(0, 5);
+  }, [query]);
+
+  // Search function (Enter key or button)
   const handleSearch = (searchQuery: string) => {
     const trimmedQuery = searchQuery.trim();
     if (!trimmedQuery) return;
-
     navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
+    // Do not clear query so suggestions stay active
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-
-    if (!value) {
-      setSuggestions([]);
-      return;
-    }
-
-    // Auto-suggest: only parts starting with typed letters
-    const filtered = parts.filter(part =>
-      part.toLowerCase().startsWith(value.toLowerCase())
-    );
-
-    setSuggestions(filtered.slice(0, 5)); // max 5 suggestions
+    setQuery(e.target.value);
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setQuery(suggestion);
-    setSuggestions([]);
-    handleSearch(suggestion);
+  const handleSuggestionClick = (sug: string) => {
+    setQuery(sug);
+    handleSearch(sug);
   };
 
   return (
@@ -62,7 +58,6 @@ const Hero = () => {
         <motion.h1 className="font-display font-bold text-5xl sm:text-6xl md:text-7xl text-gray-900">
           Pristine
         </motion.h1>
-
         <motion.p className="mt-4 text-lg md:text-xl text-gray-600">
           Premium Japanese Cars & Auto Parts
         </motion.p>
@@ -83,51 +78,48 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        {/* SEARCH BAR */}
-        <div className="mt-12 flex flex-col items-center">
-          <div className="relative w-full max-w-3xl">
-            <div className="flex bg-white rounded-xl shadow-md border overflow-hidden">
-              <div className="flex items-center pl-4 text-gray-400">
-                <Search size={18} />
-              </div>
-
-              <input
-                placeholder="Search car parts..."
-                value={query}
-                onChange={handleInputChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleSearch(query);
-                    setSuggestions([]);
-                  }
-                }}
-                className="flex-1 px-4 py-4 outline-none"
-              />
-
-              <button
-                onClick={() => handleSearch(query)}
-                className="bg-blue-900 text-white px-8 hover:bg-blue-800 transition"
-              >
-                Search
-              </button>
+        {/* Search Bar */}
+        <div className="mt-12 flex flex-col items-center relative w-full max-w-3xl mx-auto">
+          <div className="flex bg-white rounded-xl shadow-md border overflow-hidden w-full">
+            <div className="flex items-center pl-4 text-gray-400">
+              <Search size={18} />
             </div>
 
-            {/* Auto-suggest dropdown */}
-            {suggestions.length > 0 && (
-              <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1">
-                {suggestions.map((sug, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSuggestionClick(sug)}
-                    className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
-                  >
-                    {sug}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <input
+              placeholder="Search car parts..."
+              value={query}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSearch(query);
+                }
+              }}
+              className="flex-1 px-4 py-4 outline-none"
+            />
+
+            <button
+              onClick={() => handleSearch(query)}
+              className="bg-blue-900 text-white px-8 hover:bg-blue-800 transition"
+            >
+              Search
+            </button>
           </div>
+
+          {/* Suggestions dropdown */}
+          {suggestions.length > 0 && (
+            <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1">
+              {suggestions.map((sug, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSuggestionClick(sug)}
+                  className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
+                >
+                  {sug}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </section>
