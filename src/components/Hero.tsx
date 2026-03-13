@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState } from "react";
 
-// Only categories now
+// Categories list
 const categories = ["lighting", "bumper", "interior", "body parts", "mirrors", "nose cut"];
 
 const Hero = () => {
@@ -18,13 +18,15 @@ const Hero = () => {
 
     let url = "/parts";
 
-    // Check if the query matches a category
-    const categoryMatch = categories.find(cat => cat === trimmedQuery);
+    // Check for a partial match in categories
+    const categoryMatch = categories.find(cat =>
+      cat.toLowerCase().includes(trimmedQuery)
+    );
 
     if (categoryMatch) {
       url += `?category=${encodeURIComponent(categoryMatch)}`;
     } else {
-      // If not a category, treat it as a general search (part name or vehicle)
+      // Anything else is treated as a general search (part name or vehicle)
       url += `?search=${encodeURIComponent(trimmedQuery)}`;
     }
 
@@ -84,10 +86,7 @@ const Hero = () => {
         </motion.div>
 
         {/* SEARCH BAR */}
-        <form
-          onSubmit={handleSearch}
-          className="mt-12 flex justify-center"
-        >
+        <form onSubmit={handleSearch} className="mt-12 flex justify-center">
           <div className="flex w-full max-w-3xl bg-white rounded-xl shadow-md border overflow-hidden">
 
             <div className="flex items-center pl-4 text-gray-400">
