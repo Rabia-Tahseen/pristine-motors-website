@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Car, Wrench, Cog, Settings } from "lucide-react";
-import QuickSearch from "./QuickSearch"; // import the search bar
+import QuickSearch from "./QuickSearch"; // Import the search bar
 
 const Hero = () => (
   <section className="relative pt-16 pb-12 overflow-hidden bg-background">
