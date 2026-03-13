@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState, useMemo } from "react";
 
-// Updated parts list
+// Only car parts
 const parts = [
   "left side mirror",
   "right side mirror",
@@ -28,15 +28,13 @@ const Hero = () => {
     if (!value) return [];
     return parts
       .filter((part) => part.toLowerCase().startsWith(value))
-      .slice(0, 5);
+      .slice(0, 5); // max 5 suggestions
   }, [query]);
 
-  // Search function (Enter key or button)
   const handleSearch = (searchQuery: string) => {
     const trimmedQuery = searchQuery.trim();
     if (!trimmedQuery) return;
     navigate(`/parts?search=${encodeURIComponent(trimmedQuery)}`);
-    // Do not clear query so suggestions stay active
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +104,7 @@ const Hero = () => {
             </button>
           </div>
 
-          {/* Google-style suggestions dropdown */}
+          {/* Suggestions below the input */}
           {suggestions.length > 0 && (
             <ul className="absolute z-20 w-full bg-white border rounded-b-xl shadow-md mt-1">
               {suggestions.map((sug, index) => (
