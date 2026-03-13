@@ -3,21 +3,15 @@ import { motion } from "framer-motion";
 import { Car, Wrench } from "lucide-react";
 
 const Hero = () => (
-  <section className="relative pt-24 pb-16 overflow-hidden bg-gradient-to-b from-white via-blue-50 to-blue-100">
-    
-    {/* Background Decorative Elements */}
+  <section className="relative pt-24 pb-16 bg-white overflow-hidden">
 
-    {/* Large Blur Shape */}
-    <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-blue-300 opacity-20 blur-3xl rounded-full"></div>
+    {/* Dark Blue Diagonal */}
+    <div className="absolute top-0 left-0 w-full h-full bg-blue-900 clip-path-diagonal"></div>
 
-    {/* Diagonal Shape */}
-    <div className="absolute top-0 right-0 w-[600px] h-[400px] bg-blue-200 opacity-20 rotate-12 translate-x-40 -translate-y-32 rounded-3xl"></div>
+    {/* Light Blue Diagonal */}
+    <div className="absolute top-0 left-0 w-full h-full bg-blue-500 clip-path-diagonal-light"></div>
 
-    {/* Subtle Grid Pattern */}
-    <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-    <div className="relative section-container text-center">
-
+    <div className="section-container text-center relative z-10">
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -52,7 +46,6 @@ const Hero = () => (
           Browse Car Parts
         </Link>
       </motion.div>
-
     </div>
   </section>
 );
