@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Car, Wrench, Search } from "lucide-react";
 import { useState } from "react";
 
-// Example static data (replace with dynamic from API if available)
+// Categories and example parts/vehicles
 const categories = ["lighting", "bumper", "interior", "body parts", "mirrors", "nose cut"];
 const partsAndVehicles = [
   "left side mirror",
@@ -15,6 +15,7 @@ const partsAndVehicles = [
   "Toyota Corolla",
   "Honda Civic",
   "Nissan Altima",
+  "bonnet",
 ];
 
 const Hero = () => {
@@ -51,12 +52,11 @@ const Hero = () => {
     }
 
     const lowerValue = value.toLowerCase();
-
-    // Combine categories and parts/vehicles for suggestions
     const combined = [...categories, ...partsAndVehicles];
 
+    // Only suggest items that START with the query (case-insensitive)
     const filtered = combined.filter(item =>
-      item.toLowerCase().includes(lowerValue)
+      item.toLowerCase().startsWith(lowerValue)
     );
 
     setSuggestions(filtered.slice(0, 5)); // max 5 suggestions
@@ -66,6 +66,24 @@ const Hero = () => {
     setQuery(suggestion);
     setSuggestions([]);
     handleSearch(suggestion);
+  };
+
+  // Helper to highlight matching part
+  const highlightMatch = (text, query) => {
+    const index = text.toLowerCase().indexOf(query.toLowerCase());
+    if (index === -1) return text;
+
+    const before = text.slice(0, index);
+    const match = text.slice(index, index + query.length);
+    const after = text.slice(index + query.length);
+
+    return (
+      <>
+        {before}
+        <span className="font-bold bg-yellow-200">{match}</span>
+        {after}
+      </>
+    );
   };
 
   return (
@@ -151,7 +169,7 @@ const Hero = () => {
                     onClick={() => handleSuggestionClick(sug)}
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-left"
                   >
-                    {sug}
+                    {highlightMatch(sug, query)}
                   </li>
                 ))}
               </ul>
