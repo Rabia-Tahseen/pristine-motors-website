@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Car, Wrench, Cog, Settings } from "lucide-react";
-import QuickSearch from "./QuickSearch"; // import the separate QuickSearch
+import QuickSearch from "./QuickSearch";
 
 const Hero = () => (
   <section className="relative pt-16 pb-12 overflow-hidden bg-background">
@@ -49,7 +49,7 @@ const Hero = () => (
         </Link>
       </motion.div>
 
-      {/* QuickSearch below buttons */}
+      {/* QuickSearch inside Hero */}
       <QuickSearch />
     </div>
   </section>
