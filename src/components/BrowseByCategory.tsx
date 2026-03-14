@@ -28,16 +28,16 @@ const BrowseByCategory = () => (
           >
             <Link
               to={`/parts?category=${encodeURIComponent(cat.filter)}`}
-              className="flex flex-col items-center gap-3 p-6 rounded-xl bg-blue-50 border border-blue-200 
-                         hover:border-blue-400 hover:shadow-xl hover:scale-105 transition-all duration-300 group"
+              className="flex flex-col items-center gap-3 p-6 rounded-xl bg-white border border-gray-200
+                         hover:border-blue-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
             >
               <motion.div
-                whileHover={{ rotate: 10, scale: 1.2 }}
-                className="text-blue-400 group-hover:text-blue-600 transition-colors duration-300"
+                whileHover={{ scale: 1.2, rotate: 5 }}
+                className="text-blue-400 group-hover:text-blue-500 transition-colors duration-300"
               >
                 <cat.icon size={36} />
               </motion.div>
-              <span className="text-sm font-medium text-blue-800 font-body text-center">
+              <span className="text-sm font-medium text-gray-900 font-body text-center">
                 {cat.name}
               </span>
             </Link>
