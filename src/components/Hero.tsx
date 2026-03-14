@@ -63,7 +63,7 @@ const Hero = () => {
 
           <button
             onClick={handleSearch}
-            className="bg-[#1D2A55] text-white px-8 py-4 hover:bg-[#162046] transition w-auto"
+            className="bg-[#1D2A55] text-white px-6 sm:px-8 py-4 hover:bg-[#162046] transition w-auto"
           >
             Search
           </button>
