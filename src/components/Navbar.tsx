@@ -31,9 +31,7 @@ const Navbar = () => {
             className="h-10 w-10 object-contain transition-transform duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col leading-none">
-            <span className="font-display text-lg font-bold text-white">
-              Pristine
-            </span>
+            <span className="font-display text-lg font-bold text-white">Pristine</span>
             <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">
               Auto Hub
             </span>
