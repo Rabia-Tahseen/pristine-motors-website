@@ -17,7 +17,7 @@ const BrowseByCategory = () => (
       <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
         Browse Parts by Category
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
         {categoryData.map((cat, i) => (
           <motion.div
             key={cat.name}
@@ -28,13 +28,16 @@ const BrowseByCategory = () => (
           >
             <Link
               to={`/parts?category=${encodeURIComponent(cat.filter)}`}
-              className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-200 group"
+              className="flex flex-col items-center gap-3 p-6 rounded-xl bg-blue-50 border border-blue-200 
+                         hover:border-blue-400 hover:shadow-xl hover:scale-105 transition-all duration-300 group"
             >
-              <cat.icon
-                size={32}
-                className="text-muted-foreground group-hover:text-primary transition-colors duration-200"
-              />
-              <span className="text-sm font-medium text-foreground font-body text-center">
+              <motion.div
+                whileHover={{ rotate: 10, scale: 1.2 }}
+                className="text-blue-400 group-hover:text-blue-600 transition-colors duration-300"
+              >
+                <cat.icon size={36} />
+              </motion.div>
+              <span className="text-sm font-medium text-blue-800 font-body text-center">
                 {cat.name}
               </span>
             </Link>
