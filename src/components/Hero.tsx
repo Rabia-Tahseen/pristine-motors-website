@@ -1,43 +1,76 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Car, Wrench } from "lucide-react";
+import { Car, Wrench, Search } from "lucide-react";
+import { useState } from "react";
 
-const Hero = () => (
-  <section className="pt-24 pb-12 bg-background">
-    <div className="section-container text-center">
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
-      >
-        Pristine
-      </motion.h1>
-      <motion.p
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-3 text-muted-foreground text-lg md:text-xl font-body"
-      >
-        Premium Japanese Cars & Auto Parts
-      </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
-      >
-        <Link to="/cars" className="btn-primary text-base px-8 py-3.5">
-          <Car size={18} />
-          Browse Cars
-        </Link>
-        <Link to="/parts" className="btn-primary text-base px-8 py-3.5">
-          <Wrench size={18} />
-          Browse Car Parts
-        </Link>
-      </motion.div>
-    </div>
-  </section>
-);
+const Hero = () => {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+    navigate(`/parts?search=${encodeURIComponent(q)}`);
+  };
+
+  return (
+    <section className="relative pt-32 pb-32 overflow-hidden bg-gradient-to-b from-white to-blue-50">
+
+      {/* Background Glow */}
+      <div className="absolute inset-0 flex justify-center pointer-events-none">
+        <div className="w-[700px] h-[400px] bg-blue-200 opacity-30 blur-3xl rounded-full"></div>
+      </div>
+
+      <div className="section-container text-center relative z-10">
+        <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="font-display font-bold text-6xl text-gray-900">
+          Pristine
+        </motion.h1>
+
+        <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-4 text-lg text-gray-600">
+          Premium Japanese Cars & Auto Parts
+        </motion.p>
+
+        {/* Hero Buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            to="/cars"
+            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
+          >
+            <Car size={18} /> Browse Cars
+          </Link>
+
+          <Link
+            to="/parts"
+            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
+          >
+            <Wrench size={18} /> Browse Car Parts
+          </Link>
+        </div>
+
+        {/* Horizontal Search Bar */}
+        <div className="mt-12 flex flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
+          <div className="flex items-center pl-4 text-gray-400 flex-shrink-0">
+            <Search size={18} />
+          </div>
+
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            placeholder="Search parts (mirror, bumper, bonnet...)"
+            className="flex-1 px-4 py-4 outline-none w-full"
+          />
+
+          <button
+            onClick={handleSearch}
+            className="bg-[#1D2A55] text-white px-6 sm:px-8 py-4 hover:bg-[#162046] transition w-auto"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default Hero;

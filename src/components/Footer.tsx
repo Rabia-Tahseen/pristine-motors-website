@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 
 const Footer = () => (
-  <footer className="bg-foreground py-14">
+  <footer className="bg-[#1D2A55] py-14">
     <div className="section-container">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         <div>

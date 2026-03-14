@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/contexts/CartContext";
 import logo from "@/assets/logo.svg";
 
@@ -9,6 +9,7 @@ const links = [
   { label: "Home", to: "/" },
   { label: "Cars", to: "/cars" },
   { label: "Parts", to: "/parts" },
+  { label: "Request a Part", to: "/request-part" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
@@ -18,29 +19,19 @@ const Navbar = () => {
   const location = useLocation();
   const { totalItems } = useCart();
 
-  const handleLinkClick = () => setMobileOpen(false);
-
   return (
     <nav className="bg-[#1D2A55] border-b border-white/10 sticky top-0 z-50">
       <div className="section-container flex items-center justify-between h-16">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <img
-            src={logo}
-            alt="Pristine Auto Hub"
-            className="h-10 w-10 object-contain transition-transform duration-300 group-hover:scale-105"
-          />
+          <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 object-contain" />
           <div className="flex flex-col leading-none">
-            <span className="font-display text-lg font-bold text-white">
-              Pristine
-            </span>
-            <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">
-              Auto Hub
-            </span>
+            <span className="font-display text-lg font-bold text-white">Pristine</span>
+            <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">Auto Hub</span>
           </div>
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
           {links.map((l) => (
             <Link
@@ -63,7 +54,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile right side */}
+        {/* Mobile Menu Button */}
         <div className="flex items-center gap-3 lg:hidden">
           <Link to="/cart" className="relative text-white hover:text-white/80 transition-colors">
             <ShoppingCart size={22} />
@@ -73,17 +64,13 @@ const Navbar = () => {
               </span>
             )}
           </Link>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="text-white hover:text-gray-300 transition-colors"
-            aria-label="Toggle menu"
-          >
+          <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white hover:text-gray-300 transition-colors">
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -98,11 +85,9 @@ const Navbar = () => {
                 <Link
                   key={l.to}
                   to={l.to}
-                  onClick={handleLinkClick}
+                  onClick={() => setMobileOpen(false)}
                   className={`px-4 py-3 rounded-lg text-sm font-medium text-white transition-all duration-200 ${
-                    location.pathname === l.to
-                      ? "underline"
-                      : "hover:underline hover:bg-white/10"
+                    location.pathname === l.to ? "underline" : "hover:underline hover:bg-white/10"
                   }`}
                 >
                   {l.label}
