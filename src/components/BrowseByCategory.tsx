@@ -1,4 +1,4 @@
-```tsx
+
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -59,4 +59,4 @@ const BrowseByCategory = () => (
 );
 
 export default BrowseByCategory;
-```
+
