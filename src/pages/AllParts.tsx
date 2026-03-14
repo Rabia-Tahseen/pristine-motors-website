@@ -9,6 +9,7 @@ const AllParts = () => {
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
+  const [activeVehicle, setActiveVehicle] = useState(searchParams.get("vehicle") || "All");
 
   useEffect(() => {
     const s = searchParams.get("search");
