@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 const WhatsAppFloat = () => (
@@ -14,7 +14,7 @@ const WhatsAppFloat = () => (
     className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-200"
     aria-label="Chat on WhatsApp"
   >
-    <Phone size={26} />
+    <MessageCircle size={26} />
   </motion.a>
 );
 
