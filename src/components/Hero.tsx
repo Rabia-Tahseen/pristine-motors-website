@@ -10,7 +10,6 @@ const Hero = () => {
   const handleSearch = () => {
     const q = query.trim().toLowerCase();
     if (!q) return;
-
     navigate(`/parts?search=${encodeURIComponent(q)}`);
   };
 
@@ -43,11 +42,10 @@ const Hero = () => {
 
         {/* Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-
           <Link
             to="/cars"
-            className="bg-[#081a3a] text-white px-8 py-3 rounded-lg flex items-center gap-2
-            transition-all duration-200 hover:bg-[#06132b] hover:shadow-xl hover:-translate-y-0.5"
+            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2
+            transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
             <Car size={18}/>
             Browse Cars
@@ -55,18 +53,16 @@ const Hero = () => {
 
           <Link
             to="/parts"
-            className="bg-[#081a3a] text-white px-8 py-3 rounded-lg flex items-center gap-2
-            transition-all duration-200 hover:bg-[#06132b] hover:shadow-xl hover:-translate-y-0.5"
+            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2
+            transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
             <Wrench size={18}/>
             Browse Car Parts
           </Link>
-
         </div>
 
         {/* Search */}
         <div className="mt-12 flex max-w-3xl mx-auto bg-white border rounded-xl shadow-md overflow-hidden">
-
           <div className="flex items-center pl-4 text-gray-400">
             <Search size={18}/>
           </div>
@@ -83,11 +79,10 @@ const Hero = () => {
 
           <button
             onClick={handleSearch}
-            className="bg-[#081a3a] text-white px-8 hover:bg-[#06132b] transition"
+            className="bg-[#1D2A55] text-white px-8 hover:bg-[#162046] transition"
           >
             Search
           </button>
-
         </div>
 
       </div>
