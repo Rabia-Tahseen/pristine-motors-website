@@ -22,21 +22,11 @@ const Hero = () => {
       </div>
 
       <div className="section-container text-center relative z-10">
-
-        <motion.h1
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-display font-bold text-6xl text-gray-900"
-        >
+        <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="font-display font-bold text-6xl text-gray-900">
           Pristine
         </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mt-4 text-lg text-gray-600"
-        >
+        <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-4 text-lg text-gray-600">
           Premium Japanese Cars & Auto Parts
         </motion.p>
 
@@ -44,47 +34,40 @@ const Hero = () => {
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/cars"
-            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2
-            transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
+            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
-            <Car size={18}/>
-            Browse Cars
+            <Car size={18} /> Browse Cars
           </Link>
 
           <Link
             to="/parts"
-            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2
-            transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
+            className="bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
-            <Wrench size={18}/>
-            Browse Car Parts
+            <Wrench size={18} /> Browse Car Parts
           </Link>
         </div>
 
-        {/* Responsive Search Bar */}
-        <div className="mt-12 flex flex-col sm:flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
+        {/* Horizontal Search Bar */}
+        <div className="mt-12 flex flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
           <div className="flex items-center pl-4 text-gray-400 flex-shrink-0">
-            <Search size={18}/>
+            <Search size={18} />
           </div>
 
           <input
             value={query}
-            onChange={(e)=>setQuery(e.target.value)}
-            onKeyDown={(e)=>{
-              if(e.key==="Enter") handleSearch();
-            }}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="Search parts (mirror, bumper, bonnet...)"
             className="flex-1 px-4 py-4 outline-none w-full"
           />
 
           <button
             onClick={handleSearch}
-            className="bg-[#1D2A55] text-white px-8 py-4 hover:bg-[#162046] transition w-full sm:w-auto"
+            className="bg-[#1D2A55] text-white px-8 py-4 hover:bg-[#162046] transition w-auto"
           >
             Search
           </button>
         </div>
-
       </div>
     </section>
   );
