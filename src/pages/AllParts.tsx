@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { products, categories } from "@/data/products";
+import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
