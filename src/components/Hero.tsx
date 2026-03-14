@@ -40,7 +40,7 @@ const Hero = () => {
           Premium Japanese Cars & Auto Parts
         </motion.p>
 
-        {/* Buttons */}
+        {/* Hero Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/cars"
@@ -61,9 +61,9 @@ const Hero = () => {
           </Link>
         </div>
 
-        {/* Search */}
-        <div className="mt-12 flex max-w-3xl mx-auto bg-white border rounded-xl shadow-md overflow-hidden">
-          <div className="flex items-center pl-4 text-gray-400">
+        {/* Responsive Search Bar */}
+        <div className="mt-12 flex flex-col sm:flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
+          <div className="flex items-center pl-4 text-gray-400 flex-shrink-0">
             <Search size={18}/>
           </div>
 
@@ -74,12 +74,12 @@ const Hero = () => {
               if(e.key==="Enter") handleSearch();
             }}
             placeholder="Search parts (mirror, bumper, bonnet...)"
-            className="flex-1 px-4 py-4 outline-none"
+            className="flex-1 px-4 py-4 outline-none w-full"
           />
 
           <button
             onClick={handleSearch}
-            className="bg-[#1D2A55] text-white px-8 hover:bg-[#162046] transition"
+            className="bg-[#1D2A55] text-white px-8 py-4 hover:bg-[#162046] transition w-full sm:w-auto"
           >
             Search
           </button>
