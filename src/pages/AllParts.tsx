@@ -78,6 +78,16 @@ const AllParts = () => {
               ))}
             </div>
           </div>
+          <div className="flex-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Vehicle</p>
+            <div className="flex gap-2 flex-wrap">
+              {vehicles.map((v) => (
+                <button key={v} onClick={() => setActiveVehicle(v)} className={filterBtn(activeVehicle === v)}>
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <p className="text-sm text-muted-foreground font-body mb-5">
