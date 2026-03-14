@@ -15,8 +15,6 @@ const RequestPart = () => {
     notes: ""
   });
 
-  const [method, setMethod] = useState<"whatsapp" | "email">("whatsapp");
-
   const handleChange = (e: any) => {
     setForm({
       ...form,
@@ -24,9 +22,7 @@ const RequestPart = () => {
     });
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-
+  const handleSubmit = (method: "whatsapp" | "email") => {
     const message = `
 Hi, I'd like to request a part.
 
@@ -57,6 +53,7 @@ ${form.notes}
     <main className="pt-24 pb-20 min-h-screen bg-background">
       <div className="section-container max-w-2xl">
 
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -70,35 +67,13 @@ ${form.notes}
           </p>
         </motion.div>
 
-        {/* Toggle Method */}
-        <div className="flex justify-center gap-4 mb-6">
-          <button
-            type="button"
-            onClick={() => setMethod("whatsapp")}
-            className={`px-4 py-2 rounded-lg font-semibold ${
-              method === "whatsapp" ? "bg-[#25D366] text-white" : "bg-card text-foreground border border-border"
-            }`}
-          >
-            WhatsApp
-          </button>
-          <button
-            type="button"
-            onClick={() => setMethod("email")}
-            className={`px-4 py-2 rounded-lg font-semibold ${
-              method === "email" ? "bg-blue-600 text-white" : "bg-card text-foreground border border-border"
-            }`}
-          >
-            Email
-          </button>
-        </div>
-
+        {/* Form */}
         <motion.form
-          onSubmit={handleSubmit}
+          onSubmit={(e) => e.preventDefault()}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4 bg-card border border-border rounded-xl p-6"
         >
-
           <input
             name="brand"
             placeholder="Vehicle Brand (Toyota, Honda, etc)"
@@ -156,14 +131,24 @@ ${form.notes}
             onChange={handleChange}
           />
 
-          <button
-            type="submit"
-            className={`w-full py-3 rounded-lg font-semibold ${
-              method === "whatsapp" ? "btn-whatsapp" : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {method === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
-          </button>
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+            <button
+              type="button"
+              onClick={() => handleSubmit("whatsapp")}
+              className="btn-whatsapp flex-1 py-3"
+            >
+              Send via WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSubmit("email")}
+              className="flex-1 py-3 rounded-lg font-semibold text-white"
+              style={{ backgroundColor: "#1D2A55" }}
+            >
+              Send via Email
+            </button>
+          </div>
 
         </motion.form>
 
