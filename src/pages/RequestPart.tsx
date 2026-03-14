@@ -2,10 +2,12 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const WHATSAPP_NUMBER = "923219454136";
-const EMAIL_ADDRESS = "hamzanaveed1@gmail.com";
+const OWNER_EMAIL = "hamzanaveed1@gmail.com";
 
 const RequestPart = () => {
   const [form, setForm] = useState({
+    userName: "",
+    userEmail: "",
     brand: "",
     model: "",
     year: "",
@@ -22,9 +24,11 @@ const RequestPart = () => {
     });
   };
 
-  const handleSubmit = (method: "whatsapp" | "email") => {
+  const handleSend = (method: "whatsapp" | "email") => {
     const message = `
 Hi, I'd like to request a part.
+
+From: ${form.userName} (${form.userEmail})
 
 Vehicle Brand: ${form.brand}
 Model: ${form.model}
@@ -44,7 +48,7 @@ ${form.notes}
     } else if (method === "email") {
       const subject = encodeURIComponent("Part Request from Website");
       const body = encodeURIComponent(message);
-      const mailto = `mailto:${EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
+      const mailto = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
       window.open(mailto, "_blank");
     }
   };
@@ -74,6 +78,24 @@ ${form.notes}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4 bg-card border border-border rounded-xl p-6"
         >
+          {/* User Info */}
+          <input
+            name="userName"
+            placeholder="Your Name"
+            className="w-full border border-border rounded-lg px-4 py-3"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="userEmail"
+            type="email"
+            placeholder="Your Email"
+            className="w-full border border-border rounded-lg px-4 py-3"
+            onChange={handleChange}
+            required
+          />
+
+          {/* Vehicle Info */}
           <input
             name="brand"
             placeholder="Vehicle Brand (Toyota, Honda, etc)"
@@ -81,7 +103,6 @@ ${form.notes}
             onChange={handleChange}
             required
           />
-
           <input
             name="model"
             placeholder="Vehicle Model (Civic, Corolla, etc)"
@@ -89,7 +110,6 @@ ${form.notes}
             onChange={handleChange}
             required
           />
-
           <input
             name="year"
             placeholder="Vehicle Year (e.g. 2017)"
@@ -104,7 +124,6 @@ ${form.notes}
             onChange={handleChange}
             required
           />
-
           <select
             name="condition"
             className="w-full border border-border rounded-lg px-4 py-3"
@@ -115,14 +134,12 @@ ${form.notes}
             <option>Used</option>
             <option>Either</option>
           </select>
-
           <input
             name="budget"
             placeholder="Budget (optional)"
             className="w-full border border-border rounded-lg px-4 py-3"
             onChange={handleChange}
           />
-
           <textarea
             name="notes"
             placeholder="Additional details"
@@ -135,14 +152,14 @@ ${form.notes}
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <button
               type="button"
-              onClick={() => handleSubmit("whatsapp")}
+              onClick={() => handleSend("whatsapp")}
               className="btn-whatsapp flex-1 py-3"
             >
               Send via WhatsApp
             </button>
             <button
               type="button"
-              onClick={() => handleSubmit("email")}
+              onClick={() => handleSend("email")}
               className="flex-1 py-3 rounded-lg font-semibold text-white"
               style={{ backgroundColor: "#1D2A55" }}
             >
@@ -151,7 +168,6 @@ ${form.notes}
           </div>
 
         </motion.form>
-
       </div>
     </main>
   );
