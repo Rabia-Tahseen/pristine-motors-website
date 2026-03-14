@@ -5,6 +5,7 @@ import { Package, ShoppingCart, Car, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
+
 interface DashboardStats {
   totalProducts: number;
   totalOrders: number;

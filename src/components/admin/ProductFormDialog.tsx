@@ -99,15 +99,33 @@ const ProductFormDialog = ({ open, onOpenChange, product, onSaved }: Props) => {
     }
 
     setSaving(true);
-    const payload = { ...form };
+    const payload = {
+      title: form.title,
+      category: form.category ?? null,
+      price: Number(form.price) || 0,
+      short_description: form.short_description || null,
+      full_description: form.full_description || null,
+      brand: form.brand || null,
+      model_compatibility: form.model_compatibility || null,
+      condition: form.condition ?? null,
+      stock_status: form.stock_status ?? null,
+      is_featured: form.is_featured ?? false,
+      images: form.images ?? [],
+    };
 
     if (product) {
       const { error } = await supabase.from("products").update(payload).eq("id", product.id);
-      if (error) toast.error("Failed to update product");
+      if (error) {
+        console.error(error);
+        toast.error(error.message);
+      }
       else toast.success("Product updated");
     } else {
       const { error } = await supabase.from("products").insert(payload);
-      if (error) toast.error("Failed to add product");
+      if (error) {
+        console.error(error);
+        toast.error(error.message);
+      }
       else toast.success("Product added");
     }
 
