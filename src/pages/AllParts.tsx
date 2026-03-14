@@ -14,8 +14,10 @@ const AllParts = () => {
   useEffect(() => {
     const s = searchParams.get("search");
     const c = searchParams.get("category");
+    const v = searchParams.get("vehicle");
     if (s) setSearch(s);
     if (c) setActiveCategory(c);
+    if (v) setActiveVehicle(v);
   }, [searchParams]);
 
   const filtered = useMemo(() => {
