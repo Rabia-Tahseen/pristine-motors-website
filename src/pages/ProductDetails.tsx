@@ -5,11 +5,11 @@
   transition={{ duration: 0.4 }}
   className="flex flex-col"
 >
-  <div className="relative rounded-xl overflow-hidden border border-border bg-muted aspect-[4/3]">
+  <div className="relative rounded-xl overflow-hidden border border-border bg-muted w-full" style={{ paddingTop: "75%" }}>
     <img
       src={allImages[selectedImage]}
       alt={product.name}
-      className="w-full h-full object-cover"
+      className="absolute top-0 left-0 w-full h-full object-cover"
     />
 
     {allImages.length > 1 && (
