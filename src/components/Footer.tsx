@@ -10,10 +10,10 @@ const Footer = () => (
             <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 object-contain" />
             <div className="flex flex-col leading-none">
               <span className="font-display text-lg font-bold text-white">Pristine</span>
-              <span className="text-[10px] font-body uppercase tracking-[0.15em] text-white/50">Auto Hub</span>
+              <span className="text-[10px] font-body uppercase tracking-[0.15em] text-white/80">Auto Hub</span>
             </div>
           </div>
-          <p className="text-white/50 text-sm leading-relaxed max-w-xs font-body">
+          <p className="text-white/80 text-sm leading-relaxed max-w-xs font-body">
             Your trusted source for genuine Japanese auto parts & vehicles.
           </p>
         </div>
@@ -28,7 +28,7 @@ const Footer = () => (
               { label: "About", to: "/about" },
               { label: "Contact", to: "/contact" },
             ].map((l) => (
-              <Link key={l.to} to={l.to} className="text-white/50 hover:text-white text-sm transition-colors font-body">
+              <Link key={l.to} to={l.to} className="text-white/80 hover:text-white text-sm transition-colors font-body">
                 {l.label}
               </Link>
             ))}
@@ -37,7 +37,7 @@ const Footer = () => (
 
         <div>
           <h4 className="font-body font-semibold text-white text-sm mb-4">Contact</h4>
-          <div className="flex flex-col gap-2 text-sm font-body text-white/50">
+          <div className="flex flex-col gap-2 text-sm font-body text-white/80">
             <a href="https://wa.me/923219454136" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
               WhatsApp: +92 321 9454136
             </a>
