@@ -107,6 +107,7 @@ const AllParts = () => {
               onClick={() => {
                 setSearch("");
                 setActiveCategory("All");
+                setActiveVehicle("All");
               }}
               className="mt-3 text-primary hover:underline font-body text-sm font-medium"
             >
