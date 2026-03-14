@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { MessageCircle, Mail } from "lucide-react";
 
 const WHATSAPP_NUMBER = "923219454136";
 const OWNER_EMAIL = "hamzanaveed1@gmail.com";
 
 const RequestPart = () => {
   const [form, setForm] = useState({
-    userName: "",
-    userEmail: "",
     brand: "",
     model: "",
     year: "",
@@ -28,8 +27,6 @@ const RequestPart = () => {
     const message = `
 Hi, I'd like to request a part.
 
-From: ${form.userName} (${form.userEmail})
-
 Vehicle Brand: ${form.brand}
 Model: ${form.model}
 Year: ${form.year}
@@ -46,10 +43,11 @@ ${form.notes}
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       window.open(url, "_blank");
     } else if (method === "email") {
+      // Open Gmail compose directly in new tab
       const subject = encodeURIComponent("Part Request from Website");
       const body = encodeURIComponent(message);
-      const mailto = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
-      window.open(mailto, "_blank");
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${OWNER_EMAIL}&su=${subject}&body=${body}`;
+      window.open(gmailUrl, "_blank");
     }
   };
 
@@ -78,22 +76,6 @@ ${form.notes}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4 bg-card border border-border rounded-xl p-6"
         >
-          {/* User Info */}
-          <input
-            name="userName"
-            placeholder="Your Name"
-            className="w-full border border-border rounded-lg px-4 py-3"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="userEmail"
-            type="email"
-            placeholder="Your Email"
-            className="w-full border border-border rounded-lg px-4 py-3"
-            onChange={handleChange}
-            required
-          />
 
           {/* Vehicle Info */}
           <input
@@ -116,7 +98,6 @@ ${form.notes}
             className="w-full border border-border rounded-lg px-4 py-3"
             onChange={handleChange}
           />
-
           <input
             name="part"
             placeholder="Part Needed (Headlight, Bumper, etc)"
@@ -148,21 +129,23 @@ ${form.notes}
             onChange={handleChange}
           />
 
-          {/* Buttons */}
+          {/* Buttons with Icons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <button
               type="button"
               onClick={() => handleSend("whatsapp")}
-              className="btn-whatsapp flex-1 py-3"
+              className="flex items-center justify-center gap-2 btn-whatsapp flex-1 py-3"
             >
+              <MessageCircle size={20} />
               Send via WhatsApp
             </button>
             <button
               type="button"
               onClick={() => handleSend("email")}
-              className="flex-1 py-3 rounded-lg font-semibold text-white"
+              className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg font-semibold text-white"
               style={{ backgroundColor: "#1D2A55" }}
             >
+              <Mail size={20} />
               Send via Email
             </button>
           </div>
