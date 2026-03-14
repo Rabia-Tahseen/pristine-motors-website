@@ -43,7 +43,6 @@ const Navbar = () => {
               {l.label}
             </Link>
           ))}
-
           <Link to="/cart" className="relative text-white hover:text-white/80 transition-colors">
             <ShoppingCart size={22} />
             {totalItems > 0 && (
