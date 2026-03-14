@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const WHATSAPP_NUMBER = "923219454136";
+const EMAIL_ADDRESS = "hamzanaveed1@gmail.com";
 
 const RequestPart = () => {
-
   const [form, setForm] = useState({
     brand: "",
     model: "",
@@ -15,14 +15,16 @@ const RequestPart = () => {
     notes: ""
   });
 
-  const handleChange = (e:any) => {
+  const [method, setMethod] = useState<"whatsapp" | "email">("whatsapp");
+
+  const handleChange = (e: any) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
     const message = `
@@ -40,9 +42,15 @@ Additional Notes:
 ${form.notes}
 `;
 
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
-    window.open(url, "_blank");
+    if (method === "whatsapp") {
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    } else if (method === "email") {
+      const subject = encodeURIComponent("Part Request from Website");
+      const body = encodeURIComponent(message);
+      const mailto = `mailto:${EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
+      window.open(mailto, "_blank");
+    }
   };
 
   return (
@@ -57,11 +65,32 @@ ${form.notes}
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
             Part Finder
           </h1>
-
           <p className="mt-3 text-muted-foreground font-body">
             Can't find the part you need? Fill the form below and send your request directly to the owner.
           </p>
         </motion.div>
+
+        {/* Toggle Method */}
+        <div className="flex justify-center gap-4 mb-6">
+          <button
+            type="button"
+            onClick={() => setMethod("whatsapp")}
+            className={`px-4 py-2 rounded-lg font-semibold ${
+              method === "whatsapp" ? "bg-[#25D366] text-white" : "bg-card text-foreground border border-border"
+            }`}
+          >
+            WhatsApp
+          </button>
+          <button
+            type="button"
+            onClick={() => setMethod("email")}
+            className={`px-4 py-2 rounded-lg font-semibold ${
+              method === "email" ? "bg-blue-600 text-white" : "bg-card text-foreground border border-border"
+            }`}
+          >
+            Email
+          </button>
+        </div>
 
         <motion.form
           onSubmit={handleSubmit}
@@ -129,9 +158,11 @@ ${form.notes}
 
           <button
             type="submit"
-            className="btn-whatsapp w-full"
+            className={`w-full py-3 rounded-lg font-semibold ${
+              method === "whatsapp" ? "btn-whatsapp" : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
           >
-            Send Request via WhatsApp
+            {method === "whatsapp" ? "Send via WhatsApp" : "Send via Email"}
           </button>
 
         </motion.form>
