@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { products, categories } from "@/data/products";
+import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
@@ -9,12 +9,15 @@ const AllParts = () => {
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
+  const [activeVehicle, setActiveVehicle] = useState(searchParams.get("vehicle") || "All");
 
   useEffect(() => {
     const s = searchParams.get("search");
     const c = searchParams.get("category");
+    const v = searchParams.get("vehicle");
     if (s) setSearch(s);
     if (c) setActiveCategory(c);
+    if (v) setActiveVehicle(v);
   }, [searchParams]);
 
   const filtered = useMemo(() => {
@@ -75,6 +78,16 @@ const AllParts = () => {
               ))}
             </div>
           </div>
+          <div className="flex-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Vehicle</p>
+            <div className="flex gap-2 flex-wrap">
+              {vehicles.map((v) => (
+                <button key={v} onClick={() => setActiveVehicle(v)} className={filterBtn(activeVehicle === v)}>
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <p className="text-sm text-muted-foreground font-body mb-5">
@@ -94,6 +107,7 @@ const AllParts = () => {
               onClick={() => {
                 setSearch("");
                 setActiveCategory("All");
+                setActiveVehicle("All");
               }}
               className="mt-3 text-primary hover:underline font-body text-sm font-medium"
             >
