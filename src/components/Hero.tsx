@@ -14,7 +14,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative pt-32 pb-12 overflow-hidden bg-gradient-to-b from-white to-blue-50">
+    <section className="relative pt-32 pb-10 overflow-hidden bg-gradient-to-b from-white to-blue-50">
       {/* Background Glow */}
       <div className="absolute inset-0 flex justify-center pointer-events-none">
         <div className="w-[700px] h-[400px] bg-blue-200 opacity-30 blur-3xl rounded-full"></div>
