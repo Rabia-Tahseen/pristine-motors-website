@@ -17,7 +17,7 @@ const About = () => (
             <img
               src={logo}
               alt="Pristine Auto Hub"
-              className="relative h-[88px] w-[88px] rounded-full object-cover ring-1 ring-border/60 bg-background"
+              className="relative h-[92px] w-[92px] rounded-full object-cover ring-1 ring-border/60 bg-background"
             />
 
           </div>
