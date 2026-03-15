@@ -28,18 +28,17 @@ Price: ${product.price}`;
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      {/* Entire card is clickable */}
+      {/* Entire card clickable */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300"
       >
         {/* Image with hover effect */}
         <div className="overflow-hidden aspect-[4/3] relative">
           <motion.img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300"
-            whileHover={{ scale: 1.05 }}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
           <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
@@ -49,7 +48,7 @@ Price: ${product.price}`;
 
         {/* Product info */}
         <div className="p-4 flex flex-col flex-1">
-          <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1">
+          <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1 group-hover:text-primary transition-colors">
             {product.name}
           </h3>
 
@@ -58,9 +57,7 @@ Price: ${product.price}`;
           </p>
 
           <div className="flex items-center justify-between mt-auto gap-2">
-            <p className="font-body font-bold text-primary text-lg">
-              {product.price}
-            </p>
+            <p className="font-body font-bold text-primary text-lg">{product.price}</p>
 
             <div className="flex items-center gap-2">
               {/* Add to cart */}
