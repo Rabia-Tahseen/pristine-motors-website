@@ -25,6 +25,25 @@ const Navbar = () => {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
+  
+  <div className="h-11 w-11 rounded-full overflow-hidden">
+    <img
+      src={logo}
+      alt="Pristine Auto Hub"
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  <div className="flex flex-col leading-none">
+    <span className="font-display text-lg font-bold text-white">
+      Pristine
+    </span>
+    <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">
+      Auto Hub
+    </span>
+  </div>
+
+</Link>
 
           <img
             src={logo}
