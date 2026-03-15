@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, MessageCircle, ArrowLeft } from "lucide-react";
+import { ShoppingCart, MessageCircle, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import type { Product } from "@/data/products";
 
@@ -31,8 +31,8 @@ Price: ${product.price}`;
       {/* Entire card clickable */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden
-                   hover:bg-gray-50 hover:shadow-md transition-all duration-200 relative"
+        className="group block h-full max-w-xs flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden
+                   hover:shadow-lg hover:bg-gray-50 transition-all duration-200 relative"
       >
         {/* Image with subtle zoom */}
         <div className="overflow-hidden aspect-[4/3] relative">
@@ -40,7 +40,7 @@ Price: ${product.price}`;
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-300"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.06 }}
             loading="lazy"
           />
           <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
@@ -49,17 +49,17 @@ Price: ${product.price}`;
         </div>
 
         {/* Product info */}
-        <div className="p-4 flex flex-col flex-1">
-          <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1">
+        <div className="p-3 flex flex-col flex-1 relative">
+          <h3 className="font-display font-semibold text-foreground text-sm leading-tight mb-1">
             {product.name}
           </h3>
 
-          <p className="text-muted-foreground text-sm font-body line-clamp-2 mb-3 flex-1">
+          <p className="text-muted-foreground text-xs font-body line-clamp-2 mb-2 flex-1">
             {product.description}
           </p>
 
           <div className="flex items-center justify-between mt-auto gap-2">
-            <p className="font-body font-bold text-primary text-lg">{product.price}</p>
+            <p className="font-body font-bold text-primary text-base">{product.price}</p>
 
             <div className="flex items-center gap-2">
               {/* Add to cart */}
@@ -88,10 +88,10 @@ Price: ${product.price}`;
             </div>
           </div>
 
-          {/* View Details at the bottom left */}
-          <div className="mt-3 flex items-center gap-1 text-blue-900 text-sm font-medium group-hover:text-blue-500 transition-colors">
-            <ArrowLeft size={14} />
+          {/* View Details bottom-right */}
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 text-blue-900 text-sm font-medium group-hover:text-blue-500 transition-colors">
             <span className="underline cursor-pointer">View Details</span>
+            <ArrowRight size={14} />
           </div>
         </div>
       </Link>
