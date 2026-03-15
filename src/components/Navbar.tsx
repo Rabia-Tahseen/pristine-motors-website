@@ -27,7 +27,7 @@ const Navbar = () => {
         <Link to="/" className="flex items-center gap-3">
 
           {/* Circular Logo */}
-         <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-white/30 shadow-md">
+          <div className="h-11 w-11 rounded-full overflow-hidden border border-white/20">
             <img
               src={logo}
               alt="Pristine Auto Hub"
