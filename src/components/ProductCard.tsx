@@ -33,7 +33,7 @@ Price: ${product.price}`;
       {/* Entire card clickable except cart & WhatsApp */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105"
+        className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-transform transform hover:scale-[1.02]" // subtle hover
       >
         <div className="flex flex-col h-full bg-white">
           {/* Image */}
@@ -41,12 +41,14 @@ Price: ${product.price}`;
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
             <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
               {product.vehicle}
             </span>
+            {/* Optional subtle shadow overlay */}
+            <div className="absolute inset-0 bg-black/5 pointer-events-none"></div>
           </div>
 
           <div className="p-4 flex flex-col flex-1">
@@ -91,7 +93,7 @@ Price: ${product.price}`;
                 {/* View Details styled as text */}
                 <div
                   className="text-sm font-medium text-blue-900 hover:text-blue-500 flex items-center gap-1 cursor-pointer"
-                  onClick={(e) => e.stopPropagation()} // optional, since whole card already clickable
+                  onClick={(e) => e.stopPropagation()} // optional
                 >
                   View Details <ArrowRight size={14} />
                 </div>
