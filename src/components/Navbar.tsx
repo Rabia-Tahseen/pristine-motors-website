@@ -24,15 +24,13 @@ const Navbar = () => {
       <div className="section-container flex items-center justify-between h-16">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
-          
-          <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-white">
-            <img
-              src={logo}
-              alt="Pristine Auto Hub"
-              className="w-full h-full object-cover"
-            />
-          </div>
+        <Link to="/" className="flex items-center gap-3">
+
+          <img
+            src={logo}
+            alt="Pristine Auto Hub"
+            className="h-11 w-11 object-contain"
+          />
 
           <div className="flex flex-col leading-none">
             <span className="font-display text-lg font-bold text-white">
@@ -52,9 +50,7 @@ const Navbar = () => {
               key={l.to}
               to={l.to}
               className={`text-white font-medium transition-all duration-200 ${
-                location.pathname === l.to
-                  ? "underline"
-                  : "hover:underline"
+                location.pathname === l.to ? "underline" : "hover:underline"
               }`}
             >
               {l.label}
@@ -62,14 +58,11 @@ const Navbar = () => {
           ))}
 
           {/* Cart */}
-          <Link
-            to="/cart"
-            className="relative text-white hover:text-white/80 transition-colors"
-          >
+          <Link to="/cart" className="relative text-white hover:text-white/80 transition-colors">
             <ShoppingCart size={22} />
 
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-destructive text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems > 99 ? "99+" : totalItems}
               </span>
             )}
@@ -78,15 +71,12 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <div className="flex items-center gap-3 lg:hidden">
-          
-          <Link
-            to="/cart"
-            className="relative text-white hover:text-white/80 transition-colors"
-          >
+
+          <Link to="/cart" className="relative text-white hover:text-white/80 transition-colors">
             <ShoppingCart size={22} />
 
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-destructive text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems > 99 ? "99+" : totalItems}
               </span>
             )}
