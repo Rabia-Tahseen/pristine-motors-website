@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Car, Rectangle, Search } from "lucide-react"; // Rectangle replaces Wrench
+import { Car, Cog, Search } from "lucide-react"; // Cog used for car parts
 import { useState } from "react";
 
 const Hero = () => {
@@ -21,6 +21,7 @@ const Hero = () => {
       </div>
 
       <div className="section-container text-center relative z-10">
+        {/* Heading */}
         <motion.h1
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -44,7 +45,10 @@ const Hero = () => {
             to="/cars"
             className="group bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
-            <Car size={18} className="text-yellow-400 group-hover:text-yellow-300 transition-colors" />
+            <Car
+              size={18}
+              className="text-yellow-400 group-hover:text-yellow-300 transition-colors"
+            />
             Browse Cars
           </Link>
 
@@ -52,13 +56,16 @@ const Hero = () => {
             to="/parts"
             className="group bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
-            <Rectangle size={18} className="text-yellow-400 group-hover:text-yellow-300 transition-colors" />
+            <Cog
+              size={16}           // slightly smaller than Car
+              className="text-yellow-400 group-hover:text-yellow-300 transition-colors"
+            />
             Browse Car Parts
           </Link>
         </div>
 
         {/* Horizontal Search Bar */}
-        <div className="mt-10 flex flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
+        <div className="mt-8 flex flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
           <div className="flex items-center pl-4 flex-shrink-0">
             <Search size={18} className="text-yellow-400" />
           </div>
