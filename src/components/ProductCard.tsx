@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, MessageCircle } from "lucide-react";
+import { ShoppingCart, MessageCircle, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import type { Product } from "@/data/products";
 
@@ -31,16 +31,16 @@ Price: ${product.price}`;
       {/* Entire card clickable */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden 
-                   hover:shadow-md transition-shadow duration-200"
+        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden
+                   hover:border-primary hover:shadow-md transition-all duration-200 relative"
       >
-        {/* Image with your original subtle hover effect */}
+        {/* Image with subtle zoom */}
         <div className="overflow-hidden aspect-[4/3] relative">
           <motion.img
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-300"
-            whileHover={{ scale: 1.05 }} // subtle image zoom
+            whileHover={{ scale: 1.05 }}
             loading="lazy"
           />
           <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
@@ -86,6 +86,12 @@ Price: ${product.price}`;
                 <MessageCircle size={16} />
               </a>
             </div>
+          </div>
+
+          {/* View Details indicator */}
+          <div className="mt-3 flex items-center gap-1 text-primary text-sm font-medium group-hover:underline">
+            <span>View Details</span>
+            <ArrowRight size={14} />
           </div>
         </div>
       </Link>
