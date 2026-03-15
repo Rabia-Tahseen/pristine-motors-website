@@ -5,13 +5,13 @@ const indicators = [
   { icon: ShieldCheck, text: "Genuine Japanese Auto Parts" },
   { icon: Award, text: "Trusted Supplier" },
   { icon: MessageCircle, text: "Direct Dealer Communication" },
-  { icon: Zap, text: "Fast Response" },
+  { icon: Zap, text: "Fast Response via WhatsApp" },
 ];
 
 const TrustIndicators = () => (
-  <section className="py-10 bg-white"> {/* White background */}
+  <section className="py-10 bg-white border-b border-[#1D2A55]">
     <div className="section-container">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
         {indicators.map((item, i) => (
           <motion.div
             key={item.text}
@@ -19,12 +19,12 @@ const TrustIndicators = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.08 }}
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-3"
           >
-            <div className="w-12 h-12 rounded-lg bg-yellow-100 flex items-center justify-center flex-shrink-0">
+            <div className="w-14 h-14 rounded-lg bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
               <item.icon size={24} className="text-yellow-400" />
             </div>
-            <span className="text-sm font-medium text-[#1D2A55] font-body leading-tight">
+            <span className="text-sm md:text-base font-medium text-[#1D2A55] font-body leading-tight">
               {item.text}
             </span>
           </motion.div>
