@@ -25,17 +25,24 @@ const Navbar = () => {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <img
-            src={logo}
-            alt="Pristine Auto Hub"
-            className="h-10 w-auto object-contain"
-          />
+          
+          <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-white">
+            <img
+              src={logo}
+              alt="Pristine Auto Hub"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
           <div className="flex flex-col leading-none">
-            <span className="font-display text-lg font-bold text-white">Pristine</span>
+            <span className="font-display text-lg font-bold text-white">
+              Pristine
+            </span>
             <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">
               Auto Hub
             </span>
           </div>
+
         </Link>
 
         {/* Desktop Links */}
@@ -45,13 +52,16 @@ const Navbar = () => {
               key={l.to}
               to={l.to}
               className={`text-white font-medium transition-all duration-200 ${
-                location.pathname === l.to ? "underline" : "hover:underline"
+                location.pathname === l.to
+                  ? "underline"
+                  : "hover:underline"
               }`}
             >
               {l.label}
             </Link>
           ))}
 
+          {/* Cart */}
           <Link
             to="/cart"
             className="relative text-white hover:text-white/80 transition-colors"
@@ -68,6 +78,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <div className="flex items-center gap-3 lg:hidden">
+          
           <Link
             to="/cart"
             className="relative text-white hover:text-white/80 transition-colors"
@@ -87,6 +98,7 @@ const Navbar = () => {
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+
         </div>
       </div>
 
@@ -119,6 +131,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
     </nav>
   );
 };
