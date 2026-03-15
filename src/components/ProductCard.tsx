@@ -31,9 +31,10 @@ Price: ${product.price}`;
       {/* Entire card clickable */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300"
+        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden 
+                   transition-transform duration-300 transform hover:shadow-xl hover:scale-105"
       >
-        {/* Image with hover effect */}
+        {/* Image with hover zoom */}
         <div className="overflow-hidden aspect-[4/3] relative">
           <motion.img
             src={product.image}
@@ -63,7 +64,7 @@ Price: ${product.price}`;
               {/* Add to cart */}
               <button
                 onClick={(e) => {
-                  e.preventDefault(); // prevent navigating when clicking cart
+                  e.preventDefault();
                   addToCart(product);
                 }}
                 className="p-2 rounded-lg border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
@@ -79,7 +80,7 @@ Price: ${product.price}`;
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg border border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors"
                 aria-label="Chat on WhatsApp"
-                onClick={(e) => e.stopPropagation()} // prevent navigating when clicking WhatsApp
+                onClick={(e) => e.stopPropagation()}
               >
                 <MessageCircle size={16} />
               </a>
