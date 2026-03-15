@@ -33,7 +33,7 @@ Price: ${product.price}`;
       {/* Entire card clickable except cart & WhatsApp */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block rounded-xl overflow-hidden bg-white shadow-lg transition-transform transform hover:scale-[1.02] hover:shadow-xl"
+        className="group block rounded-xl overflow-hidden bg-white transition-transform transform hover:scale-[1.02] hover:shadow-lg"
       >
         <div className="flex flex-col h-full">
           {/* Image */}
@@ -47,8 +47,8 @@ Price: ${product.price}`;
             <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
               {product.vehicle}
             </span>
-            {/* Optional subtle shadow overlay */}
-            <div className="absolute inset-0 bg-black/5 pointer-events-none"></div>
+            {/* Darker shadow overlay on hover */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none"></div>
           </div>
 
           <div className="p-4 flex flex-col flex-1">
