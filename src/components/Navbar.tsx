@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/contexts/CartContext";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/newlogo.png";
 
 const links = [
   { label: "Home", to: "/" },
@@ -24,7 +24,7 @@ const Navbar = () => {
       <div className="section-container flex items-center justify-between h-16">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 object-contain" />
+          <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 rounded-full object-cover" />
           <div className="flex flex-col leading-none">
             <span className="font-display text-lg font-bold text-white">Pristine</span>
             <span className="text-[10px] font-body text-white/80 uppercase tracking-[0.15em]">Auto Hub</span>
