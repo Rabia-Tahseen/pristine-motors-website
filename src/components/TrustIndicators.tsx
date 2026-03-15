@@ -5,11 +5,11 @@ const indicators = [
   { icon: ShieldCheck, text: "Genuine Japanese Auto Parts" },
   { icon: Award, text: "Trusted Supplier" },
   { icon: MessageCircle, text: "Direct Dealer Communication" },
-  { icon: Zap, text: "Fast Response via WhatsApp" },
+  { icon: Zap, text: "Fast Response" },
 ];
 
 const TrustIndicators = () => (
-  <section className="py-10 bg-[#1D2A55]"> {/* Dark blue background */}
+  <section className="py-10 bg-white"> {/* White background */}
     <div className="section-container">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         {indicators.map((item, i) => (
@@ -21,10 +21,10 @@ const TrustIndicators = () => (
             transition={{ delay: i * 0.08 }}
             className="flex flex-col items-center gap-2"
           >
-            <div className="w-12 h-12 rounded-lg bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-lg bg-yellow-100 flex items-center justify-center flex-shrink-0">
               <item.icon size={24} className="text-yellow-400" />
             </div>
-            <span className="text-sm font-medium text-white font-body leading-tight">
+            <span className="text-sm font-medium text-[#1D2A55] font-body leading-tight">
               {item.text}
             </span>
           </motion.div>
