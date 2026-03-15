@@ -9,7 +9,6 @@ const CALL_NUMBER = "+92 301 3917380";
 const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // EmailCard (no export)
-// EmailCard (no export)
 const EmailCard = () => {
   const email = "hamzanaveed1@gmail.com";
 
@@ -26,7 +25,7 @@ const EmailCard = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.16 }}
-      className="flex flex-col items-center gap-3 p-6 rounded-xl bg-muted border border-border hover:bg-muted/80 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+      className="flex flex-col items-center gap-3 p-6 rounded-xl bg-yellow-50 border border-yellow-200 hover:bg-yellow-100 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
       onClick={(e) => {
         if (isMobile()) {
           e.preventDefault();
@@ -34,8 +33,8 @@ const EmailCard = () => {
         }
       }}
     >
-      <div className="w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center">
-        <Mail size={24} className="text-foreground" />
+      <div className="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center">
+        <Mail size={24} className="text-white" />
       </div>
 
       <span className="font-semibold text-foreground font-body text-sm">
@@ -47,7 +46,7 @@ const EmailCard = () => {
       </span>
     </motion.a>
   );
-};;
+};
 
 // Main ContactSection (export only this)
 const ContactSection = () => (
