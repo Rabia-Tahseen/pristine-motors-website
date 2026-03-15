@@ -32,7 +32,7 @@ Price: ${product.price}`;
       <Link
         to={`/parts/${product.id}`}
         className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden
-                   hover:border-primary hover:shadow-md transition-all duration-200 relative"
+                   hover:bg-gray-50 transition-colors duration-200 relative"
       >
         {/* Image with subtle zoom */}
         <div className="overflow-hidden aspect-[4/3] relative">
@@ -88,10 +88,10 @@ Price: ${product.price}`;
             </div>
           </div>
 
-          {/* View Details indicator */}
-          <div className="mt-3 flex items-center gap-1 text-primary text-sm font-medium group-hover:underline">
-            <span>View Details</span>
+          {/* View Details at the bottom left */}
+          <div className="mt-3 flex items-center gap-1 text-gray-600 text-sm font-medium">
             <ArrowRight size={14} />
+            <span>View Details</span>
           </div>
         </div>
       </Link>
