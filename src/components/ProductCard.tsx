@@ -37,17 +37,17 @@ Price: ${product.price}`;
       >
         <div className="flex flex-col h-full">
           {/* Image */}
-          <div className="overflow-hidden aspect-[4/3] relative transition-shadow duration-300">
+          <div className="overflow-hidden aspect-[4/3] relative">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
             <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
               {product.vehicle}
             </span>
-            {/* Darker shadow overlay on hover */}
+            {/* Dark overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none"></div>
           </div>
 
@@ -90,7 +90,7 @@ Price: ${product.price}`;
                   <MessageCircle size={16} />
                 </a>
 
-                {/* View Details styled as text */}
+                {/* View Details */}
                 <div
                   className="text-sm font-medium text-blue-900 hover:text-blue-500 flex items-center gap-1 cursor-pointer"
                   onClick={(e) => e.stopPropagation()}
