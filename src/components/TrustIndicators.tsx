@@ -1,18 +1,16 @@
 import { motion } from "framer-motion";
-import { ShieldCheck, Award, MessageCircle, Zap } from "lucide-react";
+import { ShieldCheck, Award, MessageCircle } from "lucide-react";
 
 const indicators = [
   { icon: ShieldCheck, text: "Genuine Japanese Auto Parts" },
   { icon: Award, text: "Trusted Supplier" },
   { icon: MessageCircle, text: "Direct Dealer Communication" },
-  { icon: Zap, text: "Fast Response via WhatsApp" },
 ];
 
 const TrustIndicators = () => (
-  <section className="pt-4 pb-4 bg-white border-b-2 border-gray-200"> 
-    {/* Top padding 4, bottom padding reduced to 2, light grey bottom border */}
+  <section className="pt-4 pb-4 bg-white border-b-2 border-gray-200">
     <div className="section-container">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 justify-items-center">
         {indicators.map((item, i) => (
           <motion.div
             key={item.text}
