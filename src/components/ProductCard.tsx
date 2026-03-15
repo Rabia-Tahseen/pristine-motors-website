@@ -32,14 +32,15 @@ Price: ${product.price}`;
       <Link
         to={`/parts/${product.id}`}
         className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden 
-                   transition-transform duration-300 transform hover:shadow-xl hover:scale-105"
+                   hover:shadow-md transition-shadow duration-200"
       >
-        {/* Image with hover zoom */}
+        {/* Image with your original subtle hover effect */}
         <div className="overflow-hidden aspect-[4/3] relative">
           <motion.img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300"
+            whileHover={{ scale: 1.05 }} // subtle image zoom
             loading="lazy"
           />
           <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
@@ -49,7 +50,7 @@ Price: ${product.price}`;
 
         {/* Product info */}
         <div className="p-4 flex flex-col flex-1">
-          <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1 group-hover:text-primary transition-colors">
+          <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1">
             {product.name}
           </h3>
 
