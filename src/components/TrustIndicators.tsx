@@ -9,7 +9,7 @@ const indicators = [
 ];
 
 const TrustIndicators = () => (
-  <section className="pt-4 pb-2 bg-white border-b-2 border-gray-200"> 
+  <section className="pt-4 pb-4 bg-white border-b-2 border-gray-200"> 
     {/* Top padding 4, bottom padding reduced to 2, light grey bottom border */}
     <div className="section-container">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
