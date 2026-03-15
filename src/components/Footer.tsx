@@ -26,6 +26,7 @@ const Footer = () => (
               { label: "Parts", to: "/parts" },
               { label: "About", to: "/about" },
               { label: "Contact", to: "/contact" },
+              { label: "Request a Part", to: "/contact" },
             ].map((l) => (
               <Link key={l.to} to={l.to} className="text-white/50 hover:text-white text-sm transition-colors font-body">
                 {l.label}
