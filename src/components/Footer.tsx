@@ -9,9 +9,9 @@ const indicators = [
 ];
 
 const TrustIndicators = () => (
-  <section className="py-8 bg-white"> {/* gives separation from other sections */}
+  <section className="py-3 bg-white">
     <div className="section-container">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {indicators.map((item, i) => (
           <motion.div
             key={item.text}
@@ -19,13 +19,11 @@ const TrustIndicators = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.08 }}
-            className="flex items-center gap-3 bg-white p-2 rounded-md shadow-sm hover:shadow-md transition"
+            className="flex items-center gap-1 sm:gap-1.5"
           >
-            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <item.icon size={20} className="text-yellow-400" />
-            </div>
-            <span className="text-[#1D2A55] font-medium text-sm font-body">
-              {item.text}
+            <item.icon size={18} className="text-yellow-400 flex-shrink-0" />
+            <span className="text-[#1D2A55] font-medium text-sm font-body flex items-center gap-0.5">
+              : {item.text}
             </span>
           </motion.div>
         ))}
