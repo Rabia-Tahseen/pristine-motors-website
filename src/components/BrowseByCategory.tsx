@@ -12,7 +12,7 @@ const categoryData = [
 ];
 
 const BrowseByCategory = () => (
-  <section className="pt-8 pb-8 section-alt">
+  <section className="pt-10 pb-12 section-alt">
     <div className="section-container">
       <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
         Browse Parts by Category
@@ -32,7 +32,7 @@ const BrowseByCategory = () => (
             >
               <cat.icon
                 size={32}
-                className="text-muted-foreground group-hover:text-primary transition-colors duration-200"
+                className="text-[#1D2A55] group-hover:text-primary transition-colors duration-200"
               />
               <span className="text-sm font-medium text-foreground font-body text-center">
                 {cat.name}
