@@ -13,7 +13,6 @@ const ProductCard = ({ product, index = 0 }: Props) => {
   const { addToCart } = useCart();
 
   const phoneNumber = "923219454136";
-
   const message = `Hello, I'm interested in this part:
 
 Name: ${product.name}
@@ -29,12 +28,18 @@ Price: ${product.price}`;
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <div className="product-card group h-full flex flex-col">
-        <div className="overflow-hidden aspect-[4/3] rounded-t-xl relative">
-          <img
+      {/* Entire card is clickable */}
+      <Link
+        to={`/parts/${product.id}`}
+        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+      >
+        {/* Image with hover effect */}
+        <div className="overflow-hidden aspect-[4/3] relative">
+          <motion.img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-300"
+            whileHover={{ scale: 1.05 }}
             loading="lazy"
           />
           <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
@@ -42,6 +47,7 @@ Price: ${product.price}`;
           </span>
         </div>
 
+        {/* Product info */}
         <div className="p-4 flex flex-col flex-1">
           <h3 className="font-display font-semibold text-foreground text-base leading-tight mb-1">
             {product.name}
@@ -57,10 +63,12 @@ Price: ${product.price}`;
             </p>
 
             <div className="flex items-center gap-2">
-
               {/* Add to cart */}
               <button
-                onClick={() => addToCart(product)}
+                onClick={(e) => {
+                  e.preventDefault(); // prevent navigating when clicking cart
+                  addToCart(product);
+                }}
                 className="p-2 rounded-lg border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
                 aria-label="Add to cart"
               >
@@ -74,22 +82,14 @@ Price: ${product.price}`;
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg border border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors"
                 aria-label="Chat on WhatsApp"
+                onClick={(e) => e.stopPropagation()} // prevent navigating when clicking WhatsApp
               >
                 <MessageCircle size={16} />
               </a>
-
-              {/* View Details */}
-              <Link
-                to={`/parts/${product.id}`}
-                className="btn-primary text-xs py-2 px-4"
-              >
-                View Details
-              </Link>
-
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 };
