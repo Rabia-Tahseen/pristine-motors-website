@@ -1,56 +1,37 @@
-import { Link } from "react-router-dom";
-import logo from "@/assets/image.png";
+import { motion } from "framer-motion";
+import { ShieldCheck, Award, MessageCircle, Zap } from "lucide-react";
 
-const Footer = () => (
-  <footer className="bg-[#1D2A55] py-14">
+const indicators = [
+  { icon: ShieldCheck, text: "Genuine Japanese Auto Parts" },
+  { icon: Award, text: "Trusted Supplier" },
+  { icon: MessageCircle, text: "Direct Dealer Communication" },
+  { icon: Zap, text: "Fast Response via WhatsApp" },
+];
+
+const TrustIndicators = () => (
+  <section className="py-8 bg-white"> {/* gives separation from other sections */}
     <div className="section-container">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 rounded-full object-cover" />
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-lg font-bold text-white">Pristine</span>
-              <span className="text-[10px] font-body uppercase tracking-[0.15em] text-white/50">Auto Hub</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {indicators.map((item, i) => (
+          <motion.div
+            key={item.text}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.08 }}
+            className="flex items-center gap-3 bg-white p-2 rounded-md shadow-sm hover:shadow-md transition"
+          >
+            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+              <item.icon size={20} className="text-yellow-400" />
             </div>
-          </div>
-          <p className="text-white/50 text-sm leading-relaxed max-w-xs font-body">
-            Your trusted source for genuine Japanese auto parts & vehicles.
-          </p>
-        </div>
-        <div>
-          <h4 className="font-body font-semibold text-white text-sm mb-4">Quick Links</h4>
-          <div className="flex flex-col gap-2">
-            {[
-              { label: "Home", to: "/" },
-              { label: "Cars", to: "/cars" },
-              { label: "Parts", to: "/parts" },
-              { label: "About", to: "/about" },
-              { label: "Contact", to: "/contact" },
-              { label: "Request a Part", to: "/request-part" },
-            ].map((l) => (
-              <Link key={l.to} to={l.to} className="text-white/50 hover:text-white text-sm transition-colors font-body">
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h4 className="font-body font-semibold text-white text-sm mb-4">Contact</h4>
-          <div className="flex flex-col gap-2 text-sm font-body text-white/50">
-            <a href="https://wa.me/923219454136" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              WhatsApp: +92 321 9454136
-            </a>
-            <a href="tel:+923013917380" className="hover:text-white transition-colors">
-              Call: +92 301 3917380
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="mt-12 pt-6 border-t border-white/10 text-center">
-        <p className="text-white/30 text-xs font-body">© 2025 Pristine Auto Hub. All rights reserved.</p>
+            <span className="text-[#1D2A55] font-medium text-sm font-body">
+              {item.text}
+            </span>
+          </motion.div>
+        ))}
       </div>
     </div>
-  </footer>
+  </section>
 );
 
-export default Footer;
+export default TrustIndicators;
