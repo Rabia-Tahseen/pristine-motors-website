@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/newlogo.png";
 import { ShieldCheck, Truck, CheckCircle } from "lucide-react";
 
 const About = () => (
