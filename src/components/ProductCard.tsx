@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, MessageCircle, ArrowRight } from "lucide-react";
+import { ShoppingCart, MessageCircle, ArrowLeft } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import type { Product } from "@/data/products";
 
@@ -32,7 +32,7 @@ Price: ${product.price}`;
       <Link
         to={`/parts/${product.id}`}
         className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden
-                   hover:bg-gray-50 transition-colors duration-200 relative"
+                   hover:bg-gray-50 hover:shadow-md transition-all duration-200 relative"
       >
         {/* Image with subtle zoom */}
         <div className="overflow-hidden aspect-[4/3] relative">
@@ -89,9 +89,9 @@ Price: ${product.price}`;
           </div>
 
           {/* View Details at the bottom left */}
-          <div className="mt-3 flex items-center gap-1 text-gray-600 text-sm font-medium">
-            <ArrowRight size={14} />
-            <span>View Details</span>
+          <div className="mt-3 flex items-center gap-1 text-blue-900 text-sm font-medium group-hover:text-blue-500 transition-colors">
+            <ArrowLeft size={14} />
+            <span className="underline cursor-pointer">View Details</span>
           </div>
         </div>
       </Link>
