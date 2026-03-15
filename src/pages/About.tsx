@@ -1,30 +1,22 @@
 import { motion } from "framer-motion";
-import logo from "@/assets/newlogo.png";
+import logo from "@/assets/logo.svg";
 import { ShieldCheck, Truck, CheckCircle } from "lucide-react";
 
 const About = () => (
   <main className="pt-24 pb-20 bg-background min-h-screen">
     <div className="section-container max-w-3xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         {/* Logo and heading */}
-        <div className="flex justify-center mb-6">
-          <div className="h-20 w-20 rounded-full overflow-hidden border border-black shadow-md">
-            <img
-              src={logo}
-              alt="Pristine Auto Hub"
-              className="w-full h-full object-cover"
-            />
-          </div>
+        <div className="flex justify-center mb-8">
+          <img
+            src={logo}
+            alt="Pristine Auto Hub"
+            className="h-20 w-20 rounded-full object-cover border-2 border-border"
+          />
         </div>
-
         <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center">
           About Pristine Auto Hub
         </h1>
-
         <p className="text-center text-muted-foreground text-sm font-body mt-2 uppercase tracking-wider">
           Est. 2025 — Genuine Japanese Auto Parts
         </p>
@@ -44,36 +36,20 @@ const About = () => (
           </p>
         </div>
 
-        {/* Core strengths / highlights */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Core strengths / genuine highlights */}
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            {
-              icon: ShieldCheck,
-              label: "Trusted Source",
-              description: "Genuine parts sourced directly from Japan.",
-            },
-            {
-              icon: Truck,
-              label: "Fast Shipping",
-              description: "Quick delivery across Pakistan.",
-            },
-            {
-              icon: CheckCircle,
-              label: "Quality Assured",
-              description: "Every part inspected and graded for condition.",
-            },
+            { icon: ShieldCheck, label: "Trusted Source", description: "Genuine parts sourced directly from Japan." },
+            { icon: Truck, label: "Fast Shipping", description: "Quick delivery across Pakistan." },
+            { icon: CheckCircle, label: "Quality Assured", description: "Every part inspected and graded for condition." },
           ].map((s) => (
             <div
               key={s.label}
-              className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:shadow-lg transition-shadow"
+              className="flex flex-col items-center p-6 rounded-xl border border-border bg-card hover:shadow-md transition-shadow"
             >
-              <s.icon size={28} className="text-primary mb-3" />
-              <p className="font-display text-lg font-semibold text-foreground text-center">
-                {s.label}
-              </p>
-              <p className="text-muted-foreground text-xs mt-1 font-body text-center">
-                {s.description}
-              </p>
+              <s.icon size={24} className="text-primary mb-3" />
+              <p className="font-display text-lg font-semibold text-foreground text-center">{s.label}</p>
+              <p className="text-muted-foreground text-xs mt-1 font-body text-center">{s.description}</p>
             </div>
           ))}
         </div>
