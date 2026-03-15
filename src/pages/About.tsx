@@ -6,12 +6,21 @@ const About = () => (
   <main className="pt-24 pb-20 bg-background min-h-screen">
     <div className="section-container max-w-3xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        
+        {/* Logo */}
         <div className="flex justify-center mb-8">
-          <img
-            src={logo}
-            alt="Pristine Auto Hub"
-            className="h-20 w-20 rounded-full object-cover border-2 border-border"
-          />
+          <div className="relative flex items-center justify-center">
+            
+            {/* Soft glow */}
+            <div className="absolute inset-0 rounded-full bg-primary/10 blur-md"></div>
+
+            <img
+              src={logo}
+              alt="Pristine Auto Hub"
+              className="relative h-22 w-22 rounded-full object-cover ring-1 ring-border/60 bg-background"
+            />
+
+          </div>
         </div>
 
         <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center">
@@ -52,6 +61,7 @@ const About = () => (
             </div>
           ))}
         </div>
+
       </motion.div>
     </div>
   </main>
