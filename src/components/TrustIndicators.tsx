@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Award, MessageCircle } from "lucide-react";
 
 const indicators = [
-  { icon: ShieldCheck, text: "Genuine Japanese Auto Parts" },
   { icon: Award, text: "Trusted Supplier" },
+  { icon: ShieldCheck, text: "Genuine Japanese Auto Parts" },
   { icon: MessageCircle, text: "Direct Dealer Communication" },
 ];
 
