@@ -57,7 +57,7 @@ const Hero = () => {
             className="group bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
           >
             <Cog
-              size={16}           // slightly smaller than Car
+              size={16} // slightly smaller than Car
               className="text-yellow-400 group-hover:text-yellow-300 transition-colors"
             />
             Browse Car Parts
@@ -80,9 +80,10 @@ const Hero = () => {
 
           <button
             onClick={handleSearch}
-            className="bg-[#1D2A55] text-white px-6 py-3 hover:bg-[#162046] transition flex items-center justify-center"
+            className="bg-[#1D2A55] text-white px-6 py-3 hover:bg-[#162046] transition flex items-center justify-center font-medium"
+            style={{ minHeight: "44px" }} // matches the input height
           >
-            <Search size={16} className="text-yellow-400" />
+            Search
           </button>
         </div>
       </div>
