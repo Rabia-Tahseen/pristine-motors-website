@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/contexts/CartContext";
-import logo from "@/assets/newlogo.png";
+import logo from "@/assets/image.png";
 
 const links = [
   { label: "Home", to: "/" },
