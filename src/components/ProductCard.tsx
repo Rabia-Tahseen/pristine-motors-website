@@ -27,18 +27,19 @@ Price: ${product.price}`;
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
+      whileHover={{ scale: 1.03 }} // Slight scale up on hover
     >
       <Link
         to={`/parts/${product.id}`}
-        className="group block h-full flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden
-                   hover:bg-gray-100 hover:shadow-xl transition-all duration-200 relative max-w-sm"
+        className="group block h-full max-w-sm flex flex-col bg-white border border-border rounded-xl overflow-hidden
+                   shadow-md hover:shadow-2xl transition-all duration-300 relative"
       >
-        {/* Image */}
+        {/* Image with subtle shadow on hover */}
         <div className="overflow-hidden aspect-[4/3] relative">
           <motion.img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300"
+            className="w-full h-full object-cover transition-transform duration-300 shadow-sm group-hover:shadow-lg"
             whileHover={{ scale: 1.05 }}
             loading="lazy"
           />
@@ -57,8 +58,13 @@ Price: ${product.price}`;
             {product.description}
           </p>
 
-          {/* Centered icons at bottom middle */}
-          <div className="flex items-center justify-center gap-3 mt-4">
+          {/* Price bottom-left */}
+          <p className="absolute bottom-3 left-4 font-body font-bold text-primary text-lg">
+            {product.price}
+          </p>
+
+          {/* Centered icons at bottom-middle */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-3">
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -83,13 +89,10 @@ Price: ${product.price}`;
           </div>
 
           {/* View Details bottom-right */}
-          <div className="absolute bottom-3 right-3 flex items-center gap-1 text-blue-900 text-sm font-medium group-hover:text-blue-500 transition-colors">
+          <div className="absolute bottom-3 right-4 flex items-center gap-1 text-blue-900 text-sm font-medium group-hover:text-blue-500 transition-colors">
             <span className="underline cursor-pointer">View Details</span>
             <ArrowRight size={14} />
           </div>
-
-          {/* Price above the icons */}
-          <p className="absolute bottom-14 left-4 font-body font-bold text-primary text-lg">{product.price}</p>
         </div>
       </Link>
     </motion.div>
