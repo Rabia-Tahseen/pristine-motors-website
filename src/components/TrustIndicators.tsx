@@ -9,9 +9,9 @@ const indicators = [
 ];
 
 const TrustIndicators = () => (
-  <section className="py-10 bg-background border-y border-border">
+  <section className="py-10 bg-[#1D2A55]"> {/* Dark blue background */}
     <div className="section-container">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         {indicators.map((item, i) => (
           <motion.div
             key={item.text}
@@ -19,12 +19,12 @@ const TrustIndicators = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.08 }}
-            className="flex items-center gap-3"
+            className="flex flex-col items-center gap-2"
           >
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <item.icon size={20} className="text-primary" />
+            <div className="w-12 h-12 rounded-lg bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+              <item.icon size={24} className="text-yellow-400" />
             </div>
-            <span className="text-sm font-medium text-foreground font-body leading-tight">
+            <span className="text-sm font-medium text-white font-body leading-tight">
               {item.text}
             </span>
           </motion.div>
