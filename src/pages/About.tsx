@@ -12,7 +12,7 @@ const About = () => (
       >
         {/* Logo and heading */}
         <div className="flex justify-center mb-6">
-          <div className="h-20 w-20 rounded-full overflow-hidden border-2 border-white/30 shadow-md">
+          <div className="h-20 w-20 rounded-full overflow-hidden border border-black shadow-md">
             <img
               src={logo}
               alt="Pristine Auto Hub"
