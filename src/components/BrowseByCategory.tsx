@@ -12,7 +12,7 @@ const categoryData = [
 ];
 
 const BrowseByCategory = () => (
-  <section className="py-12 section-alt">
+  <section className="pt-10 pb-12 section-alt">
     <div className="section-container">
       <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
         Browse Parts by Category
