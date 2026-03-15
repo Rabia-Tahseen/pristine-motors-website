@@ -33,15 +33,15 @@ Price: ${product.price}`;
       {/* Entire card clickable except cart & WhatsApp */}
       <Link
         to={`/parts/${product.id}`}
-        className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-transform transform hover:scale-[1.02]" // subtle hover
+        className="group block rounded-xl overflow-hidden bg-white shadow-lg transition-transform transform hover:scale-[1.02] hover:shadow-xl"
       >
-        <div className="flex flex-col h-full bg-white">
+        <div className="flex flex-col h-full">
           {/* Image */}
-          <div className="overflow-hidden aspect-[4/3] relative">
+          <div className="overflow-hidden aspect-[4/3] relative transition-shadow duration-300">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
               loading="lazy"
             />
             <span className="absolute top-3 left-3 text-[11px] font-body font-medium bg-background/90 backdrop-blur-sm text-foreground px-2.5 py-1 rounded-md">
@@ -69,7 +69,7 @@ Price: ${product.price}`;
                 {/* Add to cart */}
                 <button
                   onClick={(e) => {
-                    e.preventDefault(); // prevent triggering card click
+                    e.preventDefault();
                     addToCart(product);
                   }}
                   className="p-2 rounded-lg border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
@@ -83,7 +83,7 @@ Price: ${product.price}`;
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()} // prevent card click
+                  onClick={(e) => e.stopPropagation()}
                   className="p-2 rounded-lg border border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors"
                   aria-label="Chat on WhatsApp"
                 >
@@ -93,7 +93,7 @@ Price: ${product.price}`;
                 {/* View Details styled as text */}
                 <div
                   className="text-sm font-medium text-blue-900 hover:text-blue-500 flex items-center gap-1 cursor-pointer"
-                  onClick={(e) => e.stopPropagation()} // optional
+                  onClick={(e) => e.stopPropagation()}
                 >
                   View Details <ArrowRight size={14} />
                 </div>
