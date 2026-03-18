@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 
 const normalize = (str) => str.toLowerCase().trim();
 
-// 🔥 Fuzzy match helper
+// 🔥 Fuzzy match category
 const findMatchingCategory = (query) => {
   const q = normalize(query);
 
@@ -14,10 +14,10 @@ const findMatchingCategory = (query) => {
     const c = normalize(cat);
 
     return (
-      c === q || // exact
-      c.includes(q) || // category contains query
-      q.includes(c) || // query contains category
-      c.replace(/s$/, "") === q || // singular/plural
+      c === q ||
+      c.includes(q) ||
+      q.includes(c) ||
+      c.replace(/s$/, "") === q ||
       q.replace(/s$/, "") === c
     );
   });
@@ -30,7 +30,7 @@ const AllParts = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeVehicle, setActiveVehicle] = useState("All");
 
-  // 🔥 Sync URL → State with fuzzy logic
+  // 🔥 SYNC URL → STATE (FIXED)
   useEffect(() => {
     const s = searchParams.get("search") || "";
     const c = searchParams.get("category") || "All";
@@ -40,17 +40,26 @@ const AllParts = () => {
 
     if (s) {
       const match = findMatchingCategory(s);
-      if (match) detectedCategory = match;
+
+      if (match && match !== c) {
+        detectedCategory = match;
+
+        // ✅ Update URL so UI syncs
+        const params = new URLSearchParams(searchParams);
+        params.set("category", match);
+        setSearchParams(params);
+      }
     }
 
     setSearch(s);
     setActiveCategory(detectedCategory);
     setActiveVehicle(v);
-  }, [searchParams.toString()]);
+  }, [searchParams]);
 
-  // 🔥 Unified filter handler
+  // 🔥 HANDLE FILTER CHANGE
   const handleFilterChange = (s, c, v) => {
     const params = {};
+
     if (s) params.search = s;
     if (c !== "All") params.category = c;
     if (v !== "All") params.vehicle = v;
@@ -62,7 +71,7 @@ const AllParts = () => {
     setActiveVehicle(v);
   };
 
-  // 🔥 Filtering logic
+  // 🔥 FILTER PRODUCTS
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchCategory =
@@ -73,8 +82,7 @@ const AllParts = () => {
 
       const matchSearch =
         !search ||
-        normalize(p.name).includes(normalize(search)) ||
-        normalize(p.category).includes(normalize(search));
+        normalize(p.name).includes(normalize(search));
 
       return matchCategory && matchVehicle && matchSearch;
     });
@@ -85,7 +93,7 @@ const AllParts = () => {
       <div className="section-container">
         <h1 className="text-3xl font-bold mb-6">All Parts</h1>
 
-        {/* Search */}
+        {/* 🔍 Search */}
         <div className="relative mb-6">
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
@@ -98,13 +106,13 @@ const AllParts = () => {
           />
         </div>
 
-        {/* Categories */}
+        {/* 🧩 Category */}
         <div className="mb-4">
           <div className="flex gap-2 flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => handleFilterChange("", cat, activeVehicle)} // ✅ clears search
+                onClick={() => handleFilterChange("", cat, "All")} // ✅ clears search
                 className={`px-3 py-1 rounded ${
                   activeCategory === cat
                     ? "bg-blue-900 text-white"
@@ -117,7 +125,7 @@ const AllParts = () => {
           </div>
         </div>
 
-        {/* Vehicles */}
+        {/* 🚗 Vehicle */}
         <div className="mb-6">
           <div className="flex gap-2 flex-wrap">
             {vehicles.map((v) => (
