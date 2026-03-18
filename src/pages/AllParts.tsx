@@ -11,7 +11,7 @@ const AllParts = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeVehicle, setActiveVehicle] = useState("All");
 
-  // Read query params individually to update filters
+  // Read query params individually
   useEffect(() => {
     const s = searchParams.get("search") || "";
     const c = searchParams.get("category") || "All";
@@ -26,7 +26,7 @@ const AllParts = () => {
     searchParams.get("vehicle"),
   ]);
 
-  // Update state and URL at the same time
+  // Update URL and local state together
   const handleFilterChange = (s, c, v) => {
     const params = {};
     if (s) params.search = s;
@@ -59,9 +59,7 @@ const AllParts = () => {
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
             value={search}
-            onChange={(e) =>
-              handleFilterChange(e.target.value, activeCategory, activeVehicle)
-            }
+            onChange={(e) => handleFilterChange(e.target.value, activeCategory, activeVehicle)}
             placeholder="Search..."
             className="w-full border pl-10 py-2 rounded"
           />
@@ -74,9 +72,7 @@ const AllParts = () => {
               key={cat}
               onClick={() => handleFilterChange(search, cat, activeVehicle)}
               className={`px-3 py-1 rounded ${
-                activeCategory === cat
-                  ? "bg-blue-900 text-white"
-                  : "bg-gray-200"
+                activeCategory === cat ? "bg-blue-900 text-white" : "bg-gray-200"
               }`}
             >
               {cat}
@@ -91,9 +87,7 @@ const AllParts = () => {
               key={v}
               onClick={() => handleFilterChange(search, activeCategory, v)}
               className={`px-3 py-1 rounded ${
-                activeVehicle === v
-                  ? "bg-blue-900 text-white"
-                  : "bg-gray-200"
+                activeVehicle === v ? "bg-blue-900 text-white" : "bg-gray-200"
               }`}
             >
               {v}
