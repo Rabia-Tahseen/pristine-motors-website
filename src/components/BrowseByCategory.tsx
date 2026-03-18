@@ -15,7 +15,6 @@ const BrowseByCategory = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get current category from URL
   const searchParams = new URLSearchParams(location.search);
   const activeCategory = searchParams.get("category") || "All";
 
@@ -52,9 +51,7 @@ const BrowseByCategory = () => {
                       : "text-[#1D2A55] group-hover:text-primary"
                   }`}
                 />
-                <span className="text-sm font-medium text-center">
-                  {cat.name}
-                </span>
+                <span className="text-sm font-medium text-center">{cat.name}</span>
               </div>
             </motion.div>
           ))}
