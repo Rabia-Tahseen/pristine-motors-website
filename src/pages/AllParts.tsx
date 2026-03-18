@@ -6,7 +6,7 @@ import BrowseByCategory from "@/components/BrowseByCategory";
 
 const AllParts = () => {
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState("All"); // default
   const [vehicle, setVehicle] = useState("All");
 
   // Filter products based on search, category, and vehicle
@@ -23,7 +23,8 @@ const AllParts = () => {
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
-        <h1 className="text-3xl font-bold mb-6">All Parts</h1>
+        <h1 className="text-3xl font-bold mb-2">All Parts</h1>
+        <p className="text-gray-600 mb-6">Browse our complete catalog of auto parts.</p>
 
         {/* Search */}
         <div className="relative mb-6">
@@ -31,12 +32,12 @@ const AllParts = () => {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
+            placeholder="Search by part name..."
             className="w-full border pl-10 py-2 rounded"
           />
         </div>
 
-        {/* Browse By Category */}
+        {/* Category */}
         <div className="mb-6">
           <BrowseByCategory
             activeCategory={category}
