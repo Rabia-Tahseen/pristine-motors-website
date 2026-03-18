@@ -12,7 +12,7 @@ const AllParts = () => {
   const [category, setCategory] = useState("All");
   const [vehicle, setVehicle] = useState("All");
 
-  // Read query params from URL on load
+  // ✅ Read URL params ONCE on initial load
   useEffect(() => {
     const s = searchParams.get("search") || "";
     const c = searchParams.get("category") || "All";
@@ -21,9 +21,9 @@ const AllParts = () => {
     setSearch(s);
     setCategory(c);
     setVehicle(v);
-  }, [searchParams.toString()]);
+  }, []); // run only once
 
-  // Filter products
+  // ✅ Filter products based on current search/category/vehicle
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchesCategory = category === "All" || p.category === category;
@@ -34,16 +34,15 @@ const AllParts = () => {
     });
   }, [search, category, vehicle]);
 
-  // Update URL when filters change
-  const updateURL = (s, c, v) => {
-    const params = {};
+  // ✅ Update URL when filters change
+  const updateURL = (s: string, c: string, v: string) => {
+    const params: Record<string, string> = {};
     if (s) params.search = s;
     if (c !== "All") params.category = c;
     if (v !== "All") params.vehicle = v;
     setSearchParams(params);
   };
 
-  // When user changes search, category, or vehicle
   useEffect(() => {
     updateURL(search, category, vehicle);
   }, [search, category, vehicle]);
