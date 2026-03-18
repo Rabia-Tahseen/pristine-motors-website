@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
-import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
 const AllParts = () => {
@@ -20,7 +19,7 @@ const AllParts = () => {
     setSearch(s);
     setActiveCategory(c);
     setActiveVehicle(v);
-  }, [searchParams]);
+  }, [searchParams.toString()]);
 
   const updateURL = (s, c, v) => {
     const params = {};
@@ -33,28 +32,26 @@ const AllParts = () => {
   };
 
   const filtered = useMemo(() => {
-    const q = search.toLowerCase();
-
     return products.filter((p) => {
-      const matchCategory = activeCategory === "All" || p.category === activeCategory;
-      const matchVehicle = activeVehicle === "All" || p.vehicle === activeVehicle;
-      const matchSearch = !q || p.name.toLowerCase().includes(q);
+      const matchCategory =
+        activeCategory === "All" || p.category === activeCategory;
+
+      const matchVehicle =
+        activeVehicle === "All" || p.vehicle === activeVehicle;
+
+      const matchSearch =
+        !search ||
+        p.name.toLowerCase().includes(search.toLowerCase());
 
       return matchCategory && matchVehicle && matchSearch;
     });
   }, [search, activeCategory, activeVehicle]);
 
-  const filterBtn = (active) =>
-    `px-4 py-2 rounded-lg text-xs ${
-      active ? "bg-blue-900 text-white" : "bg-gray-100"
-    }`;
-
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
 
-        <h1 className="text-3xl font-bold mb-2">All Parts</h1>
-        <p className="text-gray-500 mb-6">Browse all parts</p>
+        <h1 className="text-3xl font-bold mb-6">All Parts</h1>
 
         <div className="relative mb-6">
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
@@ -71,13 +68,16 @@ const AllParts = () => {
         </div>
 
         <div className="mb-4">
-          <p className="text-sm mb-2">Category</p>
           <div className="flex gap-2 flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => updateURL(search, cat, activeVehicle)}
-                className={filterBtn(activeCategory === cat)}
+                className={`px-3 py-1 rounded ${
+                  activeCategory === cat
+                    ? "bg-blue-900 text-white"
+                    : "bg-gray-200"
+                }`}
               >
                 {cat}
               </button>
@@ -86,13 +86,16 @@ const AllParts = () => {
         </div>
 
         <div className="mb-6">
-          <p className="text-sm mb-2">Vehicle</p>
           <div className="flex gap-2 flex-wrap">
             {vehicles.map((v) => (
               <button
                 key={v}
                 onClick={() => updateURL(search, activeCategory, v)}
-                className={filterBtn(activeVehicle === v)}
+                className={`px-3 py-1 rounded ${
+                  activeVehicle === v
+                    ? "bg-blue-900 text-white"
+                    : "bg-gray-200"
+                }`}
               >
                 {v}
               </button>
@@ -100,13 +103,13 @@ const AllParts = () => {
           </div>
         </div>
 
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm mb-4">
           Showing {filtered.length} parts
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filtered.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
+          {filtered.map((p) => (
+            <ProductCard key={p.id} product={p} />
           ))}
         </div>
 
