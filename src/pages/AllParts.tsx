@@ -11,7 +11,7 @@ const AllParts = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeVehicle, setActiveVehicle] = useState("All");
 
-  // Read URL params properly
+  // Read query params individually to update filters
   useEffect(() => {
     const s = searchParams.get("search") || "";
     const c = searchParams.get("category") || "All";
@@ -23,8 +23,8 @@ const AllParts = () => {
   }, [
     searchParams.get("search"),
     searchParams.get("category"),
-    searchParams.get("vehicle")
-  ]); // <-- dependency on each param individually
+    searchParams.get("vehicle"),
+  ]);
 
   // Update state and URL at the same time
   const handleFilterChange = (s, c, v) => {
@@ -39,7 +39,7 @@ const AllParts = () => {
     setActiveVehicle(v);
   };
 
-  // Filter products
+  // Filter products based on search, category, and vehicle
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchCategory = activeCategory === "All" || p.category === activeCategory;
@@ -54,6 +54,7 @@ const AllParts = () => {
       <div className="section-container">
         <h1 className="text-3xl font-bold mb-6">All Parts</h1>
 
+        {/* Search */}
         <div className="relative mb-6">
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
@@ -66,6 +67,7 @@ const AllParts = () => {
           />
         </div>
 
+        {/* Category Filter */}
         <div className="mb-4 flex gap-2 flex-wrap">
           {categories.map((cat) => (
             <button
@@ -82,6 +84,7 @@ const AllParts = () => {
           ))}
         </div>
 
+        {/* Vehicle Filter */}
         <div className="mb-6 flex gap-2 flex-wrap">
           {vehicles.map((v) => (
             <button
@@ -100,6 +103,7 @@ const AllParts = () => {
 
         <p className="text-sm mb-4">Showing {filtered.length} parts</p>
 
+        {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filtered.map((p) => (
             <ProductCard key={p.id} product={p} />
