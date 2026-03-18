@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { products, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
@@ -9,22 +9,14 @@ const AllParts = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
   const [vehicle, setVehicle] = useState("All");
 
-  // ✅ Sync category from URL (FIXED)
-  useEffect(() => {
-    const catFromURL = searchParams.get("category");
-    if (catFromURL) {
-      setCategory(catFromURL);
-    } else {
-      setCategory("All");
-    }
-  }, [searchParams]);
+  // ✅ SINGLE SOURCE OF TRUTH (URL)
+  const category = searchParams.get("category") || "All";
 
-  // ✅ Handle category change (FIXED - no mutation)
+  // ✅ Handle category change
   const handleCategoryChange = (cat) => {
-    console.log("CLICKED CATEGORY:", cat); // 🧪 DEBUG
+    console.log("Changing category to:", cat); // 🧪 DEBUG
 
     if (cat === "All") {
       setSearchParams({});
@@ -33,12 +25,13 @@ const AllParts = () => {
     }
   };
 
-  // ✅ FILTER LOGIC (with debug)
+  // ✅ FILTER (FINAL FIXED)
   const filtered = useMemo(() => {
     const result = products.filter((p) => {
       const matchesCategory =
         category === "All" ||
-        p.category.toLowerCase() === category.toLowerCase();
+        p.category.toLowerCase().trim() ===
+          category.toLowerCase().trim();
 
       const matchesVehicle =
         vehicle === "All" || p.vehicle === vehicle;
@@ -50,8 +43,8 @@ const AllParts = () => {
       return matchesCategory && matchesVehicle && matchesSearch;
     });
 
-    // 🧪 DEBUG LOGS
-    console.log("CURRENT CATEGORY:", category);
+    // 🧪 DEBUG
+    console.log("URL CATEGORY:", category);
     console.log("FILTERED COUNT:", result.length);
 
     return result;
