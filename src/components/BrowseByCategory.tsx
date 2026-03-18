@@ -15,14 +15,14 @@ const BrowseByCategory = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (filter) => {
-    // ✅ Clear search when clicking category
-    navigate(`/parts?category=${encodeURIComponent(filter)}&search=`);
+    // ✅ Only set category (NO search param)
+    navigate(`/parts?category=${encodeURIComponent(filter)}`);
   };
 
   return (
     <section className="pt-8 pb-8 section-alt">
       <div className="section-container">
-        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
+        <h2 className="font-display text-2xl md:text-3xl font-bold mb-8">
           Browse Parts by Category
         </h2>
 
@@ -37,7 +37,7 @@ const BrowseByCategory = () => {
             >
               <div
                 onClick={() => handleCategoryClick(cat.filter)}
-                className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-200 group cursor-pointer"
+                className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border hover:shadow-md hover:-translate-y-1 transition cursor-pointer"
               >
                 <cat.icon size={32} className="text-[#1D2A55]" />
                 <span className="text-sm font-medium text-center">
