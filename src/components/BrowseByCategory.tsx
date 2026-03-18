@@ -15,8 +15,8 @@ const BrowseByCategory = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (filter) => {
-    // Navigate to /parts with the selected category
-    navigate(`/parts?category=${encodeURIComponent(filter)}`);
+    // ✅ Clear search when clicking category
+    navigate(`/parts?category=${encodeURIComponent(filter)}&search=`);
   };
 
   return (
@@ -39,11 +39,8 @@ const BrowseByCategory = () => {
                 onClick={() => handleCategoryClick(cat.filter)}
                 className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-200 group cursor-pointer"
               >
-                <cat.icon
-                  size={32}
-                  className="text-[#1D2A55] group-hover:text-primary transition-colors duration-200"
-                />
-                <span className="text-sm font-medium text-foreground text-center">
+                <cat.icon size={32} className="text-[#1D2A55]" />
+                <span className="text-sm font-medium text-center">
                   {cat.name}
                 </span>
               </div>
