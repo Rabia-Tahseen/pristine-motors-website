@@ -17,9 +17,18 @@ const BrowseByCategory = () => {
 
   const searchParams = new URLSearchParams(location.search);
   const activeCategory = searchParams.get("category") || "All";
+  const activeVehicle = searchParams.get("vehicle") || "All";
+  const search = searchParams.get("search") || "";
 
+  // When clicking a category, preserve search & vehicle filters
   const handleClick = (filter) => {
-    navigate(`/parts?category=${encodeURIComponent(filter)}`);
+    const params = {};
+    if (search) params.search = search;
+    if (filter !== "All") params.category = filter;
+    if (activeVehicle !== "All") params.vehicle = activeVehicle;
+
+    const query = new URLSearchParams(params).toString();
+    navigate(`/parts?${query}`);
   };
 
   return (
