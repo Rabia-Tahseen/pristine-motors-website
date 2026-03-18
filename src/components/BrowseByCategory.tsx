@@ -2,7 +2,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Cog, Disc3, Lightbulb, Layers, RectangleEllipsis, Armchair } from "lucide-react";
 
-// Your real categories
 const categoryData = [
   { name: "Body Parts", icon: Layers, filter: "Body Parts" },
   { name: "Lighting", icon: Lightbulb, filter: "Lighting" },
@@ -16,7 +15,7 @@ const BrowseByCategory = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Read the current category from URL
+  // Get current category from URL
   const searchParams = new URLSearchParams(location.search);
   const activeCategory = searchParams.get("category") || "All";
 
