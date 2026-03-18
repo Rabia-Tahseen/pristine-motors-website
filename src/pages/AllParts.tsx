@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { products, categories, vehicles } from "@/data/products";
+import { products, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Search } from "lucide-react";
 import BrowseByCategory from "@/components/BrowseByCategory";
@@ -12,7 +12,7 @@ const AllParts = () => {
   const [category, setCategory] = useState("All");
   const [vehicle, setVehicle] = useState("All");
 
-  // ✅ Read URL params ONCE on initial load
+  // ✅ Initialize state from URL ONCE
   useEffect(() => {
     const s = searchParams.get("search") || "";
     const c = searchParams.get("category") || "All";
@@ -21,20 +21,9 @@ const AllParts = () => {
     setSearch(s);
     setCategory(c);
     setVehicle(v);
-  }, []); // run only once
+  }, []);
 
-  // ✅ Filter products based on current search/category/vehicle
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
-      const matchesCategory = category === "All" || p.category === category;
-      const matchesVehicle = vehicle === "All" || p.vehicle === vehicle;
-      const matchesSearch =
-        !search || p.name.toLowerCase().includes(search.toLowerCase());
-      return matchesCategory && matchesVehicle && matchesSearch;
-    });
-  }, [search, category, vehicle]);
-
-  // ✅ Update URL when filters change
+  // ✅ Update URL immediately when any filter changes
   const updateURL = (s: string, c: string, v: string) => {
     const params: Record<string, string> = {};
     if (s) params.search = s;
@@ -43,8 +32,27 @@ const AllParts = () => {
     setSearchParams(params);
   };
 
-  useEffect(() => {
-    updateURL(search, category, vehicle);
+  // ✅ Handle category click
+  const handleCategoryChange = (cat: string) => {
+    setCategory(cat);
+    updateURL(search, cat, vehicle); // immediately update URL
+  };
+
+  // ✅ Handle vehicle change
+  const handleVehicleChange = (v: string) => {
+    setVehicle(v);
+    updateURL(search, category, v);
+  };
+
+  // ✅ Filter products based on current filters
+  const filtered = useMemo(() => {
+    return products.filter((p) => {
+      const matchesCategory = category === "All" || p.category === category;
+      const matchesVehicle = vehicle === "All" || p.vehicle === vehicle;
+      const matchesSearch =
+        !search || p.name.toLowerCase().includes(search.toLowerCase());
+      return matchesCategory && matchesVehicle && matchesSearch;
+    });
   }, [search, category, vehicle]);
 
   return (
@@ -57,7 +65,10 @@ const AllParts = () => {
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              updateURL(e.target.value, category, vehicle);
+            }}
             placeholder="Search..."
             className="w-full border pl-10 py-2 rounded"
           />
@@ -67,7 +78,7 @@ const AllParts = () => {
         <div className="mb-6">
           <BrowseByCategory
             activeCategory={category}
-            setActiveCategory={setCategory}
+            setActiveCategory={handleCategoryChange} // ✅ use new handler
           />
         </div>
 
@@ -76,7 +87,7 @@ const AllParts = () => {
           {vehicles.map((v) => (
             <button
               key={v}
-              onClick={() => setVehicle(v)}
+              onClick={() => handleVehicleChange(v)}
               className={`px-3 py-1 rounded ${
                 vehicle === v ? "bg-blue-900 text-white" : "bg-gray-200"
               }`}
