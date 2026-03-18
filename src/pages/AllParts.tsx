@@ -1,13 +1,33 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { products, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Search } from "lucide-react";
 import BrowseByCategory from "@/components/BrowseByCategory";
 
 const AllParts = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All"); // default
+  const [category, setCategory] = useState("All");
   const [vehicle, setVehicle] = useState("All");
+
+  // Sync category state with URL query
+  useEffect(() => {
+    const cat = searchParams.get("category");
+    if (cat) setCategory(cat);
+  }, [searchParams]);
+
+  // Update URL when category changes
+  const handleCategoryChange = (cat) => {
+    setCategory(cat);
+    if (cat === "All") {
+      searchParams.delete("category");
+      setSearchParams(searchParams);
+    } else {
+      setSearchParams({ category: cat });
+    }
+  };
 
   // Filter products based on search, category, and vehicle
   const filtered = useMemo(() => {
@@ -41,7 +61,7 @@ const AllParts = () => {
         <div className="mb-6">
           <BrowseByCategory
             activeCategory={category}
-            setActiveCategory={setCategory}
+            setActiveCategory={handleCategoryChange}
           />
         </div>
 
