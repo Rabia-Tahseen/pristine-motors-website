@@ -4,25 +4,6 @@ import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Search } from "lucide-react";
 
-const normalize = (str) => str.toLowerCase().trim();
-
-// 🔥 Fuzzy match category
-const findMatchingCategory = (query) => {
-  const q = normalize(query);
-
-  return categories.find((cat) => {
-    const c = normalize(cat);
-
-    return (
-      c === q ||
-      c.includes(q) ||
-      q.includes(c) ||
-      c.replace(/s$/, "") === q ||
-      q.replace(/s$/, "") === c
-    );
-  });
-};
-
 const AllParts = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -30,61 +11,34 @@ const AllParts = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeVehicle, setActiveVehicle] = useState("All");
 
-  // 🔥 SYNC URL → STATE (FIXED)
+  // ✅ Sync URL → State
   useEffect(() => {
     const s = searchParams.get("search") || "";
     const c = searchParams.get("category") || "All";
     const v = searchParams.get("vehicle") || "All";
 
-    let detectedCategory = c;
-
-    if (s) {
-      const match = findMatchingCategory(s);
-
-      if (match && match !== c) {
-        detectedCategory = match;
-
-        // ✅ Update URL so UI syncs
-        const params = new URLSearchParams(searchParams);
-        params.set("category", match);
-        setSearchParams(params);
-      }
-    }
-
-    setSearch(s);
-    setActiveCategory(detectedCategory);
-    setActiveVehicle(v);
-  }, [searchParams]);
-
-  // 🔥 HANDLE FILTER CHANGE
-  const handleFilterChange = (s, c, v) => {
-    const params = {};
-
-    if (s) params.search = s;
-    if (c !== "All") params.category = c;
-    if (v !== "All") params.vehicle = v;
-
-    setSearchParams(params);
-
     setSearch(s);
     setActiveCategory(c);
     setActiveVehicle(v);
-  };
+  }, [searchParams.toString()]);
 
-  // 🔥 FILTER PRODUCTS
+  // ✅ FILTER LOGIC (SMART)
   const filtered = useMemo(() => {
     return products.filter((p) => {
+      const searchLower = search.toLowerCase();
+
+      const matchSearch =
+        !search ||
+        p.name.toLowerCase().includes(searchLower) ||
+        p.category.toLowerCase().includes(searchLower);
+
       const matchCategory =
         activeCategory === "All" || p.category === activeCategory;
 
       const matchVehicle =
         activeVehicle === "All" || p.vehicle === activeVehicle;
 
-      const matchSearch =
-        !search ||
-        normalize(p.name).includes(normalize(search));
-
-      return matchCategory && matchVehicle && matchSearch;
+      return matchSearch && matchCategory && matchVehicle;
     });
   }, [search, activeCategory, activeVehicle]);
 
@@ -93,26 +47,52 @@ const AllParts = () => {
       <div className="section-container">
         <h1 className="text-3xl font-bold mb-6">All Parts</h1>
 
-        {/* 🔍 Search */}
+        {/* 🔍 SEARCH INPUT */}
         <div className="relative mb-6">
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
+
           <input
             value={search}
-            onChange={(e) =>
-              handleFilterChange(e.target.value, activeCategory, activeVehicle)
-            }
+            onChange={(e) => {
+              const value = e.target.value;
+              const lower = value.toLowerCase();
+
+              // 🔥 AUTO DETECT CATEGORY FROM SEARCH
+              const match = categories.find((cat) =>
+                lower.includes(cat.toLowerCase().replace(/s$/, ""))
+              );
+
+              setSearch(value);
+              setActiveCategory(match || "All");
+
+              // ✅ UPDATE URL
+              const params = {};
+              if (value) params.search = value;
+              if (match) params.category = match;
+
+              setSearchParams(params);
+            }}
             placeholder="Search..."
             className="w-full border pl-10 py-2 rounded"
           />
         </div>
 
-        {/* 🧩 Category */}
+        {/* 🧩 CATEGORY FILTER */}
         <div className="mb-4">
           <div className="flex gap-2 flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => handleFilterChange("", cat, "All")} // ✅ clears search
+                onClick={() => {
+                  setSearch("");
+                  setActiveCategory(cat);
+                  setActiveVehicle("All");
+
+                  const params = {};
+                  if (cat !== "All") params.category = cat;
+
+                  setSearchParams(params);
+                }}
                 className={`px-3 py-1 rounded ${
                   activeCategory === cat
                     ? "bg-blue-900 text-white"
@@ -125,15 +105,22 @@ const AllParts = () => {
           </div>
         </div>
 
-        {/* 🚗 Vehicle */}
+        {/* 🚗 VEHICLE FILTER */}
         <div className="mb-6">
           <div className="flex gap-2 flex-wrap">
             {vehicles.map((v) => (
               <button
                 key={v}
-                onClick={() =>
-                  handleFilterChange(search, activeCategory, v)
-                }
+                onClick={() => {
+                  setActiveVehicle(v);
+
+                  const params = {};
+                  if (search) params.search = search;
+                  if (activeCategory !== "All") params.category = activeCategory;
+                  if (v !== "All") params.vehicle = v;
+
+                  setSearchParams(params);
+                }}
                 className={`px-3 py-1 rounded ${
                   activeVehicle === v
                     ? "bg-blue-900 text-white"
@@ -150,6 +137,7 @@ const AllParts = () => {
           Showing {filtered.length} part{filtered.length !== 1 ? "s" : ""}
         </p>
 
+        {/* 🛒 PRODUCTS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filtered.map((p) => (
             <ProductCard key={p.id} product={p} />
