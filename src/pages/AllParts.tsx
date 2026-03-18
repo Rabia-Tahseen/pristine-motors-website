@@ -1,50 +1,15 @@
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { products, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Search } from "lucide-react";
 import BrowseByCategory from "@/components/BrowseByCategory";
 
 const AllParts = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [vehicle, setVehicle] = useState("All");
 
-  // ✅ Initialize state from URL ONCE
-  useEffect(() => {
-    const s = searchParams.get("search") || "";
-    const c = searchParams.get("category") || "All";
-    const v = searchParams.get("vehicle") || "All";
-
-    setSearch(s);
-    setCategory(c);
-    setVehicle(v);
-  }, []);
-
-  // ✅ Update URL immediately when any filter changes
-  const updateURL = (s: string, c: string, v: string) => {
-    const params: Record<string, string> = {};
-    if (s) params.search = s;
-    if (c !== "All") params.category = c;
-    if (v !== "All") params.vehicle = v;
-    setSearchParams(params);
-  };
-
-  // ✅ Handle category click
-  const handleCategoryChange = (cat: string) => {
-    setCategory(cat);
-    updateURL(search, cat, vehicle); // immediately update URL
-  };
-
-  // ✅ Handle vehicle change
-  const handleVehicleChange = (v: string) => {
-    setVehicle(v);
-    updateURL(search, category, v);
-  };
-
-  // ✅ Filter products based on current filters
+  // Filter products based on search, category, and vehicle
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchesCategory = category === "All" || p.category === category;
@@ -65,10 +30,7 @@ const AllParts = () => {
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
             value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              updateURL(e.target.value, category, vehicle);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search..."
             className="w-full border pl-10 py-2 rounded"
           />
@@ -78,7 +40,7 @@ const AllParts = () => {
         <div className="mb-6">
           <BrowseByCategory
             activeCategory={category}
-            setActiveCategory={handleCategoryChange} // ✅ use new handler
+            setActiveCategory={setCategory} // just update state
           />
         </div>
 
@@ -87,7 +49,7 @@ const AllParts = () => {
           {vehicles.map((v) => (
             <button
               key={v}
-              onClick={() => handleVehicleChange(v)}
+              onClick={() => setVehicle(v)}
               className={`px-3 py-1 rounded ${
                 vehicle === v ? "bg-blue-900 text-white" : "bg-gray-200"
               }`}
