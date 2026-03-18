@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Cog, Disc3, Lightbulb, Layers, RectangleEllipsis, Armchair } from "lucide-react";
 
 const categoryData = [
+  { name: "All", icon: Layers, filter: "All" }, // Add All
   { name: "Body Parts", icon: Layers, filter: "Body Parts" },
   { name: "Lighting", icon: Lightbulb, filter: "Lighting" },
   { name: "Bumpers", icon: RectangleEllipsis, filter: "Bumpers" },
