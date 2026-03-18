@@ -25,30 +25,26 @@ const AllParts = () => {
     }
   };
 
-  // ✅ FILTER (FINAL FIXED)
-  const filtered = useMemo(() => {
-    const result = products.filter((p) => {
-      const matchesCategory =
-        category === "All" ||
-        p.category.toLowerCase().trim() ===
-          category.toLowerCase().trim();
+const filtered = useMemo(() => {
+  return products.filter((p) => {
+    const productCategory = p.category.toLowerCase().trim();
+    const selectedCategory = category.toLowerCase().trim();
 
-      const matchesVehicle =
-        vehicle === "All" || p.vehicle === vehicle;
+    const matchesCategory =
+      selectedCategory === "all" ||
+      productCategory.includes(selectedCategory) ||
+      selectedCategory.includes(productCategory);
 
-      const matchesSearch =
-        !search ||
-        p.name.toLowerCase().includes(search.toLowerCase());
+    const matchesVehicle =
+      vehicle === "All" || p.vehicle === vehicle;
 
-      return matchesCategory && matchesVehicle && matchesSearch;
-    });
+    const matchesSearch =
+      !search ||
+      p.name.toLowerCase().includes(search.toLowerCase());
 
-    // 🧪 DEBUG
-    console.log("URL CATEGORY:", category);
-    console.log("FILTERED COUNT:", result.length);
-
-    return result;
-  }, [search, category, vehicle]);
+    return matchesCategory && matchesVehicle && matchesSearch;
+  });
+}, [search, category, vehicle]);
 
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
