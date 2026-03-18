@@ -40,12 +40,20 @@ const AllParts = () => {
         <div className="mb-6">
           <BrowseByCategory
             activeCategory={category}
-            setActiveCategory={setCategory} // just update state
+            setActiveCategory={setCategory}
           />
         </div>
 
         {/* Vehicle Filter */}
         <div className="mb-6 flex gap-2 flex-wrap">
+          <button
+            onClick={() => setVehicle("All")}
+            className={`px-3 py-1 rounded ${
+              vehicle === "All" ? "bg-blue-900 text-white" : "bg-gray-200"
+            }`}
+          >
+            All
+          </button>
           {vehicles.map((v) => (
             <button
               key={v}
@@ -59,6 +67,7 @@ const AllParts = () => {
           ))}
         </div>
 
+        {/* Showing count */}
         <p className="text-sm mb-4">
           Showing {filtered.length} {filtered.length === 1 ? "part" : "parts"}
         </p>
