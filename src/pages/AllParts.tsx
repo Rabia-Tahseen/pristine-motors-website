@@ -1,15 +1,29 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Search } from "lucide-react";
 import BrowseByCategory from "@/components/BrowseByCategory";
 
 const AllParts = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [vehicle, setVehicle] = useState("All");
 
-  // Filter products based on search, category, and vehicle
+  // Read query params from URL on load
+  useEffect(() => {
+    const s = searchParams.get("search") || "";
+    const c = searchParams.get("category") || "All";
+    const v = searchParams.get("vehicle") || "All";
+
+    setSearch(s);
+    setCategory(c);
+    setVehicle(v);
+  }, [searchParams.toString()]);
+
+  // Filter products
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchesCategory = category === "All" || p.category === category;
@@ -20,12 +34,26 @@ const AllParts = () => {
     });
   }, [search, category, vehicle]);
 
+  // Update URL when filters change
+  const updateURL = (s, c, v) => {
+    const params = {};
+    if (s) params.search = s;
+    if (c !== "All") params.category = c;
+    if (v !== "All") params.vehicle = v;
+    setSearchParams(params);
+  };
+
+  // When user changes search, category, or vehicle
+  useEffect(() => {
+    updateURL(search, category, vehicle);
+  }, [search, category, vehicle]);
+
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
         <h1 className="text-3xl font-bold mb-6">All Parts</h1>
 
-        {/* Search Box */}
+        {/* Search */}
         <div className="relative mb-6">
           <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
@@ -59,7 +87,6 @@ const AllParts = () => {
           ))}
         </div>
 
-        {/* Showing Count */}
         <p className="text-sm mb-4">
           Showing {filtered.length} {filtered.length === 1 ? "part" : "parts"}
         </p>
