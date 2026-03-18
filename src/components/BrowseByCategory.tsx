@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Cog, Disc3, Lightbulb, Layers, RectangleEllipsis, Armchair } from "lucide-react";
 
@@ -11,38 +10,30 @@ const categoryData = [
   { name: "Nose Cut", icon: Cog, filter: "Nose Cut" },
 ];
 
-const BrowseByCategory = () => (
-  <section className="py-12 section-alt">
-    <div className="section-container">
-      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
-        Browse Parts by Category
-      </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {categoryData.map((cat, i) => (
-          <motion.div
-            key={cat.name}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.05 }}
-          >
-            <Link
-              to={`/parts?category=${encodeURIComponent(cat.filter)}`}
-              className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-200 group"
-            >
-              <cat.icon
-                size={32}
-                className="text-muted-foreground group-hover:text-primary transition-colors duration-200"
-              />
-              <span className="text-sm font-medium text-foreground font-body text-center">
-                {cat.name}
-              </span>
-            </Link>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
+const BrowseByCategory = ({ activeCategory, setActiveCategory }) => (
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+    {categoryData.map((cat, i) => {
+      const isActive = activeCategory === cat.filter;
+      return (
+        <motion.button
+          key={cat.name}
+          onClick={() => setActiveCategory(cat.filter)}
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: i * 0.05 }}
+          className={`flex flex-col items-center gap-3 p-6 rounded-xl border transition-all duration-200
+            ${isActive ? "bg-blue-900 text-white border-blue-900" : "bg-white text-gray-700 border-gray-200 hover:shadow-md hover:-translate-y-1"}`}
+        >
+          <cat.icon
+            size={32}
+            className={`transition-colors duration-200 ${isActive ? "text-white" : "text-blue-600"}`}
+          />
+          <span className="text-sm font-medium text-center">{cat.name}</span>
+        </motion.button>
+      );
+    })}
+  </div>
 );
 
 export default BrowseByCategory;
