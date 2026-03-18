@@ -1,105 +1,52 @@
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { products, categories, vehicles } from "@/data/products";
-import ProductCard from "@/components/ProductCard";
-import { Search } from "lucide-react";
-import BrowseByCategory from "@/components/BrowseByCategory";
+import { motion } from "framer-motion";
+import { Cog, Disc3, Lightbulb, Layers, RectangleEllipsis, Armchair } from "lucide-react";
 
-const AllParts = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const categoryData = [
+  { name: "Body Parts", icon: Layers },
+  { name: "Lighting", icon: Lightbulb },
+  { name: "Bumpers", icon: RectangleEllipsis },
+  { name: "Mirrors", icon: Disc3 },
+  { name: "Interior", icon: Armchair },
+  { name: "Nose Cut", icon: Cog },
+];
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [vehicle, setVehicle] = useState("All");
-
-  // Read query params from URL on load
-  useEffect(() => {
-    const s = searchParams.get("search") || "";
-    const c = searchParams.get("category") || "All";
-    const v = searchParams.get("vehicle") || "All";
-
-    setSearch(s);
-    setCategory(c);
-    setVehicle(v);
-  }, [searchParams.toString()]);
-
-  // Filter products
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
-      const matchesCategory = category === "All" || p.category === category;
-      const matchesVehicle = vehicle === "All" || p.vehicle === vehicle;
-      const matchesSearch =
-        !search || p.name.toLowerCase().includes(search.toLowerCase());
-      return matchesCategory && matchesVehicle && matchesSearch;
-    });
-  }, [search, category, vehicle]);
-
-  // Update URL when filters change
-  const updateURL = (s, c, v) => {
-    const params = {};
-    if (s) params.search = s;
-    if (c !== "All") params.category = c;
-    if (v !== "All") params.vehicle = v;
-    setSearchParams(params);
-  };
-
-  // When user changes search, category, or vehicle
-  useEffect(() => {
-    updateURL(search, category, vehicle);
-  }, [search, category, vehicle]);
-
+const BrowseByCategory = ({ activeCategory, setActiveCategory }) => {
   return (
-    <main className="pt-24 pb-20 bg-white min-h-screen">
+    <section className="pt-8 pb-8 section-alt">
       <div className="section-container">
-        <h1 className="text-3xl font-bold mb-6">All Parts</h1>
+        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
+          Browse Parts by Category
+        </h2>
 
-        {/* Search */}
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-3 text-gray-400" size={18} />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="w-full border pl-10 py-2 rounded"
-          />
-        </div>
-
-        {/* Browse By Category */}
-        <div className="mb-6">
-          <BrowseByCategory
-            activeCategory={category}
-            setActiveCategory={setCategory}
-          />
-        </div>
-
-        {/* Vehicle Filter */}
-        <div className="mb-6 flex gap-2 flex-wrap">
-          {vehicles.map((v) => (
-            <button
-              key={v}
-              onClick={() => setVehicle(v)}
-              className={`px-3 py-1 rounded ${
-                vehicle === v ? "bg-blue-900 text-white" : "bg-gray-200"
-              }`}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categoryData.map((cat, i) => (
+            <motion.div
+              key={cat.name}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
             >
-              {v}
-            </button>
-          ))}
-        </div>
-
-        <p className="text-sm mb-4">
-          Showing {filtered.length} {filtered.length === 1 ? "part" : "parts"}
-        </p>
-
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filtered.map((p, index) => (
-            <ProductCard key={p.id} product={p} index={index} />
+              <div
+                onClick={() => setActiveCategory(cat.name)}
+                className={`flex flex-col items-center gap-3 p-6 rounded-xl border border-border
+                  hover:border-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-200 group cursor-pointer
+                  ${activeCategory === cat.name ? "bg-blue-900 text-white" : "bg-card text-foreground"}`}
+              >
+                <cat.icon
+                  size={32}
+                  className={`transition-colors duration-200 ${
+                    activeCategory === cat.name ? "text-white" : "text-[#1D2A55] group-hover:text-primary"
+                  }`}
+                />
+                <span className="text-sm font-medium text-center">{cat.name}</span>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </main>
+    </section>
   );
 };
 
-export default AllParts;
+export default BrowseByCategory;
