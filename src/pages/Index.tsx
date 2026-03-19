@@ -1,5 +1,5 @@
 import Hero from "@/components/Hero";
-import BrowseByCategoryHomepage from "@/components/BrowseByCategoryHomepage";
+import BrowseByCategoryHomepage from "@/components/BrowseByCategory";
 import FeaturedParts from "@/components/FeaturedParts";
 import TrustIndicators from "@/components/TrustIndicators";
 import ContactSection from "@/components/ContactSection";
@@ -7,7 +7,7 @@ import ContactSection from "@/components/ContactSection";
 const Index = () => (
   <main>
     <Hero />
-    <BrowseByCategoryHomepage />
+    <BrowseByCategory />
     <FeaturedParts />
     <TrustIndicators />
     <ContactSection />
