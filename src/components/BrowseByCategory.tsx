@@ -3,42 +3,44 @@ import { useNavigate } from "react-router-dom";
 import { Cog, Disc3, Lightbulb, Layers, RectangleEllipsis, Armchair } from "lucide-react";
 
 const categoryData = [
-  { name: "All", icon: Layers, filter: "All" },
-  { name: "Body Parts", icon: Layers, filter: "Body Parts" },
-  { name: "Lighting", icon: Lightbulb, filter: "Lighting" },
-  { name: "Bumpers", icon: RectangleEllipsis, filter: "Bumpers" },
-  { name: "Mirrors", icon: Disc3, filter: "Mirrors" },
-  { name: "Interior", icon: Armchair, filter: "Interior" },
-  { name: "Nose Cut", icon: Cog, filter: "Nose Cut" },
+  { name: "All", icon: Layers },
+  { name: "Body Parts", icon: Layers },
+  { name: "Lighting", icon: Lightbulb },
+  { name: "Bumpers", icon: RectangleEllipsis },
+  { name: "Mirrors", icon: Disc3 },
+  { name: "Interior", icon: Armchair },
+  { name: "Nose Cut", icon: Cog },
 ];
 
-const BrowseByCategory = ({ activeCategory, setActiveCategory }) => {
+const BrowseByCategory = ({ activeCategory, setActiveCategory }: any) => {
   const navigate = useNavigate();
 
- const handleClick = (cat: string) => {
-  // If used inside AllParts → update state
-  if (setActiveCategory) {
-    setActiveCategory(cat === "All" ? "" : cat);
-  } 
-  // If used on homepage → navigate
-  else {
-    if (cat === "All") {
-      navigate("/parts");
-    } else {
-      navigate(`/parts?category=${encodeURIComponent(cat)}`);
+  const handleClick = (cat: string) => {
+    // ✅ If inside AllParts → update URL via parent
+    if (setActiveCategory) {
+      setActiveCategory(cat);
+    } 
+    // ✅ If on homepage → navigate
+    else {
+      if (cat === "All") {
+        navigate("/parts");
+      } else {
+        navigate(`/parts?category=${encodeURIComponent(cat)}`);
+      }
     }
-  }
-};
+  };
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
       {categoryData.map((cat, i) => {
-        const isActive = activeCategory === cat.filter;
+        const isActive =
+          activeCategory === cat.name ||
+          (cat.name === "All" && !activeCategory);
 
         return (
           <motion.button
             key={cat.name}
-            onClick={() => handleClick(cat.filter)} // ✅ FIXED HERE
+            onClick={() => handleClick(cat.name)}
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -52,9 +54,7 @@ const BrowseByCategory = ({ activeCategory, setActiveCategory }) => {
           >
             <cat.icon
               size={32}
-              className={`transition-colors duration-200 ${
-                isActive ? "text-white" : "text-blue-600"
-              }`}
+              className={isActive ? "text-white" : "text-blue-600"}
             />
             <span className="text-sm font-medium text-center">
               {cat.name}
