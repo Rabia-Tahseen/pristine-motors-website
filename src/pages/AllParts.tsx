@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { motion } from "framer-motion";
@@ -7,17 +7,22 @@ import { Search } from "lucide-react";
 
 const AllParts = () => {
   const [searchParams] = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
+  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
   const [activeVehicle, setActiveVehicle] = useState("All");
 
+  // ✅ SYNC URL → STATE (FIXED)
   useEffect(() => {
-    const s = searchParams.get("search");
-    const c = searchParams.get("category");
-    if (s) setSearch(s);
-    if (c) setActiveCategory(c);
+    const s = searchParams.get("search") || "";
+    const c = searchParams.get("category") || "All";
+
+    setSearch(s);
+    setActiveCategory(c);
   }, [searchParams]);
 
+  // ✅ FILTER LOGIC
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchCat = activeCategory === "All" || p.category === activeCategory;
@@ -26,84 +31,77 @@ const AllParts = () => {
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.description.toLowerCase().includes(search.toLowerCase()) ||
         p.vehicle.toLowerCase().includes(search.toLowerCase());
+
       return matchCat && matchVehicle && matchSearch;
     });
   }, [search, activeCategory, activeVehicle]);
 
   const filterBtn = (active: boolean) =>
-    `px-4 py-2 rounded-lg text-xs font-body font-medium transition-all duration-200 ${
+    `px-4 py-2 rounded-lg text-xs font-medium ${
       active
-        ? "bg-primary text-primary-foreground shadow-sm"
-        : "bg-card text-muted-foreground hover:bg-muted border border-border"
+        ? "bg-blue-900 text-white"
+        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
     }`;
 
+  // ✅ CATEGORY CLICK → UPDATE URL (CRITICAL FIX)
+  const handleCategoryClick = (cat: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (cat === "All") {
+      params.delete("category");
+    } else {
+      params.set("category", cat);
+    }
+
+    navigate(`/parts?${params.toString()}`);
+  };
+
   return (
-    <main className="pt-24 pb-20 bg-background min-h-screen">
+    <main className="pt-24 pb-20 min-h-screen">
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">All Parts</h1>
-          <p className="mt-2 text-muted-foreground text-sm font-body">Browse our complete catalog of genuine auto parts.</p>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <h1 className="text-3xl font-bold mb-6">All Parts</h1>
         </motion.div>
 
-        {/* Search */}
-        <div className="relative w-full mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" size={18} />
+        {/* SEARCH */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
-            placeholder="Search by part name, vehicle..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
+            placeholder="Search..."
+            className="w-full pl-10 p-3 border rounded-lg"
           />
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-5 mb-8">
-          <div className="flex-1">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Vehicle</p>
-            <div className="flex gap-2 flex-wrap">
-              {vehicles.map((v) => (
-                <button key={v} onClick={() => setActiveVehicle(v)} className={filterBtn(activeVehicle === v)}>
-                  {v}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex-1">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Category</p>
-            <div className="flex gap-2 flex-wrap">
-              {categories.map((cat) => (
-                <button key={cat} onClick={() => setActiveCategory(cat)} className={filterBtn(activeCategory === cat)}>
-                  {cat}
-                </button>
-              ))}
-            </div>
+        {/* CATEGORY FILTER */}
+        <div className="mb-6">
+          <p className="mb-2 text-sm">Category</p>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className={filterBtn(activeCategory === cat)}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground font-body mb-5">
-          Showing {filtered.length} {filtered.length === 1 ? "part" : "parts"}
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* PRODUCTS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filtered.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg font-body">No parts found matching your filters.</p>
-            <button
-              onClick={() => { setSearch(""); setActiveCategory("All"); setActiveVehicle("All"); }}
-              className="mt-3 text-primary hover:underline font-body text-sm font-medium"
-            >
-              Clear all filters
-            </button>
-          </div>
+          <p className="text-center mt-10 text-gray-500">
+            No products found
+          </p>
         )}
       </div>
     </main>
