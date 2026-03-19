@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import BrowseByCategory from "@/components/BrowseByCategory";
 import { products } from "@/data/products";
 
-const PartsPage = () => {
+const AllParts = () => {
   const [searchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -16,10 +16,12 @@ const PartsPage = () => {
 
     let result = products;
 
+    // ✅ Apply category filter
     if (category && category !== "All") {
       result = result.filter((p) => p.category === category);
     }
 
+    // ✅ Apply search filter
     if (search) {
       result = result.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase())
@@ -31,12 +33,19 @@ const PartsPage = () => {
 
   return (
     <div>
-      <BrowseByCategory activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
-      <div className="grid grid-cols-3 gap-4 mt-6">
+      <BrowseByCategory
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+      />
+
+      {/* Render your existing product layout */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {filteredProducts.map((p) => (
-          <div key={p.id} className="border p-4">
-            <img src={p.image} alt={p.name} />
-            <h3>{p.name}</h3>
+          <div key={p.id} className="border p-4 rounded shadow-sm">
+            <img src={p.image} alt={p.name} className="w-full h-40 object-cover mb-2" />
+            <h3 className="font-semibold">{p.name}</h3>
+            <p className="text-sm text-gray-600">{p.category}</p>
+            <p className="text-blue-700 font-bold mt-2">Rs. {p.price}</p>
           </div>
         ))}
       </div>
@@ -44,4 +53,4 @@ const PartsPage = () => {
   );
 };
 
-export default PartsPage;
+export default AllParts;
