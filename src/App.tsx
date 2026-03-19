@@ -31,6 +31,15 @@ import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
+const PublicLayout = ({ children }: { children: React.ReactNode }) => (
+  <>
+    <Navbar />
+    {children}
+    <Footer />
+    <WhatsAppFloat />
+  </>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -40,30 +49,17 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              {/* Public routes with Navbar/Footer */}
-              <Route
-                path="/*"
-                element={
-                  <>
-                    <Navbar />
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/parts" element={<AllParts />} />
-                      <Route path="/parts/:id" element={<ProductDetails />} />
-                      <Route path="/cart" element={<Cart />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                      <Route path="/request-part" element={<RequestPart />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/cars" element={<Cars />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                    <Footer />
-                    <WhatsAppFloat />
-                  </>
-                }
-              />
+              {/* Public routes */}
+              <Route path="/" element={<PublicLayout><Index /></PublicLayout>} />
+              <Route path="/parts" element={<PublicLayout><AllParts /></PublicLayout>} />
+              <Route path="/parts/:id" element={<PublicLayout><ProductDetails /></PublicLayout>} />
+              <Route path="/cart" element={<PublicLayout><Cart /></PublicLayout>} />
+              <Route path="/checkout" element={<PublicLayout><Checkout /></PublicLayout>} />
+              <Route path="/order-confirmation" element={<PublicLayout><OrderConfirmation /></PublicLayout>} />
+              <Route path="/request-part" element={<PublicLayout><RequestPart /></PublicLayout>} />
+              <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+              <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+              <Route path="/cars" element={<PublicLayout><Cars /></PublicLayout>} />
 
               {/* Admin routes (no Navbar/Footer) */}
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -74,6 +70,8 @@ const App = () => (
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
+
+              <Route path="*" element={<PublicLayout><NotFound /></PublicLayout>} />
             </Routes>
           </BrowserRouter>
         </AdminAuthProvider>
