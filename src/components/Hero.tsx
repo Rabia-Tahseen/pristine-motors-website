@@ -1,30 +1,93 @@
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Car, Cog, Search } from "lucide-react"; // Cog used for car parts
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    if (query.trim()) {
-      navigate(`/parts?search=${encodeURIComponent(query)}`);
-    } else {
-      navigate("/parts");
-    }
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+    navigate(`/parts?search=${encodeURIComponent(q)}`);
   };
 
   return (
-    <div className="p-6 flex gap-2 justify-center">
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="border p-3 rounded"
-        placeholder="Search parts..."
-      />
-      <button onClick={handleSearch} className="bg-blue-900 text-white px-4 rounded">
-        Search
-      </button>
-    </div>
+    <section className="relative pt-32 pb-10 overflow-hidden bg-gradient-to-b from-white to-blue-50">
+      {/* Background Glow */}
+      <div className="absolute inset-0 flex justify-center pointer-events-none">
+        <div className="w-[700px] h-[400px] bg-blue-200 opacity-30 blur-3xl rounded-full"></div>
+      </div>
+
+      <div className="section-container text-center relative z-10">
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="font-display font-bold text-6xl text-gray-900"
+        >
+          Pristine
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mt-4 text-lg text-gray-600"
+        >
+          Premium Japanese Cars & Auto Parts
+        </motion.p>
+
+        {/* Hero Buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            to="/cars"
+            className="group bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
+          >
+            <Car
+              size={18}
+              className="text-yellow-400 group-hover:text-yellow-300 transition-colors"
+            />
+            Browse Cars
+          </Link>
+
+          <Link
+            to="/parts"
+            className="group bg-[#1D2A55] text-white px-8 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 hover:bg-[#162046] hover:shadow-xl hover:-translate-y-0.5"
+          >
+            <Cog
+              size={16} // slightly smaller than Car
+              className="text-yellow-400 group-hover:text-yellow-300 transition-colors"
+            />
+            Browse Car Parts
+          </Link>
+        </div>
+
+        {/* Horizontal Search Bar */}
+        <div className="mt-8 flex flex-row max-w-3xl mx-auto w-full bg-white border rounded-xl shadow-md overflow-hidden">
+          <div className="flex items-center pl-4 flex-shrink-0">
+            <Search size={18} className="text-yellow-400" />
+          </div>
+
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            placeholder="Search parts (mirror, bumper, bonnet...)"
+            className="flex-1 px-4 py-3 outline-none w-full"
+          />
+
+          <button
+            onClick={handleSearch}
+            className="bg-[#1D2A55] text-white px-6 py-3 hover:bg-[#162046] transition flex items-center justify-center font-medium"
+            style={{ minHeight: "44px" }} // matches the input height
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 
