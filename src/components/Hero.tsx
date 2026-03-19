@@ -1,40 +1,37 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSearch = () => {
-    const q = query.trim();
-    if (!q) return;
-    navigate(`/parts?search=${encodeURIComponent(q)}`);
-  };
-
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") handleSearch();
+    const searchParams = new URLSearchParams(location.search);
+    if (query.trim()) {
+      searchParams.set("search", query.trim());
+    } else {
+      searchParams.delete("search");
+    }
+    navigate(`/parts?${searchParams.toString()}`);
   };
 
   return (
-    <section className="bg-gray-100 py-16 text-center">
-      <h1 className="text-3xl font-bold mb-6">Find the Right Auto Parts</h1>
-      <div className="flex justify-center">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Search for parts (e.g. mirrors, bumper...)"
-          className="w-80 px-4 py-3 border rounded-l-lg outline-none"
-        />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-600 text-white px-6 py-3 rounded-r-lg hover:bg-blue-700"
-        >
-          Search
-        </button>
-      </div>
-    </section>
+    <div className="hero-section p-6 bg-gray-100">
+      <input
+        type="text"
+        placeholder="Search parts..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="p-3 rounded-l-lg border border-gray-300 w-72"
+      />
+      <button
+        onClick={handleSearch}
+        className="bg-blue-900 text-white p-3 rounded-r-lg hover:bg-blue-700"
+      >
+        Search
+      </button>
+    </div>
   );
 };
 
