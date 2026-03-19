@@ -17,6 +17,7 @@ const BrowseByCategory = () => (
       <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
         Browse Parts by Category
       </h2>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {categoryData.map((cat, i) => (
           <motion.div
