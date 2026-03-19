@@ -1,55 +1,47 @@
-import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { products, Product } from "@/data/products";
-import ProductCard from "@/components/ProductCard";
+import { useEffect, useState } from "react";
 import BrowseByCategory from "@/components/BrowseByCategory";
+import { products } from "@/data/products";
 
-const AllParts = () => {
+const PartsPage = () => {
   const [searchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
-
-  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-  const categoryQuery = searchParams.get("category") || "All";
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
   useEffect(() => {
-    setActiveCategory(categoryQuery);
+    const category = searchParams.get("category") || "All";
+    const search = searchParams.get("search") || "";
 
-    let filtered = products;
+    setActiveCategory(category);
 
-    // Filter by category if not "All"
-    if (categoryQuery && categoryQuery !== "All") {
-      filtered = filtered.filter((p) => p.category === categoryQuery);
+    let result = products;
+
+    if (category && category !== "All") {
+      result = result.filter((p) => p.category === category);
     }
 
-    // Filter by search query
-    if (searchQuery) {
-      filtered = filtered.filter((p) =>
-        p.name.toLowerCase().includes(searchQuery) ||
-        p.description.toLowerCase().includes(searchQuery)
+    if (search) {
+      result = result.filter((p) =>
+        p.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    setFilteredProducts(filtered);
-  }, [searchQuery, categoryQuery]);
+    setFilteredProducts(result);
+  }, [searchParams]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Browse by Category</h2>
+    <div>
       <BrowseByCategory activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
-
-      <h2 className="text-2xl font-bold mt-8 mb-4">Products</h2>
-      {filteredProducts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
-          ))}
-        </div>
-      ) : (
-        <p>No products found.</p>
-      )}
+      <div className="grid grid-cols-3 gap-4 mt-6">
+        {filteredProducts.map((p) => (
+          <div key={p.id} className="border p-4">
+            <img src={p.image} alt={p.name} />
+            <h3>{p.name}</h3>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default AllParts;
+export default PartsPage;
