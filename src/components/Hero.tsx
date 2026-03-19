@@ -8,8 +8,6 @@ const Hero = () => {
   const handleSearch = () => {
     const q = query.trim();
     if (!q) return;
-
-    // Navigate to parts page with search query
     navigate(`/parts?search=${encodeURIComponent(q)}`);
   };
 
@@ -20,7 +18,6 @@ const Hero = () => {
   return (
     <section className="bg-gray-100 py-16 text-center">
       <h1 className="text-3xl font-bold mb-6">Find the Right Auto Parts</h1>
-
       <div className="flex justify-center">
         <input
           type="text"
