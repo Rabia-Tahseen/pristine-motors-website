@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 
@@ -34,7 +34,8 @@ import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
-// ✅ Layout wrapper (FIX)
+
+// ✅ Layout wrapper
 const MainLayout = () => (
   <>
     <Navbar />
@@ -43,6 +44,14 @@ const MainLayout = () => (
     <WhatsAppFloat />
   </>
 );
+
+
+// 🔥 THIS IS THE FIX (FORCES RE-RENDER ON QUERY CHANGE)
+const PartsWrapper = () => {
+  const location = useLocation();
+  return <AllParts key={location.search} />;
+};
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -57,8 +66,12 @@ const App = () => (
 
               {/* ✅ PUBLIC ROUTES */}
               <Route element={<MainLayout />}>
+
                 <Route path="/" element={<Index />} />
-                <Route path="/parts" element={<AllParts />} />
+
+                {/* 🔥 FIXED ROUTE */}
+                <Route path="/parts" element={<PartsWrapper />} />
+
                 <Route path="/parts/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
@@ -68,6 +81,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/cars" element={<Cars />} />
                 <Route path="*" element={<NotFound />} />
+
               </Route>
 
               {/* ✅ ADMIN ROUTES */}
