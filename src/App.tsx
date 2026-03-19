@@ -34,7 +34,6 @@ import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
-
 // ✅ Layout wrapper
 const MainLayout = () => (
   <>
@@ -45,13 +44,11 @@ const MainLayout = () => (
   </>
 );
 
-
-// 🔥 THIS IS THE FIX (FORCES RE-RENDER ON QUERY CHANGE)
+// 🔥 PartsWrapper ensures AllParts re-renders on URL change
 const PartsWrapper = () => {
   const location = useLocation();
   return <AllParts key={location.search} />;
 };
-
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -64,14 +61,10 @@ const App = () => (
           <BrowserRouter>
             <Routes>
 
-              {/* ✅ PUBLIC ROUTES */}
+              {/* PUBLIC ROUTES */}
               <Route element={<MainLayout />}>
-
                 <Route path="/" element={<Index />} />
-
-                {/* 🔥 FIXED ROUTE */}
                 <Route path="/parts" element={<PartsWrapper />} />
-
                 <Route path="/parts/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
@@ -81,10 +74,9 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/cars" element={<Cars />} />
                 <Route path="*" element={<NotFound />} />
-
               </Route>
 
-              {/* ✅ ADMIN ROUTES */}
+              {/* ADMIN ROUTES */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
