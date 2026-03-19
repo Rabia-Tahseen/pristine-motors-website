@@ -1,8 +1,8 @@
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 
@@ -44,10 +44,10 @@ const MainLayout = () => (
   </>
 );
 
-// PartsWrapper ensures AllParts re-renders on URL change
+// ✅ PartsWrapper forces AllParts to remount on URL changes
 const PartsWrapper = () => {
   const location = useLocation();
-  return <AllParts key={location.search} />;
+  return <AllParts key={location.pathname + location.search} />;
 };
 
 const App = () => (
@@ -62,7 +62,10 @@ const App = () => (
               {/* PUBLIC ROUTES */}
               <Route element={<MainLayout />}>
                 <Route path="/" element={<Index />} />
+
+                {/* ✅ Updated /parts route */}
                 <Route path="/parts" element={<PartsWrapper />} />
+
                 <Route path="/parts/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
