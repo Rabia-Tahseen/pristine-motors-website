@@ -41,13 +41,13 @@ const Sidebar = () => {
             <Layers size={18} /> Categories
           </h3>
           <div className="flex flex-col gap-1">
-            {categories.map((cat) => (
+            {categories.filter(c => c !== "All").map((cat) => (
               <Link
-                key={cat.name}
-                to={`/parts?category=${encodeURIComponent(cat.name)}`}
+                key={cat}
+                to={`/parts?category=${encodeURIComponent(cat)}`}
                 className="px-4 py-2 rounded-lg text-white hover:bg-[#253B75]/80 text-sm"
               >
-                {cat.name}
+                {cat}
               </Link>
             ))}
           </div>
