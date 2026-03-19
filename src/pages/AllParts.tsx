@@ -1,7 +1,7 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BrowseByCategory from "@/components/BrowseByCategory";
-import { products } from "@/data/products";
+import { products, Product } from "@/data/products";
 
 const AllParts = () => {
   const [searchParams] = useSearchParams();
@@ -17,14 +17,14 @@ const AllParts = () => {
 
     let result = products;
 
-    // ✅ Exact match with your dataset categories
+    // ✅ Category filter (case-insensitive, exact match)
     if (categoryParam !== "All") {
       result = result.filter(
-        (p) => p.category.toLowerCase() === categoryParam.toLowerCase()
+        (p) => p.category.toLowerCase().trim() === categoryParam.toLowerCase().trim()
       );
     }
 
-    // ✅ Case-insensitive search
+    // ✅ Search filter (case-insensitive substring match)
     if (searchParam) {
       result = result.filter((p) =>
         p.name.toLowerCase().includes(searchParam.toLowerCase())
@@ -32,11 +32,6 @@ const AllParts = () => {
     }
 
     setFilteredProducts(result);
-
-    // Debugging: see what’s happening
-    console.log("Category from URL:", categoryParam);
-    console.log("Search from URL:", searchParam);
-    console.log("Filtered products count:", result.length);
   }, [searchParams]);
 
   // ✅ Use navigate so React Router updates searchParams
@@ -56,18 +51,22 @@ const AllParts = () => {
       />
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-        {filteredProducts.map((p) => (
-          <div key={p.id} className="border p-4 rounded shadow-sm">
-            <img
-              src={p.image}
-              alt={p.name}
-              className="w-full h-40 object-cover mb-2"
-            />
-            <h3 className="font-semibold">{p.name}</h3>
-            <p className="text-sm text-gray-600">{p.category}</p>
-            <p className="text-blue-700 font-bold mt-2">{p.price}</p>
-          </div>
-        ))}
+        {filteredProducts.length === 0 ? (
+          <p className="text-gray-600">No parts found for this filter.</p>
+        ) : (
+          filteredProducts.map((p) => (
+            <div key={p.id} className="border p-4 rounded shadow-sm">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="w-full h-40 object-cover mb-2"
+              />
+              <h3 className="font-semibold">{p.name}</h3>
+              <p className="text-sm text-gray-600">{p.category}</p>
+              <p className="text-blue-700 font-bold mt-2">{p.price}</p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
