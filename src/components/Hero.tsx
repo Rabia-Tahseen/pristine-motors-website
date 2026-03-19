@@ -1,33 +1,33 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleSearch = () => {
-    const searchParams = new URLSearchParams(location.search);
-    if (query.trim()) {
-      searchParams.set("search", query.trim());
+    const q = query.trim();
+
+    if (q) {
+      navigate(`/parts?search=${encodeURIComponent(q)}`);
     } else {
-      searchParams.delete("search");
+      navigate(`/parts`);
     }
-    navigate(`/parts?${searchParams.toString()}`);
   };
 
   return (
-    <div className="hero-section p-6 bg-gray-100">
+    <div className="p-6 bg-gray-100 flex gap-2 justify-center">
       <input
         type="text"
         placeholder="Search parts..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="p-3 rounded-l-lg border border-gray-300 w-72"
+        className="p-3 border rounded-lg w-80"
       />
+
       <button
         onClick={handleSearch}
-        className="bg-blue-900 text-white p-3 rounded-r-lg hover:bg-blue-700"
+        className="bg-blue-900 text-white px-5 rounded-lg"
       >
         Search
       </button>
