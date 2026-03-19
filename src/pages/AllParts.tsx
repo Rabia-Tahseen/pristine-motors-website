@@ -1,46 +1,48 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { products } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import BrowseByCategory from "@/components/BrowseByCategory";
 
 const AllParts = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("");
+  // 🔥 DIRECTLY READ FROM URL (NO STATE)
+  const search = searchParams.get("search") || "";
+  const category = searchParams.get("category") || "";
 
-  // ✅ SYNC URL → STATE
-  useEffect(() => {
-    const searchQuery = searchParams.get("search") || "";
-    const categoryQuery = searchParams.get("category") || "";
-
-    setSearch(searchQuery);
-    setActiveCategory(categoryQuery);
-  }, [searchParams]);
-
-  // ✅ FILTER LOGIC
+  // 🔥 FILTER (ALWAYS CORRECT NOW)
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchesSearch = product.name
         .toLowerCase()
         .includes(search.toLowerCase());
 
-      const matchesCategory = activeCategory
-        ? product.category.toLowerCase() === activeCategory.toLowerCase()
+      const matchesCategory = category
+        ? product.category.toLowerCase() === category.toLowerCase()
         : true;
 
       return matchesSearch && matchesCategory;
     });
-  }, [search, activeCategory]);
+  }, [search, category]);
+
+  // 🔥 HANDLE CATEGORY CLICK (UPDATES URL DIRECTLY)
+  const handleCategoryChange = (cat: string) => {
+    const params: any = {};
+
+    if (search) params.search = search;
+    if (cat && cat !== "All") params.category = cat;
+
+    setSearchParams(params);
+  };
 
   return (
     <div className="p-6">
 
-      {/* ✅ CATEGORY FILTER UI */}
+      {/* ✅ CATEGORY FILTER */}
       <BrowseByCategory
-        activeCategory={activeCategory || "All"}
-        setActiveCategory={setActiveCategory}
+        activeCategory={category || "All"}
+        setActiveCategory={handleCategoryChange}
       />
 
       {/* ✅ RESULTS */}
