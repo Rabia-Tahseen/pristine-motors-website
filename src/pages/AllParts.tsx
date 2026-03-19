@@ -12,6 +12,7 @@ const AllParts = () => {
     const category = searchParams.get("category") || "All";
     const search = searchParams.get("search") || "";
 
+    // ✅ Sync category state with URL
     setActiveCategory(category);
 
     let result = products;
@@ -31,14 +32,24 @@ const AllParts = () => {
     setFilteredProducts(result);
   }, [searchParams]);
 
+  // ✅ Update URL when clicking categories inside Parts page
+  const handleCategoryChange = (cat: string) => {
+    setActiveCategory(cat);
+    if (cat === "All") {
+      window.history.pushState({}, "", "/parts");
+    } else {
+      window.history.pushState({}, "", `/parts?category=${encodeURIComponent(cat)}`);
+    }
+  };
+
   return (
     <div>
       <BrowseByCategory
         activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
+        setActiveCategory={handleCategoryChange}
       />
 
-      {/* Render your existing product layout */}
+      {/* Render your product layout */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {filteredProducts.map((p) => (
           <div key={p.id} className="border p-4 rounded shadow-sm">
