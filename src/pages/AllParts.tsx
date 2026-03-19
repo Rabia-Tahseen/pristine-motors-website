@@ -17,10 +17,14 @@ const AllParts = () => {
 
     let result = products;
 
+    // ✅ Case-insensitive category filter
     if (categoryParam !== "All") {
-      result = result.filter((p) => p.category === categoryParam);
+      result = result.filter(
+        (p) => p.category.toLowerCase() === categoryParam.toLowerCase()
+      );
     }
 
+    // ✅ Case-insensitive search filter
     if (searchParam) {
       result = result.filter((p) =>
         p.name.toLowerCase().includes(searchParam.toLowerCase())
@@ -30,7 +34,7 @@ const AllParts = () => {
     setFilteredProducts(result);
   }, [searchParams]);
 
-  // ✅ Use navigate instead of pushState
+  // ✅ Use navigate so React Router updates searchParams
   const handleCategoryChange = (cat: string) => {
     if (cat === "All") {
       navigate("/parts");
@@ -49,7 +53,11 @@ const AllParts = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {filteredProducts.map((p) => (
           <div key={p.id} className="border p-4 rounded shadow-sm">
-            <img src={p.image} alt={p.name} className="w-full h-40 object-cover mb-2" />
+            <img
+              src={p.image}
+              alt={p.name}
+              className="w-full h-40 object-cover mb-2"
+            />
             <h3 className="font-semibold">{p.name}</h3>
             <p className="text-sm text-gray-600">{p.category}</p>
             <p className="text-blue-700 font-bold mt-2">Rs. {p.price}</p>
