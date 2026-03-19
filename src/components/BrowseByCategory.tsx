@@ -15,22 +15,20 @@ const categoryData = [
 const BrowseByCategory = ({ activeCategory, setActiveCategory }) => {
   const navigate = useNavigate();
 
-  const handleClick = (cat) => {
-    console.log("Clicked:", cat); // 🧪 DEBUG
-
-    // ✅ If used in AllParts page → filter
-    if (setActiveCategory) {
-      setActiveCategory(cat);
-    } 
-    // ✅ If used in Homepage → navigate
-    else {
-      if (cat === "All") {
-        navigate("/parts");
-      } else {
-        navigate(`/parts?category=${encodeURIComponent(cat)}`);
-      }
+ const handleClick = (cat: string) => {
+  // If used inside AllParts → update state
+  if (setActiveCategory) {
+    setActiveCategory(cat === "All" ? "" : cat);
+  } 
+  // If used on homepage → navigate
+  else {
+    if (cat === "All") {
+      navigate("/parts");
+    } else {
+      navigate(`/parts?category=${encodeURIComponent(cat)}`);
     }
-  };
+  }
+};
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
