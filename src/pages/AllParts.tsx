@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { products, categories, vehicles } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
@@ -6,23 +6,31 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
 const AllParts = () => {
-  const [searchParams] = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
-  const [activeVehicle, setActiveVehicle] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    const s = searchParams.get("search");
-    const c = searchParams.get("category");
-    if (s) setSearch(s);
-    if (c) setActiveCategory(c);
-  }, [searchParams]);
+  // URL params are the single source of truth
+  const search = searchParams.get("search") || "";
+  const activeCategory = searchParams.get("category") || "All";
+  const activeVehicle = searchParams.get("vehicle") || "All";
+
+  const updateParam = (key: string, value: string) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (value === "" || value === "All") {
+        next.delete(key);
+      } else {
+        next.set(key, value);
+      }
+      return next;
+    });
+  };
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchCat = activeCategory === "All" || p.category === activeCategory;
       const matchVehicle = activeVehicle === "All" || p.vehicle === activeVehicle;
       const matchSearch =
+        !search ||
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.description.toLowerCase().includes(search.toLowerCase()) ||
         p.vehicle.toLowerCase().includes(search.toLowerCase());
@@ -36,6 +44,8 @@ const AllParts = () => {
         ? "bg-primary text-primary-foreground shadow-sm"
         : "bg-card text-muted-foreground hover:bg-muted border border-border"
     }`;
+
+  const clearAll = () => setSearchParams({});
 
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
@@ -55,7 +65,7 @@ const AllParts = () => {
           <input
             placeholder="Search by part name, vehicle..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => updateParam("search", e.target.value)}
             className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
           />
         </div>
@@ -66,7 +76,7 @@ const AllParts = () => {
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Vehicle</p>
             <div className="flex gap-2 flex-wrap">
               {vehicles.map((v) => (
-                <button key={v} onClick={() => setActiveVehicle(v)} className={filterBtn(activeVehicle === v)}>
+                <button key={v} onClick={() => updateParam("vehicle", v)} className={filterBtn(activeVehicle === v)}>
                   {v}
                 </button>
               ))}
@@ -76,7 +86,7 @@ const AllParts = () => {
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Category</p>
             <div className="flex gap-2 flex-wrap">
               {categories.map((cat) => (
-                <button key={cat} onClick={() => setActiveCategory(cat)} className={filterBtn(activeCategory === cat)}>
+                <button key={cat} onClick={() => updateParam("category", cat)} className={filterBtn(activeCategory === cat)}>
                   {cat}
                 </button>
               ))}
@@ -98,7 +108,7 @@ const AllParts = () => {
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg font-body">No parts found matching your filters.</p>
             <button
-              onClick={() => { setSearch(""); setActiveCategory("All"); setActiveVehicle("All"); }}
+              onClick={clearAll}
               className="mt-3 text-primary hover:underline font-body text-sm font-medium"
             >
               Clear all filters
