@@ -12,30 +12,24 @@ const categoryData = [
   { name: "Nose Cut", icon: Cog },
 ];
 
-const BrowseByCategory = ({ activeCategory, setActiveCategory }: any) => {
+const BrowseByCategory = ({ activeCategory, onCategoryChange }: any) => {
   const navigate = useNavigate();
 
   const handleClick = (cat: string) => {
-    // ✅ If inside AllParts → update URL via parent
-    if (setActiveCategory) {
-      setActiveCategory(cat);
-    } 
-    // ✅ If on homepage → navigate
-    else {
-      if (cat === "All") {
-        navigate("/parts");
-      } else {
-        navigate(`/parts?category=${encodeURIComponent(cat)}`);
-      }
+    if (onCategoryChange) {
+      // AllParts page → update URL
+      onCategoryChange(cat);
+    } else {
+      // Homepage → navigate
+      if (cat === "All") navigate("/parts");
+      else navigate(`/parts?category=${encodeURIComponent(cat)}`);
     }
   };
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
       {categoryData.map((cat, i) => {
-        const isActive =
-          activeCategory === cat.name ||
-          (cat.name === "All" && !activeCategory);
+        const isActive = activeCategory === cat.name || (cat.name === "All" && !activeCategory);
 
         return (
           <motion.button
@@ -52,13 +46,8 @@ const BrowseByCategory = ({ activeCategory, setActiveCategory }: any) => {
                   : "bg-white text-gray-700 border-gray-200 hover:shadow-md hover:-translate-y-1"
               }`}
           >
-            <cat.icon
-              size={32}
-              className={isActive ? "text-white" : "text-blue-600"}
-            />
-            <span className="text-sm font-medium text-center">
-              {cat.name}
-            </span>
+            <cat.icon size={32} className={isActive ? "text-white" : "text-blue-600"} />
+            <span className="text-sm font-medium text-center">{cat.name}</span>
           </motion.button>
         );
       })}
