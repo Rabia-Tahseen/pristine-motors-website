@@ -6,29 +6,22 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    const q = query.trim();
-
-    if (q) {
-      navigate(`/parts?search=${encodeURIComponent(q)}`);
+    if (query.trim()) {
+      navigate(`/parts?search=${encodeURIComponent(query)}`);
     } else {
-      navigate(`/parts`);
+      navigate("/parts");
     }
   };
 
   return (
-    <div className="p-6 bg-gray-100 flex gap-2 justify-center">
+    <div className="p-6 flex gap-2 justify-center">
       <input
-        type="text"
-        placeholder="Search parts..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="p-3 border rounded-lg w-80"
+        className="border p-3 rounded"
+        placeholder="Search parts..."
       />
-
-      <button
-        onClick={handleSearch}
-        className="bg-blue-900 text-white px-5 rounded-lg"
-      >
+      <button onClick={handleSearch} className="bg-blue-900 text-white px-4 rounded">
         Search
       </button>
     </div>
