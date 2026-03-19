@@ -1,10 +1,11 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BrowseByCategory from "@/components/BrowseByCategory";
 import { products } from "@/data/products";
 
 const AllParts = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("All");
   const [filteredProducts, setFilteredProducts] = useState(products);
 
@@ -29,14 +30,13 @@ const AllParts = () => {
     setFilteredProducts(result);
   }, [searchParams]);
 
-  // ✅ When clicking categories inside Parts page, update URL too
+  // ✅ Use navigate instead of pushState
   const handleCategoryChange = (cat: string) => {
     if (cat === "All") {
-      window.history.pushState({}, "", "/parts");
+      navigate("/parts");
     } else {
-      window.history.pushState({}, "", `/parts?category=${encodeURIComponent(cat)}`);
+      navigate(`/parts?category=${encodeURIComponent(cat)}`);
     }
-    setActiveCategory(cat);
   };
 
   return (
