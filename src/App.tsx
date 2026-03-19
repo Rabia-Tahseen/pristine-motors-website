@@ -34,7 +34,7 @@ import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
-// ✅ Layout wrapper
+// Layout wrapper
 const MainLayout = () => (
   <>
     <Navbar />
@@ -44,7 +44,7 @@ const MainLayout = () => (
   </>
 );
 
-// 🔥 PartsWrapper ensures AllParts re-renders on URL change
+// PartsWrapper ensures AllParts re-renders on URL change
 const PartsWrapper = () => {
   const location = useLocation();
   return <AllParts key={location.search} />;
@@ -57,10 +57,8 @@ const App = () => (
         <AdminAuthProvider>
           <Toaster />
           <Sonner />
-
           <BrowserRouter>
             <Routes>
-
               {/* PUBLIC ROUTES */}
               <Route element={<MainLayout />}>
                 <Route path="/" element={<Index />} />
@@ -85,10 +83,8 @@ const App = () => (
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
-
             </Routes>
           </BrowserRouter>
-
         </AdminAuthProvider>
       </CartProvider>
     </TooltipProvider>
