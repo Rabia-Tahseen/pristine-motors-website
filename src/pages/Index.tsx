@@ -7,7 +7,6 @@ import ContactSection from "@/components/ContactSection";
 const Index = () => (
   <main>
     <Hero />
-    {/* Homepage: BrowseByCategory navigates to /parts */}
     <BrowseByCategory />
     <FeaturedParts />
     <TrustIndicators />
