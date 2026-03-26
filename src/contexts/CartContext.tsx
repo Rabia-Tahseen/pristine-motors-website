@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import type { Product } from "@/data/products";
+import type { SupabaseProduct as Product } from "@/pages/admin/AdminProducts";
 import { toast } from "sonner";
 
 export interface CartItem {
@@ -20,7 +20,9 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const parsePrice = (price: string): number => {
+export const parsePrice = (price: string | number): number => {
+  if (typeof price === "number") return price;
+
   const num = price.replace(/[^0-9]/g, "");
   return parseInt(num, 10) || 0;
 };
@@ -50,12 +52,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id);
       if (existing) {
-        toast.success(`Updated ${product.name} quantity`);
+        toast.success(`Updated ${product.title} quantity`);
         return prev.map((i) =>
           i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
-      toast.success(`${product.name} added to cart`);
+      toast.success(`${product.title} added to cart`);
       return [...prev, { product, quantity: 1 }];
     });
   }, []);
