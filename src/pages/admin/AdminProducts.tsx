@@ -11,7 +11,13 @@ import ProductFormDialog from "@/components/admin/ProductFormDialog";
 export interface SupabaseProduct {
   id: string;
   title: string;
-  category: string;
+
+  product_type: string;
+
+  category?: {
+    name: string;
+  };
+
   price: number;
   short_description: string;
   full_description: string;
@@ -35,8 +41,13 @@ const AdminProducts = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
-    let query = supabase.from("products").select("*").order("created_at", { ascending: false });
-    if (categoryFilter !== "all") query = query.eq("category", categoryFilter);
+    let query = supabase
+  .from("products")
+  .select(`
+    *,
+    category:categories(name)
+  `).order("created_at", { ascending: false });
+    if (categoryFilter !== "all") query = query.eq("product_type", categoryFilter);
     if (stockFilter !== "all") query = query.eq("stock_status", stockFilter);
     if (search) query = query.ilike("title", `%${search}%`);
     const { data } = await query;
@@ -156,7 +167,7 @@ const AdminProducts = () => {
                         <p className="text-muted-foreground text-xs font-body">{product.brand}</p>
                       </td>
                       <td className="py-3 px-2 hidden md:table-cell">
-                        <Badge variant="outline" className="text-xs font-body capitalize">{product.category.replace("_", " ")}</Badge>
+                        <Badge variant="outline" className="text-xs font-body capitalize">{product.category?.name ?? "Uncategorized"}</Badge>
                       </td>
                       <td className="py-3 px-2 font-body font-semibold text-foreground">Rs. {product.price.toLocaleString()}</td>
                       <td className="py-3 px-2 hidden sm:table-cell">{stockBadge(product.stock_status)}</td>

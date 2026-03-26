@@ -19,7 +19,7 @@ interface Props {
 
 const emptyForm = {
   title: "",
-  category: "car_part",
+  product_type: "car_part",
   price: 0,
   short_description: "",
   full_description: "",
@@ -40,7 +40,7 @@ const ProductFormDialog = ({ open, onOpenChange, product, onSaved }: Props) => {
     if (product) {
       setForm({
         title: product.title,
-        category: product.category,
+        product_type: product.product_type,
         price: product.price,
         short_description: product.short_description ?? "",
         full_description: product.full_description ?? "",
@@ -101,7 +101,7 @@ const ProductFormDialog = ({ open, onOpenChange, product, onSaved }: Props) => {
     setSaving(true);
     const payload = {
       title: form.title,
-      category: form.category ?? null,
+      product_type: form.product_type ?? "car_part",
       price: Number(form.price) || 0,
       short_description: form.short_description || null,
       full_description: form.full_description || null,
@@ -151,7 +151,11 @@ const ProductFormDialog = ({ open, onOpenChange, product, onSaved }: Props) => {
             </div>
             <div className="space-y-2">
               <Label className="font-body">Category *</Label>
-              <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className={selectClass}>
+              <select
+                value={form.product_type}
+                onChange={(e) =>
+                setForm({ ...form, product_type: e.target.value })
+                } className={selectClass}>
                 <option value="car">Car</option>
                 <option value="car_part">Car Part</option>
               </select>

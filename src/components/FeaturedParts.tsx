@@ -1,8 +1,28 @@
-import { products } from "@/data/products";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import ProductCard from "./ProductCard";
 
 const FeaturedParts = () => {
-  const featured = products.slice(0, 6);
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchFeatured() {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_featured", true)
+        .eq("product_type", "part")
+        .limit(6);
+
+      if (error) {
+        console.error(error);
+      } else {
+        setProducts(data);
+      }
+    }
+
+    fetchFeatured();
+  }, []);
 
   return (
     <section className="py-10 section-alt">
@@ -12,7 +32,7 @@ const FeaturedParts = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featured.map((p, i) => (
+          {products.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>

@@ -77,7 +77,7 @@ export const categories = [
 
 export const vehicles = ["All", "Toyota Raize", "Daihatsu Mira", "Daihatsu Taft"];
 
-export const products: Product[] = [
+export const demoProducts: Product[] = [
   {
     id: "toyota-raize-bonnet",
     name: "Toyota Raize Bonnet",
