@@ -1,15 +1,23 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import type { SupabaseProduct as Product } from "@/pages/admin/AdminProducts";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { toast } from "sonner";
 
+/** Normalised product shape stored in the cart. */
+export interface CartProduct {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+  vehicle: string;
+}
+
 export interface CartItem {
-  product: Product;
+  product: CartProduct;
   quantity: number;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: CartProduct) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -20,15 +28,23 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+export const formatPrice = (amount: number): string =>
+  `Rs. ${amount.toLocaleString("en-PK")}`;
+
 export const parsePrice = (price: string | number): number => {
   if (typeof price === "number") return price;
-
   const num = price.replace(/[^0-9]/g, "");
   return parseInt(num, 10) || 0;
 };
 
-export const formatPrice = (amount: number): string =>
-  `Rs. ${amount.toLocaleString("en-PK")}`;
+/** Helper to normalise any product shape into CartProduct */
+export const toCartProduct = (p: any): CartProduct => ({
+  id: p.id,
+  title: p.title ?? p.name ?? "",
+  price: typeof p.price === "number" ? p.price : parsePrice(p.price),
+  image: p.image ?? p.images?.[0] ?? "",
+  vehicle: p.vehicle ?? p.model_compatibility ?? "",
+});
 
 const CART_KEY = "pristine-cart";
 
@@ -48,7 +64,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(CART_KEY, JSON.stringify(items));
   }, [items]);
 
-  const addToCart = useCallback((product: Product) => {
+  const addToCart = useCallback((product: CartProduct) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id);
       if (existing) {
@@ -76,10 +92,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = useCallback(() => setItems([]), []);
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
-  const subtotal = items.reduce(
-    (s, i) => s + parsePrice(i.product.price) * i.quantity,
-    0
-  );
+  const subtotal = items.reduce((s, i) => s + i.product.price * i.quantity, 0);
 
   return (
     <CartContext.Provider

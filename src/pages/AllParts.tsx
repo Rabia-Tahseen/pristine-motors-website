@@ -7,46 +7,52 @@ import { Search } from "lucide-react";
 
 const AllParts = () => {
   const [products, setProducts] = useState<any[]>([]);
-  const [searchParams] = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [activeVehicle, setActiveVehicle] = useState("All");
-  const [categories, setCategories] = useState(["All"]);
-  const [vehicles, setVehicles] = useState(["All"]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [categories, setCategories] = useState<string[]>(["All"]);
+  const [vehicles, setVehicles] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const s = searchParams.get("search");
-    if (s) setSearch(s);
-  }, [searchParams]);
+  // URL params as single source of truth
+  const search = searchParams.get("search") || "";
+  const activeCategory = searchParams.get("category") || "All";
+  const activeVehicle = searchParams.get("vehicle") || "All";
 
-  // Fetch products from Supabase
+  const updateParam = (key: string, value: string) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (value === "" || value === "All") next.delete(key);
+      else next.set(key, value);
+      return next;
+    });
+  };
+
+  // Fetch products with category join
   useEffect(() => {
     async function fetchProducts() {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select("*, category:categories(name)")
         .order("created_at", { ascending: false });
 
       if (!error && data) {
         setProducts(data);
-
-        // Derive unique vehicles from model_compatibility
-        const uniqueVehicles = ["All", ...new Set(data.map((p) => p.model_compatibility).filter(Boolean))];
+        const uniqueVehicles = [
+          "All",
+          ...new Set(data.map((p: any) => p.model_compatibility).filter(Boolean)),
+        ];
         setVehicles(uniqueVehicles);
       }
       setLoading(false);
     }
-
     fetchProducts();
   }, []);
 
-  // Fetch categories from Supabase
+  // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       const { data, error } = await supabase.from("categories").select("name").order("name");
       if (!error && data) {
-        setCategories(["All", ...data.map((c) => c.name)]);
+        setCategories(["All", ...data.map((c: any) => c.name)]);
       }
     }
     fetchCategories();
@@ -55,7 +61,8 @@ const AllParts = () => {
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
     return products.filter((p) => {
-      const matchCategory = activeCategory === "All" || p.category === activeCategory;
+      const catName = p.category?.name ?? "";
+      const matchCategory = activeCategory === "All" || catName === activeCategory;
       const matchVehicle = activeVehicle === "All" || p.model_compatibility === activeVehicle;
       const matchSearch = !q || p.title?.toLowerCase().includes(q);
       return matchCategory && matchVehicle && matchSearch;
@@ -81,7 +88,7 @@ const AllParts = () => {
           <input
             placeholder="Search by part name..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => updateParam("search", e.target.value)}
             className="w-full border rounded-lg pl-11 pr-4 py-3 outline-none"
           />
         </div>
@@ -92,7 +99,7 @@ const AllParts = () => {
             <p className="text-xs mb-2">Category</p>
             <div className="flex gap-2 flex-wrap">
               {categories.map((cat) => (
-                <button key={cat} onClick={() => setActiveCategory(cat)} className={filterBtn(activeCategory === cat)}>
+                <button key={cat} onClick={() => updateParam("category", cat)} className={filterBtn(activeCategory === cat)}>
                   {cat}
                 </button>
               ))}
@@ -102,7 +109,7 @@ const AllParts = () => {
             <p className="text-xs mb-2">Vehicle</p>
             <div className="flex gap-2 flex-wrap">
               {vehicles.map((v) => (
-                <button key={v} onClick={() => setActiveVehicle(v)} className={filterBtn(activeVehicle === v)}>
+                <button key={v} onClick={() => updateParam("vehicle", v)} className={filterBtn(activeVehicle === v)}>
                   {v}
                 </button>
               ))}
@@ -117,24 +124,14 @@ const AllParts = () => {
             <p className="text-sm text-gray-500 mb-5">Showing {filtered.length} parts</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((p, i) => (
-                <ProductCard
-                  key={p.id}
-                  product={{
-                    ...p,
-                    name: p.title,
-                    image: p.images?.[0],
-                    inStock: p.stock_status === "in_stock",
-                    vehicle: p.model_compatibility
-                  }}
-                  index={i}
-                />
+                <ProductCard key={p.id} product={p} index={i} />
               ))}
             </div>
             {filtered.length === 0 && (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg">No parts found.</p>
                 <button
-                  onClick={() => { setSearch(""); setActiveCategory("All"); setActiveVehicle("All"); }}
+                  onClick={() => setSearchParams({})}
                   className="mt-3 text-blue-700 hover:underline"
                 >
                   Clear filters
