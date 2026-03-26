@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useCart, formatPrice, parsePrice } from "@/contexts/CartContext";
+import { useCart, formatPrice } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Truck } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
 
@@ -30,10 +30,7 @@ const Checkout = () => {
     notes: "",
   });
 
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof CheckoutData, string>>
-  >({});
-
+  const [errors, setErrors] = useState<Partial<Record<keyof CheckoutData, string>>>({});
   const [submitting, setSubmitting] = useState(false);
 
   if (items.length === 0) {
@@ -41,73 +38,31 @@ const Checkout = () => {
       <main className="pt-24 pb-20 bg-background min-h-screen">
         <div className="section-container text-center py-20">
           <h1 className="text-2xl font-bold mb-4">No items to checkout</h1>
-          <Link to="/parts" className="btn-primary">
-            Browse Parts
-          </Link>
+          <Link to="/parts" className="btn-primary">Browse Parts</Link>
         </div>
       </main>
     );
   }
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-
     if (errors[name as keyof CheckoutData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
-  // EMAIL GENERATOR
   const sendOrderEmail = (order: any) => {
     const ownerEmail = "hamzanaveed1@gmail.com";
-
     const itemsText = order.items
-      .map(
-        (item: any) =>
-          `${item.name} (${item.vehicle})
-Quantity: ${item.quantity}
-Price: ${item.price}`
-      )
+      .map((item: any) => `${item.title} (${item.vehicle})\nQuantity: ${item.quantity}\nPrice: Rs. ${item.price.toLocaleString()}`)
       .join("\n\n");
 
     const subject = `New Order ${order.id}`;
+    const body = `New Order Received\n\nOrder ID: ${order.id}\nDate: ${new Date().toLocaleString()}\n\nCustomer Details\nName: ${order.customer.fullName}\nPhone: ${order.customer.phone}\nEmail: ${order.customer.email}\n\nAddress\n${order.customer.address}\n${order.customer.city}\n\nItems Ordered\n\n${itemsText}\n\nTotal\n${order.total}\n\nPayment Method\nCash on Delivery`;
 
-    const body = `
-New Order Received
-
-Order ID: ${order.id}
-Date: ${new Date().toLocaleString()}
-
-Customer Details
-Name: ${order.customer.fullName}
-Phone: ${order.customer.phone}
-Email: ${order.customer.email}
-
-Address
-${order.customer.address}
-${order.customer.city}
-
-Items Ordered
-
-${itemsText}
-
-Total
-${order.total}
-
-Payment Method
-Cash on Delivery
-`;
-
-    const gmailURL = `https://mail.google.com/mail/?view=cm&fs=1&to=${ownerEmail}&su=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
-
-    const mailtoURL = `mailto:${ownerEmail}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+    const gmailURL = `https://mail.google.com/mail/?view=cm&fs=1&to=${ownerEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoURL = `mailto:${ownerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
       window.location.href = mailtoURL;
@@ -118,17 +73,14 @@ Cash on Delivery
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const result = checkoutSchema.safeParse(form);
 
     if (!result.success) {
       const fieldErrors: typeof errors = {};
-
       result.error.issues.forEach((issue) => {
         const key = issue.path[0] as keyof CheckoutData;
         fieldErrors[key] = issue.message;
       });
-
       setErrors(fieldErrors);
       return;
     }
@@ -138,9 +90,9 @@ Cash on Delivery
     try {
       const orderItems = items.map((i) => ({
         id: i.product.id,
-        name: i.product.name,
+        name: i.product.title,
         vehicle: i.product.vehicle,
-        price: parsePrice(i.product.price),
+        price: i.product.price,
         quantity: i.quantity,
       }));
 
@@ -172,7 +124,7 @@ Cash on Delivery
         customer: result.data,
         items: items.map((i) => ({
           id: i.product.id,
-          name: i.product.name,
+          title: i.product.title,
           vehicle: i.product.vehicle,
           price: i.product.price,
           quantity: i.quantity,
@@ -183,14 +135,9 @@ Cash on Delivery
       };
 
       localStorage.setItem("pristine-last-order", JSON.stringify(order));
-
-      // SEND EMAIL
       sendOrderEmail(order);
-
       clearCart();
-
       toast.success("Order placed successfully!");
-
       navigate("/order-confirmation");
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -199,109 +146,44 @@ Cash on Delivery
     }
   };
 
-  const inputClass =
-    "w-full rounded-lg border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
+  const inputClass = "w-full rounded-lg border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
 
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
-
-        <Link
-          to="/cart"
-          className="inline-flex items-center gap-2 mb-6 text-sm"
-        >
-          <ArrowLeft size={16} />
-          Back to Cart
+        <Link to="/cart" className="inline-flex items-center gap-2 mb-6 text-sm">
+          <ArrowLeft size={16} /> Back to Cart
         </Link>
 
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
-
-          {/* FORM */}
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
-
             <div className="rounded-xl border p-6 space-y-4">
-
-              <input
-                name="fullName"
-                placeholder="Full Name"
-                value={form.fullName}
-                onChange={handleChange}
-                className={inputClass}
-              />
-
-              <input
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                className={inputClass}
-              />
-
-              <input
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                className={inputClass}
-              />
-
-              <input
-                name="address"
-                placeholder="Address"
-                value={form.address}
-                onChange={handleChange}
-                className={inputClass}
-              />
-
-              <input
-                name="city"
-                placeholder="City"
-                value={form.city}
-                onChange={handleChange}
-                className={inputClass}
-              />
-
-              <textarea
-                name="notes"
-                placeholder="Notes"
-                value={form.notes}
-                onChange={handleChange}
-                className={inputClass}
-              />
-
+              <input name="fullName" placeholder="Full Name" value={form.fullName} onChange={handleChange} className={inputClass} />
+              <input name="phone" placeholder="Phone Number" value={form.phone} onChange={handleChange} className={inputClass} />
+              <input name="email" placeholder="Email" value={form.email} onChange={handleChange} className={inputClass} />
+              <input name="address" placeholder="Address" value={form.address} onChange={handleChange} className={inputClass} />
+              <input name="city" placeholder="City" value={form.city} onChange={handleChange} className={inputClass} />
+              <textarea name="notes" placeholder="Notes" value={form.notes} onChange={handleChange} className={inputClass} />
             </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn-primary w-full"
-            >
+            <button type="submit" disabled={submitting} className="btn-primary w-full">
               {submitting ? "Placing Order..." : "Place Order"}
             </button>
-
           </form>
 
-          {/* ORDER SUMMARY */}
           <div className="rounded-xl border p-6 h-fit">
-
             <h2 className="text-lg font-bold mb-4">Order Summary</h2>
-
             {items.map((item) => (
               <div key={item.product.id} className="flex justify-between mb-3">
-                <span>{item.product.name} x{item.quantity}</span>
-                <span>
-                  {formatPrice(parsePrice(item.product.price) * item.quantity)}
-                </span>
+                <span>{item.product.title} x{item.quantity}</span>
+                <span>{formatPrice(item.product.price * item.quantity)}</span>
               </div>
             ))}
-
             <div className="border-t pt-4 flex justify-between font-bold">
               <span>Total</span>
               <span>{formattedSubtotal}</span>
             </div>
-
           </div>
         </div>
       </div>
