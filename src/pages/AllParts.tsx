@@ -1,119 +1,147 @@
-import { useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { products, categories, vehicles } from "@/data/products";
+import { supabase } from "@/integrations/supabase/client";
 import ProductCard from "@/components/ProductCard";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
 const AllParts = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [products, setProducts] = useState<any[]>([]);
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeVehicle, setActiveVehicle] = useState("All");
+  const [categories, setCategories] = useState(["All"]);
+  const [vehicles, setVehicles] = useState(["All"]);
+  const [loading, setLoading] = useState(true);
 
-  // URL params are the single source of truth
-  const search = searchParams.get("search") || "";
-  const activeCategory = searchParams.get("category") || "All";
-  const activeVehicle = searchParams.get("vehicle") || "All";
+  useEffect(() => {
+    const s = searchParams.get("search");
+    if (s) setSearch(s);
+  }, [searchParams]);
 
-  const updateParam = (key: string, value: string) => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
-      if (value === "" || value === "All") {
-        next.delete(key);
-      } else {
-        next.set(key, value);
+  // Fetch products from Supabase
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error && data) {
+        setProducts(data);
+
+        // Derive unique vehicles from model_compatibility
+        const uniqueVehicles = ["All", ...new Set(data.map((p) => p.model_compatibility).filter(Boolean))];
+        setVehicles(uniqueVehicles);
       }
-      return next;
-    });
-  };
+      setLoading(false);
+    }
+
+    fetchProducts();
+  }, []);
+
+  // Fetch categories from Supabase
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data, error } = await supabase.from("categories").select("name").order("name");
+      if (!error && data) {
+        setCategories(["All", ...data.map((c) => c.name)]);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
     return products.filter((p) => {
-      const matchCat = activeCategory === "All" || p.category === activeCategory;
-      const matchVehicle = activeVehicle === "All" || p.vehicle === activeVehicle;
-      const matchSearch =
-        !search ||
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.description.toLowerCase().includes(search.toLowerCase()) ||
-        p.vehicle.toLowerCase().includes(search.toLowerCase());
-      return matchCat && matchVehicle && matchSearch;
+      const matchCategory = activeCategory === "All" || p.category === activeCategory;
+      const matchVehicle = activeVehicle === "All" || p.model_compatibility === activeVehicle;
+      const matchSearch = !q || p.title?.toLowerCase().includes(q);
+      return matchCategory && matchVehicle && matchSearch;
     });
-  }, [search, activeCategory, activeVehicle]);
+  }, [search, activeCategory, activeVehicle, products]);
 
   const filterBtn = (active: boolean) =>
-    `px-4 py-2 rounded-lg text-xs font-body font-medium transition-all duration-200 ${
-      active
-        ? "bg-primary text-primary-foreground shadow-sm"
-        : "bg-card text-muted-foreground hover:bg-muted border border-border"
+    `px-4 py-2 rounded-lg text-xs transition ${
+      active ? "bg-blue-900 text-white" : "bg-gray-100 hover:bg-gray-200"
     }`;
 
-  const clearAll = () => setSearchParams({});
-
   return (
-    <main className="pt-24 pb-20 bg-background min-h-screen">
+    <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">All Parts</h1>
-          <p className="mt-2 text-muted-foreground text-sm font-body">Browse our complete catalog of genuine auto parts.</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <h1 className="text-3xl font-bold">All Parts</h1>
+          <p className="text-gray-500 mt-2">Browse our complete catalog of auto parts.</p>
         </motion.div>
 
         {/* Search */}
         <div className="relative w-full mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" size={18} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
-            placeholder="Search by part name, vehicle..."
+            placeholder="Search by part name..."
             value={search}
-            onChange={(e) => updateParam("search", e.target.value)}
-            className="w-full border border-border rounded-lg pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all font-body text-sm bg-background"
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full border rounded-lg pl-11 pr-4 py-3 outline-none"
           />
         </div>
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-5 mb-8">
           <div className="flex-1">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Vehicle</p>
-            <div className="flex gap-2 flex-wrap">
-              {vehicles.map((v) => (
-                <button key={v} onClick={() => updateParam("vehicle", v)} className={filterBtn(activeVehicle === v)}>
-                  {v}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex-1">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-body font-medium">Category</p>
+            <p className="text-xs mb-2">Category</p>
             <div className="flex gap-2 flex-wrap">
               {categories.map((cat) => (
-                <button key={cat} onClick={() => updateParam("category", cat)} className={filterBtn(activeCategory === cat)}>
+                <button key={cat} onClick={() => setActiveCategory(cat)} className={filterBtn(activeCategory === cat)}>
                   {cat}
                 </button>
               ))}
             </div>
           </div>
-        </div>
-
-        <p className="text-sm text-muted-foreground font-body mb-5">
-          Showing {filtered.length} {filtered.length === 1 ? "part" : "parts"}
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg font-body">No parts found matching your filters.</p>
-            <button
-              onClick={clearAll}
-              className="mt-3 text-primary hover:underline font-body text-sm font-medium"
-            >
-              Clear all filters
-            </button>
+          <div className="flex-1">
+            <p className="text-xs mb-2">Vehicle</p>
+            <div className="flex gap-2 flex-wrap">
+              {vehicles.map((v) => (
+                <button key={v} onClick={() => setActiveVehicle(v)} className={filterBtn(activeVehicle === v)}>
+                  {v}
+                </button>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {loading ? (
+          <p className="text-gray-400 text-sm">Loading parts...</p>
+        ) : (
+          <>
+            <p className="text-sm text-gray-500 mb-5">Showing {filtered.length} parts</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((p, i) => (
+                <ProductCard
+                  key={p.id}
+                  product={{
+                    ...p,
+                    name: p.title,
+                    image: p.images?.[0],
+                    inStock: p.stock_status === "in_stock",
+                    vehicle: p.model_compatibility
+                  }}
+                  index={i}
+                />
+              ))}
+            </div>
+            {filtered.length === 0 && (
+              <div className="text-center py-16">
+                <p className="text-gray-500 text-lg">No parts found.</p>
+                <button
+                  onClick={() => { setSearch(""); setActiveCategory("All"); setActiveVehicle("All"); }}
+                  className="mt-3 text-blue-700 hover:underline"
+                >
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>
