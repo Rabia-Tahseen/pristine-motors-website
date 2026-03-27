@@ -12,7 +12,6 @@ const AllParts = () => {
   const [vehicles, setVehicles] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
 
-  // URL params as single source of truth
   const search = searchParams.get("search") || "";
   const activeCategory = searchParams.get("category") || "All";
   const activeVehicle = searchParams.get("vehicle") || "All";
@@ -26,20 +25,21 @@ const AllParts = () => {
     });
   };
 
-  // Fetch products with category join
   useEffect(() => {
     async function fetchProducts() {
       const { data, error } = await supabase
         .from("products")
         .select("*, category:categories(name)")
-        .eq("product_type", "car_part")   // ✅ only fetch parts
+        .eq("product_type", "car_part")
         .order("created_at", { ascending: false });
 
       if (!error && data) {
         setProducts(data);
         const uniqueVehicles = [
           "All",
-          ...new Set(data.map((p: any) => p.model_compatibility).filter(Boolean)),
+          ...new Set(
+            data.map((p: any) => p.model_compatibility).filter(Boolean)
+          ),
         ];
         setVehicles(uniqueVehicles);
       }
@@ -48,7 +48,6 @@ const AllParts = () => {
     fetchProducts();
   }, []);
 
-  // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       const { data, error } = await supabase.from("categories").select("name").order("name");
@@ -71,9 +70,7 @@ const AllParts = () => {
   }, [search, activeCategory, activeVehicle, products]);
 
   const filterBtn = (active: boolean) =>
-    `px-4 py-2 rounded-lg text-xs transition ${
-      active ? "bg-blue-900 text-white" : "bg-gray-100 hover:bg-gray-200"
-    }`;
+    `px-4 py-2 rounded-lg text-xs transition ${active ? "bg-blue-900 text-white" : "bg-gray-100 hover:bg-gray-200"}`;
 
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
@@ -83,7 +80,6 @@ const AllParts = () => {
           <p className="text-gray-500 mt-2">Browse our complete catalog of auto parts.</p>
         </motion.div>
 
-        {/* Search */}
         <div className="relative w-full mb-6">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
@@ -94,7 +90,6 @@ const AllParts = () => {
           />
         </div>
 
-        {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-5 mb-8">
           <div className="flex-1">
             <p className="text-xs mb-2">Category</p>
@@ -125,16 +120,13 @@ const AllParts = () => {
             <p className="text-sm text-gray-500 mb-5">Showing {filtered.length} parts</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} />
+                <ProductCard key={p.id} product={p} index={i} section="parts" />
               ))}
             </div>
             {filtered.length === 0 && (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg">No parts found.</p>
-                <button
-                  onClick={() => setSearchParams({})}
-                  className="mt-3 text-blue-700 hover:underline"
-                >
+                <button onClick={() => setSearchParams({})} className="mt-3 text-blue-700 hover:underline">
                   Clear filters
                 </button>
               </div>
