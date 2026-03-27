@@ -6,9 +6,10 @@ import { useCart, toCartProduct } from "@/contexts/CartContext";
 interface Props {
   product: any;
   index?: number;
+  section?: "parts" | "cars"; // optional, tells which section this card belongs to
 }
 
-const ProductCard = ({ product, index = 0 }: Props) => {
+const ProductCard = ({ product, index = 0, section = "parts" }: Props) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const phoneNumber = "923219454136";
@@ -33,9 +34,10 @@ const ProductCard = ({ product, index = 0 }: Props) => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      {/* Card */}
       <div
-        onClick={() => navigate(`/parts/${product.id}`)}
+        onClick={() =>
+          navigate(`/parts/${product.id}`, { state: { section } })
+        }
         className="group block rounded-xl overflow-hidden bg-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-[4px] cursor-pointer"
       >
         <div className="flex flex-col h-full">
@@ -47,14 +49,11 @@ const ProductCard = ({ product, index = 0 }: Props) => {
               className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
               loading="lazy"
             />
-
-            {/* Slight dark overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
           </div>
 
           <div className="p-4 flex flex-col flex-1">
             <h3 className="font-semibold text-base mb-1">{title}</h3>
-
             <p className="text-gray-500 text-sm line-clamp-2 mb-3 flex-1">
               {description}
             </p>
@@ -89,7 +88,7 @@ const ProductCard = ({ product, index = 0 }: Props) => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/parts/${product.id}`);
+                    navigate(`/parts/${product.id}`, { state: { section } });
                   }}
                   className="text-sm font-medium text-blue-900 hover:text-blue-500 flex items-center gap-1"
                 >
