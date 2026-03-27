@@ -1,12 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Car } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import ProductCard from "@/components/ProductCard";
+import { Search } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 const Cars = () => {
   const [cars, setCars] = useState<any[]>([]);
+  const [vehicles, setVehicles] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const search = searchParams.get("search") || "";
+  const activeVehicle = searchParams.get("vehicle") || "All";
+
+  const updateParam = (key: string, value: string) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+
+      if (value === "" || value === "All") next.delete(key);
+      else next.set(key, value);
+
+      return next;
+    });
+  };
 
   useEffect(() => {
     async function fetchCars() {
@@ -15,10 +33,17 @@ const Cars = () => {
         .select("*")
         .eq("product_type", "car");
 
-      if (error) {
-        console.error(error);
-      } else {
-        setCars(data || []);
+      if (!error && data) {
+        setCars(data);
+
+        const uniqueVehicles = [
+          "All",
+          ...new Set(
+            data.map((c: any) => c.model_compatibility).filter(Boolean)
+          ),
+        ];
+
+        setVehicles(uniqueVehicles);
       }
 
       setLoading(false);
@@ -26,6 +51,28 @@ const Cars = () => {
 
     fetchCars();
   }, []);
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+
+    return cars.filter(car => {
+      const matchVehicle =
+        activeVehicle === "All" ||
+        car.model_compatibility === activeVehicle;
+
+      const matchSearch =
+        !q || car.title?.toLowerCase().includes(q);
+
+      return matchVehicle && matchSearch;
+    });
+  }, [cars, search, activeVehicle]);
+
+  const filterBtn = (active: boolean) =>
+    `px-4 py-2 rounded-lg text-xs transition ${
+      active
+        ? "bg-blue-900 text-white"
+        : "bg-gray-100 hover:bg-gray-200"
+    }`;
 
   if (loading) {
     return (
@@ -36,44 +83,86 @@ const Cars = () => {
   }
 
   return (
-    <main className="pt-24 pb-20 bg-background min-h-screen">
+    <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
         >
-          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center">
-            Cars
-          </h1>
-
-          {/* IF cars exist */}
-          {cars.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-              {cars.map((car, i) => (
-                <ProductCard key={car.id} product={car} index={i} />
-              ))}
-            </div>
-          ) : (
-            /* IF no cars exist */
-            <div className="mt-12 flex flex-col items-center gap-4 p-12 rounded-xl border border-border bg-card text-center">
-              <Car size={48} className="text-muted-foreground/30" />
-
-              <p className="text-muted-foreground font-body">
-                Our car listings are being prepared. Check back soon or contact
-                us directly for available vehicles.
-              </p>
-
-              <a
-                href="https://wa.me/923219454136?text=Hi%2C%20I%27m%20interested%20in%20buying%20a%20car."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary mt-2"
-              >
-                Inquire via WhatsApp
-              </a>
-            </div>
-          )}
+          <h1 className="text-3xl font-bold">All Cars</h1>
+          <p className="text-gray-500 mt-2">
+            Browse our complete collection of available vehicles.
+          </p>
         </motion.div>
+
+        {/* Search */}
+        <div className="relative w-full mb-6">
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            size={18}
+          />
+
+          <input
+            placeholder="Search by car name..."
+            value={search}
+            onChange={(e) =>
+              updateParam("search", e.target.value)
+            }
+            className="w-full border rounded-lg pl-11 pr-4 py-3 outline-none"
+          />
+        </div>
+
+        {/* Vehicle filter */}
+        <div className="mb-8">
+          <p className="text-xs mb-2">Vehicle</p>
+
+          <div className="flex gap-2 flex-wrap">
+            {vehicles.map(vehicle => (
+              <button
+                key={vehicle}
+                onClick={() =>
+                  updateParam("vehicle", vehicle)
+                }
+                className={filterBtn(
+                  activeVehicle === vehicle
+                )}
+              >
+                {vehicle}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Results */}
+        <p className="text-sm text-gray-500 mb-5">
+          Showing {filtered.length} cars
+        </p>
+
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((car, i) => (
+              <ProductCard
+                key={car.id}
+                product={car}
+                index={i}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="text-gray-500 text-lg">
+              No cars found.
+            </p>
+
+            <button
+              onClick={() => setSearchParams({})}
+              className="mt-3 text-blue-700 hover:underline"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
