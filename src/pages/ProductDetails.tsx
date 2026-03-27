@@ -181,6 +181,8 @@ const ProductDetails = () => {
                   value:
                     product.stock_status === "in_stock"
                       ? "In Stock"
+                      : product.stock_status === "out_of_stock"
+                      ? "Out of Stock"
                       : product.stock_status === "sold"
                       ? "Sold"
                       : "Unknown",
@@ -188,17 +190,40 @@ const ProductDetails = () => {
               ].map((item) => (
                 <div key={item.label} className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{item.label}</span>
-                  <span className="font-medium">{item.value}</span>
+                  <span
+                    className={`font-medium
+                    ${
+                      item.value === "In Stock"
+                        ? "text-green-600"
+                        : item.value === "Out of Stock"
+                        ? "text-red-500"
+                        : ""
+                    }`}
+                  >
+                    {item.value}
+                  </span>
                 </div>
               ))}
             </div>
 
             <button
-              onClick={() => addToCart(toCartProduct(product))}
-              className="mt-6 px-6 py-3 bg-blue-900 text-white rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-xl hover:-translate-y-[2px] transition text-base font-semibold"
+              onClick={() =>
+                product.stock_status === "in_stock" &&
+                addToCart(toCartProduct(product))
+              }
+              disabled={product.stock_status !== "in_stock"}
+              className={`mt-6 px-6 py-3 rounded-lg flex items-center justify-center gap-2 shadow-md transition text-base font-semibold
+              ${
+                product.stock_status === "in_stock"
+                  ? "bg-blue-900 text-white hover:shadow-xl hover:-translate-y-[2px]"
+                  : "bg-gray-400 text-white cursor-not-allowed"
+              }`}
             >
               <ShoppingCart size={18} />
-              Add to Cart
+
+              {product.stock_status === "in_stock"
+                ? "Add to Cart"
+                : "Out of Stock"}
             </button>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
