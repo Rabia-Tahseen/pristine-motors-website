@@ -29,7 +29,8 @@ const Cars = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("product_type", "car");
+        .eq("product_type", "car")
+        .in("stock_status", ["in_stock", "out_of_stock"]);
 
       if (!error && data) {
         setCars(data);

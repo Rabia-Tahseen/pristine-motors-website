@@ -31,6 +31,7 @@ const AllParts = () => {
         .from("products")
         .select("*, category:categories(name)")
         .eq("product_type", "car_part")
+        .in("stock_status", ["in_stock", "out_of_stock"])
         .order("created_at", { ascending: false });
 
       if (!error && data) {
