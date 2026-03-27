@@ -38,11 +38,15 @@ const Checkout = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     const key = name as keyof CheckoutData;
-    // Only digits in phone
+
+    // Only allow digits for phone number
     const newValue = key === "phone" ? value.replace(/\D/g, "") : value;
+
     setForm((prev) => ({ ...prev, [key]: newValue }));
   };
 
@@ -61,17 +65,19 @@ const Checkout = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setSubmitted(true);
 
     const errors = getErrors();
+
     if (Object.keys(errors).length > 0) {
-      // Show which fields are missing
       const missing = Object.values(errors).join(", ");
       toast.error(`Please fix: ${missing}`);
       return;
     }
 
     setSubmitting(true);
+
     try {
       const orderItems = items.map((i) => ({
         id: i.product.id,
@@ -94,21 +100,31 @@ const Checkout = () => {
         order_status: "new",
       };
 
-      const { error } = await supabase.from("orders").insert(orderPayload);
+      // Save order to database
+      const { error } = await supabase
+        .from("orders")
+        .insert(orderPayload);
 
       if (error) throw error;
 
-      // mark ordered products as SOLD
+      // ✅ NEW: Mark ordered products as SOLD
       const productIds = items.map((i) => i.product.id);
 
-      await supabase
+      const { error: updateError } = await supabase
         .from("products")
         .update({ stock_status: "sold" })
         .in("id", productIds);
 
+      if (updateError) {
+        console.error("Failed to update stock status:", updateError);
+      }
+
       clearCart();
+
       toast.success("Order placed successfully!");
+
       navigate("/order-confirmation");
+
     } catch (err: any) {
       console.error(err);
       toast.error("Failed to place order. Please try again.");
@@ -119,6 +135,7 @@ const Checkout = () => {
 
   const inputClass =
     "w-full rounded-lg border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-gray-400";
+
   const errorClass = "text-red-500 text-xs mt-1";
 
   const errors = submitted ? getErrors() : {};
@@ -127,7 +144,10 @@ const Checkout = () => {
     return (
       <main className="pt-24 pb-20 bg-background min-h-screen">
         <div className="section-container text-center py-20">
-          <h1 className="text-2xl font-bold mb-4">No items to checkout</h1>
+          <h1 className="text-2xl font-bold mb-4">
+            No items to checkout
+          </h1>
+
           <Link to="/parts" className="btn-primary">
             Browse Parts
           </Link>
@@ -139,19 +159,32 @@ const Checkout = () => {
   return (
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
-        <Link to="/cart" className="inline-flex items-center gap-2 mb-6 text-sm">
-          <ArrowLeft size={16} /> Back to Cart
+
+        <Link
+          to="/cart"
+          className="inline-flex items-center gap-2 mb-6 text-sm"
+        >
+          <ArrowLeft size={16} />
+          Back to Cart
         </Link>
 
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+        <h1 className="text-3xl font-bold mb-8">
+          Checkout
+        </h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
+
+          <form
+            onSubmit={handleSubmit}
+            className="lg:col-span-2 space-y-5"
+          >
+
             <div className="rounded-xl border p-6 space-y-4">
 
               {/* Full Name */}
               <div>
                 <Label>Full Name *</Label>
+
                 <Input
                   name="fullName"
                   placeholder="Enter your full name"
@@ -159,12 +192,18 @@ const Checkout = () => {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
+
+                {errors.fullName &&
+                  <p className={errorClass}>
+                    {errors.fullName}
+                  </p>
+                }
               </div>
 
               {/* Phone */}
               <div>
                 <Label>Phone Number *</Label>
+
                 <Input
                   name="phone"
                   placeholder="e.g. 03123456789"
@@ -172,12 +211,18 @@ const Checkout = () => {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                {errors.phone && <p className={errorClass}>{errors.phone}</p>}
+
+                {errors.phone &&
+                  <p className={errorClass}>
+                    {errors.phone}
+                  </p>
+                }
               </div>
 
               {/* Email */}
               <div>
                 <Label>Email *</Label>
+
                 <Input
                   name="email"
                   type="email"
@@ -186,12 +231,18 @@ const Checkout = () => {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                {errors.email && <p className={errorClass}>{errors.email}</p>}
+
+                {errors.email &&
+                  <p className={errorClass}>
+                    {errors.email}
+                  </p>
+                }
               </div>
 
               {/* Address */}
               <div>
                 <Label>Address *</Label>
+
                 <Input
                   name="address"
                   placeholder="Street, house no., etc."
@@ -199,12 +250,18 @@ const Checkout = () => {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                {errors.address && <p className={errorClass}>{errors.address}</p>}
+
+                {errors.address &&
+                  <p className={errorClass}>
+                    {errors.address}
+                  </p>
+                }
               </div>
 
               {/* City */}
               <div>
                 <Label>City *</Label>
+
                 <Input
                   name="city"
                   placeholder="City name"
@@ -212,12 +269,18 @@ const Checkout = () => {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                {errors.city && <p className={errorClass}>{errors.city}</p>}
+
+                {errors.city &&
+                  <p className={errorClass}>
+                    {errors.city}
+                  </p>
+                }
               </div>
 
               {/* Notes */}
               <div>
                 <Label>Notes</Label>
+
                 <Textarea
                   name="notes"
                   placeholder="Optional notes for delivery"
@@ -225,31 +288,63 @@ const Checkout = () => {
                   onChange={handleChange}
                   className={inputClass}
                 />
-                {errors.notes && <p className={errorClass}>{errors.notes}</p>}
+
+                {errors.notes &&
+                  <p className={errorClass}>
+                    {errors.notes}
+                  </p>
+                }
               </div>
+
             </div>
 
-            <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting ? "Placing Order..." : "Place Order"}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={submitting}
+            >
+              {submitting
+                ? "Placing Order..."
+                : "Place Order"}
             </Button>
+
           </form>
+
 
           {/* Order Summary */}
           <div className="rounded-xl border p-6 h-fit">
-            <h2 className="text-lg font-bold mb-4">Order Summary</h2>
+
+            <h2 className="text-lg font-bold mb-4">
+              Order Summary
+            </h2>
+
             {items.map((item) => (
-              <div key={item.product.id} className="flex justify-between mb-3">
+              <div
+                key={item.product.id}
+                className="flex justify-between mb-3"
+              >
                 <span>
                   {item.product.title} x{item.quantity}
                 </span>
-                <span>{formatPrice(item.product.price * item.quantity)}</span>
+
+                <span>
+                  {formatPrice(
+                    item.product.price * item.quantity
+                  )}
+                </span>
               </div>
             ))}
+
             <div className="border-t pt-4 flex justify-between font-bold">
+
               <span>Total</span>
+
               <span>{formattedSubtotal}</span>
+
             </div>
+
           </div>
+
         </div>
       </div>
     </main>
