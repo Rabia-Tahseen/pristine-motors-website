@@ -119,6 +119,33 @@ const Checkout = () => {
         console.error("Failed to update stock status:", updateError);
       }
 
+      // Create receipt data for confirmation page
+      const receiptData = {
+        id: `PM-${Date.now()}`,
+        customer: {
+          fullName: form.fullName,
+          phone: form.phone,
+          email: form.email,
+          address: form.address,
+          city: form.city,
+        },
+        items: items.map((i) => ({
+          name: i.product.title,
+          vehicle: i.product.vehicle,
+          quantity: i.quantity,
+          lineTotal: formatPrice(i.product.price * i.quantity),
+        })),
+        total: formattedSubtotal,
+        paymentMethod: "Cash on Delivery",
+        date: new Date().toLocaleString(),
+      };
+
+      // Save receipt locally
+      localStorage.setItem(
+        "pristine-last-order",
+        JSON.stringify(receiptData)
+      );
+
       clearCart();
 
       toast.success("Order placed successfully!");
