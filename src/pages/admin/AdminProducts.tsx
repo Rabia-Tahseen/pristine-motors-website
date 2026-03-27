@@ -36,7 +36,10 @@ export interface Category {
 const AdminProducts = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const dashboardFilter = queryParams.get("filter"); // "car-parts" | "cars" | null
+  const dashboardFilter = queryParams.get("filter");
+
+  const isDashboardFiltered =
+    dashboardFilter === "cars" || dashboardFilter === "car-parts";
 
   const [products, setProducts] = useState<SupabaseProduct[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -47,30 +50,28 @@ const AdminProducts = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<SupabaseProduct | null>(null);
 
-  // ✅ Set initial filter from dashboard (no race condition)
+  // ✅ Apply dashboard filter once
   useEffect(() => {
     if (dashboardFilter === "car-parts") {
       setCategoryFilter("car_part");
     } else if (dashboardFilter === "cars") {
       setCategoryFilter("car");
-    } else {
-      setCategoryFilter("all");
     }
-  }, [dashboardFilter]);
+  }, []);
 
-  // ✅ Fetch categories
+  // Fetch categories
   const fetchCategories = async () => {
     try {
       const { data, error } = await supabase.from("categories").select("*");
       if (error) throw error;
       setCategories(data ?? []);
     } catch (error) {
-      console.error("Failed to fetch categories:", error);
+      console.error(error);
       toast.error("Failed to fetch categories");
     }
   };
 
-  // ✅ MAIN FIXED FETCH FUNCTION
+  // Fetch products
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -79,18 +80,10 @@ const AdminProducts = () => {
         .select(`*, category:categories(name)`)
         .order("created_at", { ascending: false });
 
-      // 🔥 PRIORITY: Dashboard filter first
-      if (dashboardFilter === "car-parts") {
+      if (categoryFilter === "car_part") {
         query = query.eq("product_type", "car_part");
-      } else if (dashboardFilter === "cars") {
+      } else if (categoryFilter === "car") {
         query = query.eq("product_type", "car");
-      } else {
-        // normal filters
-        if (categoryFilter === "car_part") {
-          query = query.eq("product_type", "car_part");
-        } else if (categoryFilter === "car") {
-          query = query.eq("product_type", "car");
-        }
       }
 
       if (stockFilter !== "all") {
@@ -102,27 +95,24 @@ const AdminProducts = () => {
       }
 
       const { data, error } = await query;
-
       if (error) throw error;
 
       setProducts(data ?? []);
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      console.error(error);
       toast.error("Failed to fetch products");
     } finally {
       setLoading(false);
     }
   };
 
-  // initial load
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  // refetch on filters
   useEffect(() => {
     fetchProducts();
-  }, [categoryFilter, stockFilter, search, dashboardFilter]);
+  }, [categoryFilter, stockFilter, search]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
@@ -154,7 +144,7 @@ const AdminProducts = () => {
     };
 
     return (
-      <Badge className={`${colors[status] ?? "bg-muted text-foreground"} text-xs font-body`}>
+      <Badge className={`${colors[status] ?? "bg-muted text-foreground"} text-xs`}>
         {status.replace("_", " ")}
       </Badge>
     );
@@ -165,8 +155,8 @@ const AdminProducts = () => {
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Products</h1>
-          <p className="text-muted-foreground font-body text-sm">{products.length} products total</p>
+          <h1 className="text-2xl font-bold">Products</h1>
+          <p className="text-sm text-muted-foreground">{products.length} products total</p>
         </div>
 
         <Button onClick={handleAdd} className="gap-2">
@@ -178,6 +168,7 @@ const AdminProducts = () => {
       <Card>
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row gap-3">
+            {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
               <Input
@@ -188,27 +179,31 @@ const AdminProducts = () => {
               />
             </div>
 
-            {/* ✅ Dropdown synced with dashboard */}
-            <select
-              value={
-                dashboardFilter
-                  ? dashboardFilter === "cars"
-                    ? "car"
-                    : "car_part"
-                  : categoryFilter
-              }
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm font-body"
-            >
-              <option value="all">All Categories</option>
-              <option value="car">Cars</option>
-              <option value="car_part">Car Parts</option>
-            </select>
+            {/* ✅ Category dropdown ONLY on main page */}
+            {!isDashboardFiltered && (
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="h-10 rounded-md border px-3 text-sm"
+              >
+                <option value="all">All Categories</option>
+                <option value="car">Cars</option>
+                <option value="car_part">Car Parts</option>
+              </select>
+            )}
 
+            {/* ✅ Label for filtered pages */}
+            {isDashboardFiltered && (
+              <div className="h-10 flex items-center px-3 rounded-md border bg-muted text-sm font-medium">
+                {dashboardFilter === "cars" ? "Showing: Cars" : "Showing: Car Parts"}
+              </div>
+            )}
+
+            {/* Stock filter */}
             <select
               value={stockFilter}
               onChange={(e) => setStockFilter(e.target.value)}
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm font-body"
+              className="h-10 rounded-md border px-3 text-sm"
             >
               <option value="all">All Status</option>
               <option value="in_stock">In Stock</option>
@@ -222,20 +217,20 @@ const AdminProducts = () => {
         <CardContent>
           {loading ? (
             <div className="flex justify-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              <div className="animate-spin h-8 w-8 border-b-2 border-primary rounded-full" />
             </div>
           ) : products.length === 0 ? (
-            <p className="text-center text-muted-foreground py-10 font-body">No products found</p>
+            <p className="text-center text-muted-foreground py-10">No products found</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border">
+                  <tr className="border-b">
                     <th className="text-left py-3 px-2">Image</th>
                     <th className="text-left py-3 px-2">Title</th>
-                    <th className="hidden md:table-cell text-left py-3 px-2">Category</th>
-                    <th className="text-left py-3 px-2">Price</th>
-                    <th className="hidden sm:table-cell text-left py-3 px-2">Status</th>
+                    <th className="hidden md:table-cell py-3 px-2">Category</th>
+                    <th className="py-3 px-2">Price</th>
+                    <th className="hidden sm:table-cell py-3 px-2">Status</th>
                     <th className="text-right py-3 px-2">Actions</th>
                   </tr>
                 </thead>
@@ -245,7 +240,7 @@ const AdminProducts = () => {
                     <tr key={product.id} className="border-b hover:bg-muted/30">
                       <td className="py-3 px-2">
                         {product.images?.[0] ? (
-                          <img src={product.images[0]} className="w-12 h-12 rounded-lg object-cover" />
+                          <img src={product.images[0]} className="w-12 h-12 object-cover rounded-lg" />
                         ) : (
                           <div className="w-12 h-12 bg-muted flex items-center justify-center text-xs">N/A</div>
                         )}
