@@ -95,7 +95,16 @@ const Checkout = () => {
       };
 
       const { error } = await supabase.from("orders").insert(orderPayload);
+
       if (error) throw error;
+
+      // mark ordered products as SOLD
+      const productIds = items.map((i) => i.product.id);
+
+      await supabase
+        .from("products")
+        .update({ stock_status: "sold" })
+        .in("id", productIds);
 
       clearCart();
       toast.success("Order placed successfully!");

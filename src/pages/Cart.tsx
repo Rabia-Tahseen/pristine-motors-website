@@ -60,22 +60,9 @@ const Cart = () => {
                   <p className="font-body font-bold text-primary mt-1">{formatPrice(item.product.price)}</p>
 
                   <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center gap-2 border border-border rounded-lg">
-                      <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        disabled={item.quantity <= 1}
-                        className="p-1.5 hover:bg-muted rounded-l-lg transition disabled:opacity-40"
-                      >
-                        <Minus size={14} />
-                      </button>
-                      <span className="font-body text-sm font-semibold w-8 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="p-1.5 hover:bg-muted rounded-r-lg transition"
-                      >
-                        <Plus size={14} />
-                      </button>
-                    </div>
+                    <span className="text-xs text-muted-foreground">
+                    Quantity: 1
+                    </span>
 
                     <div className="flex items-center gap-4">
                       <span className="font-body font-bold text-foreground text-sm">

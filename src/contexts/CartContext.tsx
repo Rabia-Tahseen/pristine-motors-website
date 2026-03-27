@@ -67,12 +67,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const addToCart = useCallback((product: CartProduct) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id);
+
       if (existing) {
-        toast.success(`Updated ${product.title} quantity`);
-        return prev.map((i) =>
-          i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
+        toast.error("This item is already in your cart");
+        return prev;
       }
+
       toast.success(`${product.title} added to cart`);
       return [...prev, { product, quantity: 1 }];
     });
