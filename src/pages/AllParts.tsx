@@ -32,6 +32,7 @@ const AllParts = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*, category:categories(name)")
+        .eq("product_type", "car_part")   // ✅ only fetch parts
         .order("created_at", { ascending: false });
 
       if (!error && data) {
