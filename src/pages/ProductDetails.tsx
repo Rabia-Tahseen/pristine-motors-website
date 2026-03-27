@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import {
@@ -17,12 +17,22 @@ const CALL_NUMBER = "+923013917380";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
 
-  // 🔥 Scroll to top on mount
+  // Determine section from state or fallback
+  const sectionFromState = (location.state as any)?.section;
+  const backSection =
+    sectionFromState ||
+    (product?.category?.name?.toLowerCase().includes("car") ? "cars" : "parts");
+
+  const backLinkText = backSection === "cars" ? "Back to Cars" : "Back to Parts";
+  const backLinkUrl = backSection === "cars" ? "/cars" : "/parts";
+
+  // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -86,10 +96,10 @@ const ProductDetails = () => {
       <div className="section-container">
         {/* Back */}
         <Link
-          to="/parts"
+          to={backLinkUrl}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition mb-8 text-sm"
         >
-          <ArrowLeft size={16} /> Back to Parts
+          <ArrowLeft size={16} /> {backLinkText}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -136,10 +146,7 @@ const ProductDetails = () => {
                       selectedImage === i ? "border-primary" : "border-border"
                     }`}
                   >
-                    <img
-                      src={img}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={img} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -162,7 +169,6 @@ const ProductDetails = () => {
               {product.full_description || product.short_description}
             </p>
 
-            {/* Details Box */}
             <div className="mt-6 rounded-xl border border-border p-5 space-y-3">
               <h3 className="font-semibold text-sm">Details</h3>
 
@@ -187,7 +193,6 @@ const ProductDetails = () => {
               ))}
             </div>
 
-            {/* Add to Cart */}
             <button
               onClick={() => addToCart(toCartProduct(product))}
               className="mt-6 px-6 py-3 bg-blue-900 text-white rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-xl hover:-translate-y-[2px] transition text-base font-semibold"
@@ -196,9 +201,7 @@ const ProductDetails = () => {
               Add to Cart
             </button>
 
-            {/* Contact Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              {/* WhatsApp */}
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                   `Hi, I'm interested in: ${product.title} (${vehicleName}) - Rs. ${product.price?.toLocaleString()}`
@@ -211,7 +214,6 @@ const ProductDetails = () => {
                 +92 321 9454136
               </a>
 
-              {/* Call */}
               <a
                 href={`tel:${CALL_NUMBER.replace(/\s/g, "")}`}
                 className="flex items-center gap-2 justify-center px-4 py-2 bg-blue-800 text-white rounded-lg transition text-sm shadow-sm hover:shadow-lg hover:-translate-y-[2px] "
