@@ -20,8 +20,7 @@ const checkoutSchema = z.object({
   city: z
     .string()
     .trim()
-    .min(2, "City is required")
-    .refine((val) => val.toLowerCase() === "lahore", {
+    .refine((val) => val === "Lahore", {
       message: "We only deliver within Lahore currently",
     }),
 
@@ -39,7 +38,7 @@ const Checkout = () => {
     phone: "",
     email: "",
     address: "",
-    city: "",
+    city: "", // ❗ empty initially
     notes: "",
   });
 
@@ -211,64 +210,31 @@ const Checkout = () => {
 
             <div className="rounded-xl border p-6 space-y-4">
 
-              {/* Full Name */}
               <div>
                 <Label>Full Name *</Label>
-
-                <Input
-                  name="fullName"
-                  value={form.fullName}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-
+                <Input name="fullName" value={form.fullName} onChange={handleChange} className={inputClass} />
                 {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
               </div>
 
-              {/* Phone */}
               <div>
                 <Label>Phone Number *</Label>
-
-                <Input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-
+                <Input name="phone" value={form.phone} onChange={handleChange} className={inputClass} />
                 {errors.phone && <p className={errorClass}>{errors.phone}</p>}
               </div>
 
-              {/* Email */}
               <div>
                 <Label>Email *</Label>
-
-                <Input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-
+                <Input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} />
                 {errors.email && <p className={errorClass}>{errors.email}</p>}
               </div>
 
-              {/* Address */}
               <div>
                 <Label>Address *</Label>
-
-                <Input
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-
+                <Input name="address" value={form.address} onChange={handleChange} className={inputClass} />
                 {errors.address && <p className={errorClass}>{errors.address}</p>}
               </div>
 
-              {/* ✅ City (Dropdown Lahore only) */}
+              {/* ✅ City dropdown (ONLY Lahore, no select option) */}
               <div>
                 <Label>City *</Label>
 
@@ -283,7 +249,6 @@ const Checkout = () => {
                   }
                   className={inputClass}
                 >
-                  <option value="">Select City</option>
                   <option value="Lahore">Lahore</option>
                 </select>
 
@@ -294,51 +259,27 @@ const Checkout = () => {
                 {errors.city && <p className={errorClass}>{errors.city}</p>}
               </div>
 
-              {/* Notes */}
               <div>
                 <Label>Notes</Label>
-
-                <Textarea
-                  name="notes"
-                  value={form.notes}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-
+                <Textarea name="notes" value={form.notes} onChange={handleChange} className={inputClass} />
                 {errors.notes && <p className={errorClass}>{errors.notes}</p>}
               </div>
 
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={submitting}
-            >
+            <Button type="submit" className="w-full" disabled={submitting}>
               {submitting ? "Placing Order..." : "Place Order"}
             </Button>
 
           </form>
 
-          {/* Order Summary */}
           <div className="rounded-xl border p-6 h-fit">
-
-            <h2 className="text-lg font-bold mb-4">
-              Order Summary
-            </h2>
+            <h2 className="text-lg font-bold mb-4">Order Summary</h2>
 
             {items.map((item) => (
-              <div
-                key={item.product.id}
-                className="flex justify-between mb-3"
-              >
-                <span>
-                  {item.product.title} x{item.quantity}
-                </span>
-
-                <span>
-                  {formatPrice(item.product.price * item.quantity)}
-                </span>
+              <div key={item.product.id} className="flex justify-between mb-3">
+                <span>{item.product.title} x{item.quantity}</span>
+                <span>{formatPrice(item.product.price * item.quantity)}</span>
               </div>
             ))}
 
