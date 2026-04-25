@@ -10,13 +10,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-// Validation schema
+// ✅ Validation schema (Lahore only)
 const checkoutSchema = z.object({
   fullName: z.string().trim().min(2, "Name is required").max(100),
   phone: z.string().length(11, "Phone must be exactly 11 digits"),
   email: z.string().trim().email("Valid email required").max(255),
   address: z.string().trim().min(5, "Delivery address is required").max(500),
-  city: z.string().trim().min(2, "City is required").max(100),
+
+  city: z
+    .string()
+    .trim()
+    .min(2, "City is required")
+    .refine((val) => val.toLowerCase() === "lahore", {
+      message: "We only deliver within Lahore currently",
+    }),
+
   notes: z.string().max(500).optional(),
 });
 
@@ -44,7 +52,6 @@ const Checkout = () => {
     const { name, value } = e.target;
     const key = name as keyof CheckoutData;
 
-    // Only allow digits for phone number
     const newValue = key === "phone" ? value.replace(/\D/g, "") : value;
 
     setForm((prev) => ({ ...prev, [key]: newValue }));
@@ -100,14 +107,12 @@ const Checkout = () => {
         order_status: "new",
       };
 
-      // Save order to database
       const { error } = await supabase
         .from("orders")
         .insert(orderPayload);
 
       if (error) throw error;
 
-      // ✅ NEW: Mark ordered products as SOLD
       const productIds = items.map((i) => i.product.id);
 
       const { error: updateError } = await supabase
@@ -119,7 +124,6 @@ const Checkout = () => {
         console.error("Failed to update stock status:", updateError);
       }
 
-      // Create receipt data for confirmation page
       const receiptData = {
         id: `PM-${Date.now()}`,
         customer: {
@@ -140,7 +144,6 @@ const Checkout = () => {
         date: new Date().toLocaleString(),
       };
 
-      // Save receipt locally
       localStorage.setItem(
         "pristine-last-order",
         JSON.stringify(receiptData)
@@ -214,17 +217,12 @@ const Checkout = () => {
 
                 <Input
                   name="fullName"
-                  placeholder="Enter your full name"
                   value={form.fullName}
                   onChange={handleChange}
                   className={inputClass}
                 />
 
-                {errors.fullName &&
-                  <p className={errorClass}>
-                    {errors.fullName}
-                  </p>
-                }
+                {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
               </div>
 
               {/* Phone */}
@@ -233,17 +231,12 @@ const Checkout = () => {
 
                 <Input
                   name="phone"
-                  placeholder="e.g. 03123456789"
                   value={form.phone}
                   onChange={handleChange}
                   className={inputClass}
                 />
 
-                {errors.phone &&
-                  <p className={errorClass}>
-                    {errors.phone}
-                  </p>
-                }
+                {errors.phone && <p className={errorClass}>{errors.phone}</p>}
               </div>
 
               {/* Email */}
@@ -253,17 +246,12 @@ const Checkout = () => {
                 <Input
                   name="email"
                   type="email"
-                  placeholder="you@example.com"
                   value={form.email}
                   onChange={handleChange}
                   className={inputClass}
                 />
 
-                {errors.email &&
-                  <p className={errorClass}>
-                    {errors.email}
-                  </p>
-                }
+                {errors.email && <p className={errorClass}>{errors.email}</p>}
               </div>
 
               {/* Address */}
@@ -272,36 +260,38 @@ const Checkout = () => {
 
                 <Input
                   name="address"
-                  placeholder="Street, house no., etc."
                   value={form.address}
                   onChange={handleChange}
                   className={inputClass}
                 />
 
-                {errors.address &&
-                  <p className={errorClass}>
-                    {errors.address}
-                  </p>
-                }
+                {errors.address && <p className={errorClass}>{errors.address}</p>}
               </div>
 
-              {/* City */}
+              {/* ✅ City (Dropdown Lahore only) */}
               <div>
                 <Label>City *</Label>
 
-                <Input
+                <select
                   name="city"
-                  placeholder="City name"
                   value={form.city}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      city: e.target.value,
+                    }))
+                  }
                   className={inputClass}
-                />
+                >
+                  <option value="">Select City</option>
+                  <option value="Lahore">Lahore</option>
+                </select>
 
-                {errors.city &&
-                  <p className={errorClass}>
-                    {errors.city}
-                  </p>
-                }
+                <p className="text-xs text-gray-500 mt-1">
+                  We only deliver within Lahore currently
+                </p>
+
+                {errors.city && <p className={errorClass}>{errors.city}</p>}
               </div>
 
               {/* Notes */}
@@ -310,17 +300,12 @@ const Checkout = () => {
 
                 <Textarea
                   name="notes"
-                  placeholder="Optional notes for delivery"
                   value={form.notes}
                   onChange={handleChange}
                   className={inputClass}
                 />
 
-                {errors.notes &&
-                  <p className={errorClass}>
-                    {errors.notes}
-                  </p>
-                }
+                {errors.notes && <p className={errorClass}>{errors.notes}</p>}
               </div>
 
             </div>
@@ -330,13 +315,10 @@ const Checkout = () => {
               className="w-full"
               disabled={submitting}
             >
-              {submitting
-                ? "Placing Order..."
-                : "Place Order"}
+              {submitting ? "Placing Order..." : "Place Order"}
             </Button>
 
           </form>
-
 
           {/* Order Summary */}
           <div className="rounded-xl border p-6 h-fit">
@@ -355,19 +337,14 @@ const Checkout = () => {
                 </span>
 
                 <span>
-                  {formatPrice(
-                    item.product.price * item.quantity
-                  )}
+                  {formatPrice(item.product.price * item.quantity)}
                 </span>
               </div>
             ))}
 
             <div className="border-t pt-4 flex justify-between font-bold">
-
               <span>Total</span>
-
               <span>{formattedSubtotal}</span>
-
             </div>
 
           </div>
