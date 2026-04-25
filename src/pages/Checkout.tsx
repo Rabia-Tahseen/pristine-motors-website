@@ -19,9 +19,8 @@ const checkoutSchema = z.object({
 
   city: z
     .string()
-    .trim()
     .refine((val) => val === "Lahore", {
-      message: "We only deliver within Lahore currently",
+      message: "Please select Lahore (we only deliver within Lahore)",
     }),
 
   notes: z.string().max(500).optional(),
@@ -38,7 +37,7 @@ const Checkout = () => {
     phone: "",
     email: "",
     address: "",
-    city: "", // ❗ empty initially
+    city: "", // ✅ IMPORTANT (empty default)
     notes: "",
   });
 
@@ -163,7 +162,7 @@ const Checkout = () => {
   };
 
   const inputClass =
-    "w-full rounded-lg border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-gray-400";
+    "w-full rounded-lg border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
 
   const errorClass = "text-red-500 text-xs mt-1";
 
@@ -189,24 +188,16 @@ const Checkout = () => {
     <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
 
-        <Link
-          to="/cart"
-          className="inline-flex items-center gap-2 mb-6 text-sm"
-        >
+        <Link to="/cart" className="inline-flex items-center gap-2 mb-6 text-sm">
           <ArrowLeft size={16} />
           Back to Cart
         </Link>
 
-        <h1 className="text-3xl font-bold mb-8">
-          Checkout
-        </h1>
+        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
 
-          <form
-            onSubmit={handleSubmit}
-            className="lg:col-span-2 space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
 
             <div className="rounded-xl border p-6 space-y-4">
 
@@ -234,7 +225,7 @@ const Checkout = () => {
                 {errors.address && <p className={errorClass}>{errors.address}</p>}
               </div>
 
-              {/* ✅ City dropdown (ONLY Lahore, no select option) */}
+              {/* ✅ City dropdown */}
               <div>
                 <Label>City *</Label>
 
@@ -249,6 +240,9 @@ const Checkout = () => {
                   }
                   className={inputClass}
                 >
+                  <option value="" disabled>
+                    Select City
+                  </option>
                   <option value="Lahore">Lahore</option>
                 </select>
 
