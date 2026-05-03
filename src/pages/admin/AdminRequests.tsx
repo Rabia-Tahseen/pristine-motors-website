@@ -31,7 +31,6 @@ const AdminRequests = () => {
   const [requests, setRequests] = useState<PartRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // FETCH
   const fetchRequests = async () => {
     setLoading(true);
 
@@ -54,7 +53,6 @@ const AdminRequests = () => {
     fetchRequests();
   }, []);
 
-  // UPDATE STATUS
   const updateStatus = async (id: string, status: string) => {
     const { error } = await supabase
       .from("part_requests")
@@ -70,7 +68,6 @@ const AdminRequests = () => {
     }
   };
 
-  // EMAIL REPLY
   const handleReply = async (req: PartRequest) => {
     const message = `
 Hello,
@@ -106,7 +103,6 @@ Pristine Auto Hub
   return (
     <div className="space-y-6">
 
-      {/* HEADER */}
       <div>
         <h1 className="font-display text-2xl font-bold text-foreground">
           Part Requests
@@ -132,33 +128,30 @@ Pristine Auto Hub
 
               <table className="w-full text-sm">
 
-                {/* HEADER */}
                 <thead>
                   <tr className="border-b bg-muted/30">
                     <th className="text-left py-3 px-4">Email</th>
                     <th className="text-left py-3 px-4">Part</th>
                     <th className="text-left py-3 px-4 hidden md:table-cell">Vehicle</th>
                     <th className="text-left py-3 px-4 hidden lg:table-cell">Budget</th>
+
+                    {/* ✅ ADDED COLUMN */}
+                    <th className="text-left py-3 px-4 hidden lg:table-cell">Notes</th>
+
                     <th className="text-left py-3 px-4 hidden lg:table-cell">Date</th>
                     <th className="text-left py-3 px-4">Status</th>
                     <th className="text-right py-3 px-4">Actions</th>
                   </tr>
                 </thead>
 
-                {/* BODY */}
                 <tbody>
                   {requests.map((req) => (
-                    <tr
-                      key={req.id}
-                      className="border-b hover:bg-muted/20 transition"
-                    >
+                    <tr key={req.id} className="border-b hover:bg-muted/20 transition">
 
-                      {/* EMAIL */}
                       <td className="py-3 px-4">
                         <p className="font-medium">{req.user_email}</p>
                       </td>
 
-                      {/* PART */}
                       <td className="py-3 px-4">
                         <p className="font-medium">{req.part}</p>
                         <p className="text-xs text-muted-foreground">
@@ -169,7 +162,6 @@ Pristine Auto Hub
                         </p>
                       </td>
 
-                      {/* VEHICLE */}
                       <td className="py-3 px-4 hidden md:table-cell">
                         {req.brand} {req.model} (
                         {req.year?.trim()
@@ -178,14 +170,19 @@ Pristine Auto Hub
                         )
                       </td>
 
-                      {/* BUDGET */}
                       <td className="py-3 px-4 hidden lg:table-cell">
                         {req.budget?.trim()
                           ? `Rs. ${req.budget}`
                           : <span className="text-muted-foreground">Not specified</span>}
                       </td>
 
-                      {/* DATE */}
+                      {/* ✅ ADDED NOTES CELL */}
+                      <td className="py-3 px-4 hidden lg:table-cell text-muted-foreground">
+                        {req.notes?.trim()
+                          ? req.notes
+                          : <span className="italic">—</span>}
+                      </td>
+
                       <td className="py-3 px-4 hidden lg:table-cell text-muted-foreground">
                         {new Date(req.created_at).toLocaleDateString("en-PK", {
                           day: "numeric",
@@ -194,13 +191,10 @@ Pristine Auto Hub
                         })}
                       </td>
 
-                      {/* STATUS */}
                       <td className="py-3 px-4">
                         <select
                           value={req.status || "pending"}
-                          onChange={(e) =>
-                            updateStatus(req.id, e.target.value)
-                          }
+                          onChange={(e) => updateStatus(req.id, e.target.value)}
                           className={`text-xs rounded-full px-2 py-1 border-0 cursor-pointer ${
                             statusColor[req.status || "pending"]
                           }`}
@@ -213,7 +207,6 @@ Pristine Auto Hub
                         </select>
                       </td>
 
-                      {/* ACTION */}
                       <td className="py-3 px-4 text-right">
                         <Button
                           size="sm"
