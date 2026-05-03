@@ -223,17 +223,20 @@ const RequestPart = () => {
                  {errors.part && <p className="text-red-500 text-sm">{errors.part}</p>}
               </div>
 
-              <select
-                name="condition"
-                value={form.condition}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              >
-                <option>Either</option>
-                <option>New</option>
-                <option>Used</option>
-              </select>
+             <div>
+  <Label>Condition</Label>
 
+  <select
+    name="condition"
+    value={form.condition}
+    onChange={handleChange}
+    className="w-full border p-2 rounded"
+  >
+    <option value="Either">Either</option>
+    <option value="New">New</option>
+    <option value="Used">Used</option>
+  </select>
+</div>
               <div>
                 <Label>Budget (optional)</Label>
                 <Input
