@@ -3,65 +3,75 @@ import { useNavigate, Link } from "react-router-dom";
 import { useCart, formatPrice } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft } from "lucide-react";
+import { z } from "zod";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+// Validation schema
+const checkoutSchema = z.object({
+  fullName: z.string().trim().min(2, "Name is required").max(100),
+  phone: z.string().length(11, "Phone must be exactly 11 digits"),
+  email: z.string().trim().email("Valid email required").max(255),
+  address: z.string().trim().min(5, "Delivery address is required").max(500),
+  city: z.string().trim().min(2, "City is required").max(100),
+  notes: z.string().max(500).optional(),
+});
+
+type CheckoutData = z.infer<typeof checkoutSchema>;
+
 const Checkout = () => {
   const { items, subtotal, formattedSubtotal, clearCart } = useCart();
   const navigate = useNavigate();
 
-  // ✅ SIMPLE STATE (NO TYPES = NO ERRORS)
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<CheckoutData>({
     fullName: "",
     phone: "",
     email: "",
     address: "",
-    city: "", // ✅ FIXED: empty allowed
+    city: "Lahore", // fixed default
     notes: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // ✅ FIXED INPUT HANDLER (supports select too)
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    const key = name as keyof CheckoutData;
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: name === "phone" ? value.replace(/\D/g, "") : value,
-    }));
+    const newValue = key === "phone" ? value.replace(/\D/g, "") : value;
+
+    setForm((prev) => ({ ...prev, [key]: newValue }));
   };
 
-  // ✅ SIMPLE VALIDATION (NO ZOD)
-  const validate = () => {
-    const errors: string[] = [];
-
-    if (form.fullName.length < 2) errors.push("Name is required");
-    if (form.phone.length !== 11) errors.push("Phone must be 11 digits");
-    if (!form.email.includes("@")) errors.push("Valid email required");
-    if (form.address.length < 5) errors.push("Address is required");
-    if (!form.city) errors.push("Please select city");
-    if (form.city !== "Lahore") errors.push("We only deliver in Lahore");
-
-    return errors;
+  const getErrors = () => {
+    try {
+      checkoutSchema.parse(form);
+      return {};
+    } catch (e: any) {
+      const errors: Record<string, string> = {};
+      e.issues.forEach((issue: any) => {
+        errors[issue.path[0]] = issue.message;
+      });
+      return errors;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setSubmitted(true);
 
-    const errors = validate();
+    const errors = getErrors();
 
-    if (errors.length > 0) {
-      toast.error(errors.join(", "));
+    if (Object.keys(errors).length > 0) {
+      const missing = Object.values(errors).join(", ");
+      toast.error(`Please fix: ${missing}`);
       return;
     }
 
@@ -76,51 +86,93 @@ const Checkout = () => {
         quantity: i.quantity,
       }));
 
-      const { error } = await supabase.from("orders").insert({
+      const orderPayload = {
         customer_name: form.fullName,
         phone: form.phone,
         email: form.email,
         address: form.address,
         city: form.city,
-        notes: form.notes,
+        notes: form.notes ?? "",
         items_ordered: orderItems,
         total_price: subtotal,
         payment_method: "Cash on Delivery",
         order_status: "new",
-      });
+      };
+
+      const { error } = await supabase.from("orders").insert(orderPayload);
 
       if (error) throw error;
 
+      const productIds = items.map((i) => i.product.id);
+
+      await supabase
+        .from("products")
+        .update({ stock_status: "sold" })
+        .in("id", productIds);
+
+      const receiptData = {
+        id: `PM-${Date.now()}`,
+        customer: {
+          fullName: form.fullName,
+          phone: form.phone,
+          email: form.email,
+          address: form.address,
+          city: form.city,
+        },
+        items: items.map((i) => ({
+          name: i.product.title,
+          vehicle: i.product.vehicle,
+          quantity: i.quantity,
+          lineTotal: formatPrice(i.product.price * i.quantity),
+        })),
+        total: formattedSubtotal,
+        paymentMethod: "Cash on Delivery",
+        date: new Date().toLocaleString(),
+      };
+
+      localStorage.setItem(
+        "pristine-last-order",
+        JSON.stringify(receiptData)
+      );
+
       clearCart();
+
       toast.success("Order placed successfully!");
       navigate("/order-confirmation");
-    } catch (err) {
+
+    } catch (err: any) {
       console.error(err);
-      toast.error("Failed to place order");
+      toast.error("Failed to place order. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const inputClass =
-    "w-full rounded-lg border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
+    "w-full rounded-lg border border-border px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
+
+  const errorClass = "text-red-500 text-xs mt-1";
+
+  const errors = submitted ? getErrors() : {};
 
   if (items.length === 0) {
     return (
-      <main className="pt-24 text-center">
-        <h1 className="text-xl font-bold mb-4">No items to checkout</h1>
-        <Link to="/parts" className="btn-primary">
-          Browse Parts
-        </Link>
+      <main className="pt-24 pb-20 bg-background min-h-screen">
+        <div className="section-container text-center py-20">
+          <h1 className="text-2xl font-bold mb-4">No items to checkout</h1>
+          <Link to="/parts" className="btn-primary">
+            Browse Parts
+          </Link>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="pt-24 pb-20">
+    <main className="pt-24 pb-20 bg-background min-h-screen">
       <div className="section-container">
 
-        <Link to="/cart" className="flex items-center gap-2 mb-6">
+        <Link to="/cart" className="inline-flex items-center gap-2 mb-6 text-sm">
           <ArrowLeft size={16} />
           Back to Cart
         </Link>
@@ -129,79 +181,95 @@ const Checkout = () => {
 
         <div className="grid lg:grid-cols-3 gap-8">
 
-          {/* FORM */}
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
 
-            <div className="border rounded-xl p-6 space-y-4">
+            <div className="rounded-xl border p-6 space-y-4">
 
+              {/* Full Name */}
               <div>
                 <Label>Full Name *</Label>
-                <Input name="fullName" value={form.fullName} onChange={handleChange} className={inputClass} />
+                <Input
+                  name="fullName"
+                  value={form.fullName}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
               </div>
 
+              {/* Phone */}
               <div>
-                <Label>Phone *</Label>
-                <Input name="phone" value={form.phone} onChange={handleChange} className={inputClass} />
+                <Label>Phone Number *</Label>
+                <Input
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                {errors.phone && <p className={errorClass}>{errors.phone}</p>}
               </div>
 
+              {/* Email */}
               <div>
                 <Label>Email *</Label>
-                <Input name="email" value={form.email} onChange={handleChange} className={inputClass} />
+                <Input
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                {errors.email && <p className={errorClass}>{errors.email}</p>}
               </div>
 
+              {/* Address */}
               <div>
                 <Label>Address *</Label>
-                <Input name="address" value={form.address} onChange={handleChange} className={inputClass} />
+                <Input
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                {errors.address && <p className={errorClass}>{errors.address}</p>}
               </div>
 
-              {/* CITY FIXED */}
+              {/* City (FIXED + NON EDITABLE) */}
               <div>
                 <Label>City *</Label>
 
-                <select
+                <Input
                   name="city"
-                  value={form.city}
-                  onChange={handleChange}
-                  className={inputClass}
-                >
-                  <option value="">Select City</option>
-                  <option value="Lahore">Lahore</option>
-                </select>
+                  value="Lahore"
+                  readOnly
+                  className={`${inputClass} bg-gray-100 cursor-not-allowed`}
+                />
 
-                <p className="text-xs text-gray-500 mt-1">
-                  We only deliver in Lahore
+                <p className="text-xs mt-2 px-3 py-2 rounded-md bg-blue-50 text-blue-700 border border-blue-100">
+                  We only deliver in Lahore currently.
                 </p>
+
+                {errors.city && <p className={errorClass}>{errors.city}</p>}
               </div>
 
+              {/* Notes */}
               <div>
                 <Label>Notes</Label>
-                <Textarea name="notes" value={form.notes} onChange={handleChange} className={inputClass} />
+                <Textarea
+                  name="notes"
+                  value={form.notes}
+                  onChange={handleChange}
+                  className={inputClass}
+                />
+                {errors.notes && <p className={errorClass}>{errors.notes}</p>}
               </div>
 
             </div>
 
-            <Button type="submit" disabled={submitting} className="w-full">
+            <Button type="submit" className="w-full" disabled={submitting}>
               {submitting ? "Placing Order..." : "Place Order"}
             </Button>
 
           </form>
-
-          {/* SUMMARY */}
-          <div className="border rounded-xl p-6 h-fit">
-            <h2 className="font-bold mb-4">Order Summary</h2>
-
-            {items.map((item) => (
-              <div key={item.product.id} className="flex justify-between mb-2">
-                <span>{item.product.title} x{item.quantity}</span>
-                <span>{formatPrice(item.product.price * item.quantity)}</span>
-              </div>
-            ))}
-
-            <div className="border-t pt-4 flex justify-between font-bold">
-              <span>Total</span>
-              <span>{formattedSubtotal}</span>
-            </div>
-          </div>
 
         </div>
       </div>
