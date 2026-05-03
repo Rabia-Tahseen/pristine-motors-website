@@ -78,12 +78,12 @@ const HeroCarousel = () => {
 
   return (
     <section className="relative pt-1 pb-4 bg-[#f6f7fb]">
-      <div className="section-container">
+      <div className="w-full px-3 md:px-6 lg:px-10">
 
         {/* CAROUSEL */}
         <div
           ref={containerRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar py-1"
+          className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar py-1 w-full"
           onMouseEnter={() => (isDragging.current = true)}
           onMouseLeave={() => (isDragging.current = false)}
           onTouchStart={() => (isDragging.current = true)}
