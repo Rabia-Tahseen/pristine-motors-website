@@ -1,16 +1,20 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { MessageCircle, Mail } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
-const WHATSAPP_NUMBER = "923219454136";
-const OWNER_EMAIL = "hamzanaveed1@gmail.com";
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CURRENT_YEAR = new Date().getFullYear();
 
 const RequestPart = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
+    user_email: "",
     brand: "",
     model: "",
     year: "",
@@ -21,229 +25,258 @@ const RequestPart = () => {
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
 
-    // Restrict budget and year to numbers only
-    if (name === "budget" || name === "year") {
-      setForm({ ...form, [name]: value.replace(/\D/g, "") });
-    } else {
-      setForm({ ...form, [name]: value });
+    if (name === "year") {
+      setForm({ ...form, year: value.replace(/\D/g, "").slice(0, 4) });
+      return;
     }
 
+    if (name === "budget") {
+      setForm({ ...form, budget: value.replace(/\D/g, "") });
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
     const newErrors: any = {};
 
-    if (!form.brand.trim() || form.brand.trim().length < 2) {
-      newErrors.brand = "Enter a valid brand (e.g., Toyota)";
+    if (!form.user_email.trim()) {
+      newErrors.user_email = "Email is required";
+    } else if (!emailRegex.test(form.user_email)) {
+      newErrors.user_email = "Enter a valid email address";
     }
-    if (!form.model.trim() || form.model.trim().length < 2) {
-      newErrors.model = "Enter a valid model (e.g., Civic)";
-    }
-    if (!form.part.trim() || form.part.trim().length < 2) {
-      newErrors.part = "Enter a valid part (e.g., Headlight)";
-    }
-    if (form.year && !/^\d{4}$/.test(form.year)) {
-      newErrors.year = "Enter a valid 4-digit year";
+
+    if (!form.brand.trim()) newErrors.brand = "Brand is required";
+    if (!form.model.trim()) newErrors.model = "Model is required";
+    if (!form.part.trim()) newErrors.part = "Part is required";
+
+    if (form.year) {
+      const y = Number(form.year);
+
+      if (form.year.length !== 4) {
+        newErrors.year = "Year must be 4 digits";
+      } else if (y < 1950 || y > CURRENT_YEAR) {
+        newErrors.year = `Year must be between 1980 - ${CURRENT_YEAR}`;
+      }
     }
 
     return newErrors;
   };
 
-  const handleSend = (method: "whatsapp" | "email") => {
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+  const handleSubmit = async () => {
+    const validation = validate();
+
+    if (Object.keys(validation).length > 0) {
+      setErrors(validation);
       return;
     }
 
-    const message = `Hi, I'd like to request a part.
+    setLoading(true);
 
-Vehicle Brand: ${form.brand}
-Model: ${form.model}
-Year: ${form.year || "-"}
+    const { error } = await supabase.from("part_requests").insert([
+      {
+        user_email: form.user_email,
+        brand: form.brand,
+        model: form.model,
+        year: form.year,
+        part: form.part,
+        condition: form.condition,
+        budget: form.budget,
+        notes: form.notes,
+      },
+    ]);
 
-Part Needed: ${form.part}
-Condition: ${form.condition}
-Budget: ${form.budget || "-"}
+    setLoading(false);
 
-Additional Notes: ${form.notes || "-"}`;
+    if (!error) {
+      setSuccess(true);
 
-    if (method === "whatsapp") {
-      window.open(
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
-        "_blank"
-      );
-    } else {
-      window.open(
-        `https://mail.google.com/mail/?view=cm&fs=1&to=${OWNER_EMAIL}&su=Part Request&body=${encodeURIComponent(message)}`,
-        "_blank"
-      );
+      setForm({
+        user_email: "",
+        brand: "",
+        model: "",
+        year: "",
+        part: "",
+        condition: "Either",
+        budget: "",
+        notes: "",
+      });
     }
   };
 
-  const inputClass =
-    "w-full rounded-lg border border-gray-300 px-4 py-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-400";
-
-  const selectClass =
-    "w-full rounded-lg border border-gray-300 px-4 py-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-400";
+  // ✅ FIXED AUTO SCROLL (THIS IS THE IMPORTANT PART)
+  useEffect(() => {
+    if (success) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [success]);
 
   return (
-    <main className="pt-16 pb-12 min-h-screen bg-gray-50">
+    <main className="min-h-screen pt-16 pb-12 bg-gradient-to-br from-blue-50 via-sky-50 to-white">
       <div className="max-w-2xl mx-auto px-4">
 
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-6"
-        >
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Request a Part
-          </h1>
-          <p className="text-gray-500 mt-1">
-            Fill in the details and send your request.
-          </p>
-        </motion.div>
+        <h1 className="text-3xl font-bold text-center text-blue-1000 mb-6">
+          Request a Part
+        </h1>
 
-        {/* Form */}
-        <motion.form
-          onSubmit={(e) => e.preventDefault()}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-4 bg-white p-5 rounded-xl shadow-md"
-        >
+        <AnimatePresence mode="wait">
 
-          {/* Brand */}
-          <div>
-            <Label>Vehicle Brand *</Label>
-            <Input
-              name="brand"
-              value={form.brand}
-              onChange={handleChange}
-              placeholder="e.g., Toyota"
-              className={inputClass}
-            />
-            {errors.brand && <p className="text-red-500 text-sm mt-1">{errors.brand}</p>}
-          </div>
-
-          {/* Model */}
-          <div>
-            <Label>Vehicle Model *</Label>
-            <Input
-              name="model"
-              value={form.model}
-              onChange={handleChange}
-              placeholder="e.g., Civic"
-              className={inputClass}
-            />
-            {errors.model && <p className="text-red-500 text-sm mt-1">{errors.model}</p>}
-          </div>
-
-          {/* Year */}
-          <div>
-            <Label>
-              Vehicle Year <span className="text-gray-400">(optional)</span>
-            </Label>
-            <Input
-              name="year"
-              value={form.year}
-              onChange={handleChange}
-              placeholder="e.g., 2005"
-              className={inputClass}
-            />
-            {errors.year && <p className="text-red-500 text-sm mt-1">{errors.year}</p>}
-          </div>
-
-          {/* Part */}
-          <div>
-            <Label>Part Needed *</Label>
-            <Input
-              name="part"
-              value={form.part}
-              onChange={handleChange}
-              placeholder="e.g., Headlight"
-              className={inputClass}
-            />
-            {errors.part && <p className="text-red-500 text-sm mt-1">{errors.part}</p>}
-          </div>
-
-          {/* Condition */}
-          <div>
-            <Label>Condition</Label>
-            <select
-              name="condition"
-              value={form.condition}
-              onChange={handleChange}
-              className={selectClass}
+          {success ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white p-8 rounded-xl shadow-xl text-center border border-blue-100"
             >
-              <option>Either</option>
-              <option>New</option>
-              <option>Used</option>
-            </select>
-          </div>
+              <h2 className="text-2xl font-bold text-blue-1000">
+                Thank you for your request
+              </h2>
 
-          {/* Budget */}
-          <div>
-            <Label>
-              Budget <span className="text-gray-400">(optional)</span>
-            </Label>
-            <Input
-              name="budget"
-              value={form.budget}
-              onChange={handleChange}
-              placeholder="e.g., 5000"
-              className={inputClass}
-            />
-          </div>
+              <p className="text-gray-600 mt-4">
+               We’ve received your request and will get back to you soon with availability and pricing details.
+               </p>
 
-          {/* Notes */}
-          <div>
-            <Label>
-              Additional Notes <span className="text-gray-400">(optional)</span>
-            </Label>
-            <Textarea
-              name="notes"
-              value={form.notes}
-              onChange={handleChange}
-              placeholder="Optional details"
-              rows={3}
-              className={inputClass}
-            />
-          </div>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
 
-          {/* Buttons */}
-          <div className="flex gap-4 flex-col sm:flex-row">
-            <Button
-              onClick={() => handleSend("whatsapp")}
-              className="flex-1 flex items-center justify-center gap-2 
-              bg-green-500 hover:bg-green-600 
-              shadow-md hover:shadow-lg 
-              transition-all duration-200 
-              hover:scale-[1.02]"
-            >
-              <MessageCircle size={18} />
-              WhatsApp
-            </Button>
+                <Button
+                  onClick={() => setSuccess(false)}
+                  className="
+                    bg-white
+                    text-blue-900
+                    border border-blue-900
+                    hover:bg-blue-50
+                    shadow-md
+                    hover:shadow-lg
+                    transition-all
+                  "
+                >
+                  Submit Another Request
+                </Button>
 
-            <Button
-              onClick={() => handleSend("email")}
-              className="flex-1 flex items-center justify-center gap-2 
-              bg-blue-900 hover:bg-blue-800 text-white 
-              shadow-md hover:shadow-lg 
-              transition-all duration-200 
-              hover:scale-[1.02]"
-            >
-              <Mail size={18} />
-              Email
-            </Button>
-          </div>
+                <Button
+                  onClick={() => navigate("/")}
+                  className="
+                    bg-blue-900
+                    text-white
+                    hover:bg-blue-800
+                    shadow-md
+                    hover:shadow-xl
+                    transition-all
+                  "
+                >
+                  Go Home
+                </Button>
 
-        </motion.form>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div className="space-y-4 bg-white/90 p-5 rounded-xl shadow-md">
+
+              <div>
+                <Label>Email *</Label>
+                <Input
+                  name="user_email"
+                  value={form.user_email}
+                  onChange={handleChange}
+                  placeholder="example@gmail.com"
+                />
+                {errors.user_email && <p className="text-red-500 text-sm">{errors.user_email}</p>}
+              </div>
+
+              <div>
+                <Label>Brand *</Label>
+                <Input name="brand" value={form.brand} onChange={handleChange} placeholder="Toyota" />
+                {errors.brand && <p className="text-red-500 text-sm">{errors.brand}</p>}
+              </div>
+
+              <div>
+                <Label>Model *</Label>
+                <Input name="model" value={form.model} onChange={handleChange} placeholder="Corolla" />
+                {errors.model && <p className="text-red-500 text-sm">{errors.model}</p>}
+              </div>
+
+              <div>
+                <Label>Year</Label>
+                <Input
+                  name="year"
+                  value={form.year}
+                  onChange={handleChange}
+                  placeholder="e.g. 2018"
+                  maxLength={4}
+                />
+                {errors.year && <p className="text-red-500 text-sm">{errors.year}</p>}
+              </div>
+
+              <div>
+                <Label>Part *</Label>
+                <Input name="part" value={form.part} onChange={handleChange} placeholder="Headlight" />
+                 {errors.part && <p className="text-red-500 text-sm">{errors.part}</p>}
+              </div>
+
+             <div>
+  <Label>Condition</Label>
+
+  <select
+    name="condition"
+    value={form.condition}
+    onChange={handleChange}
+    className="w-full border p-2 rounded"
+  >
+    <option value="Either">Either</option>
+    <option value="New">New</option>
+    <option value="Used">Used</option>
+  </select>
+</div>
+              <div>
+                <Label>Budget (optional)</Label>
+                <Input
+                  name="budget"
+                  value={form.budget}
+                  onChange={handleChange}
+                  placeholder="e.g. 5000"
+                />
+              </div>
+
+              <Textarea
+                name="notes"
+                value={form.notes}
+                onChange={handleChange}
+                placeholder="Any extra details..."
+              />
+
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="
+                    bg-blue-900
+                    text-white
+                    hover:bg-blue-800
+                    shadow-md
+                    hover:shadow-xl
+                    px-6
+                    transition-all
+                  "
+                >
+                  {loading ? "Submitting..." : "Submit Request"}
+                </Button>
+              </div>
+
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+
       </div>
     </main>
   );
