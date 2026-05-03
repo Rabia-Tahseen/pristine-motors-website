@@ -23,16 +23,24 @@ const FeaturedParts = () => {
   if (products.length === 0) return null;
 
   return (
-    <section className="py-10 section-alt">
+    <section className="py-8 section-alt"> {/* reduced from py-10 → py-8 */}
       <div className="section-container">
-        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
+
+        <h2
+          className="font-display text-2xl md:text-3xl font-bold mb-6"
+          style={{
+            color: "#06142e", // very dark blue (950–1000 feel)
+          }}
+        >
           Featured Parts
         </h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((p, i) => (
             <ProductCard key={p.id} product={p} index={i} />
           ))}
         </div>
+
       </div>
     </section>
   );
