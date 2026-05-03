@@ -132,13 +132,10 @@ Pristine Auto Hub
                   <tr className="border-b bg-muted/30">
                     <th className="text-left py-3 px-4">Email</th>
                     <th className="text-left py-3 px-4">Part</th>
-                    <th className="text-left py-3 px-4 hidden md:table-cell">Vehicle</th>
-                    <th className="text-left py-3 px-4 hidden lg:table-cell">Budget</th>
-
-                    {/* ✅ ADDED COLUMN */}
-                    <th className="text-left py-3 px-4 hidden lg:table-cell">Notes</th>
-
-                    <th className="text-left py-3 px-4 hidden lg:table-cell">Date</th>
+                    <th className="text-left py-3 px-4">Vehicle</th>
+                    <th className="text-left py-3 px-4">Budget</th>
+                    <th className="text-left py-3 px-4">Notes</th>
+                    <th className="text-left py-3 px-4">Date</th>
                     <th className="text-left py-3 px-4">Status</th>
                     <th className="text-right py-3 px-4">Actions</th>
                   </tr>
@@ -154,36 +151,31 @@ Pristine Auto Hub
 
                       <td className="py-3 px-4">
                         <p className="font-medium">{req.part}</p>
+
                         <p className="text-xs text-muted-foreground">
-                          Condition:{" "}
-                          {req.condition?.trim()
-                            ? req.condition
-                            : <span className="italic">Not specified</span>}
+                          Condition: {req.condition || "Not specified"}
                         </p>
+
+                        {req.notes?.trim() && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Notes: {req.notes}
+                          </p>
+                        )}
                       </td>
 
-                      <td className="py-3 px-4 hidden md:table-cell">
-                        {req.brand} {req.model} (
-                        {req.year?.trim()
-                          ? req.year
-                          : <span className="text-muted-foreground">N/A</span>}
-                        )
+                      <td className="py-3 px-4">
+                        {req.brand} {req.model} ({req.year || "N/A"})
                       </td>
 
-                      <td className="py-3 px-4 hidden lg:table-cell">
-                        {req.budget?.trim()
-                          ? `Rs. ${req.budget}`
-                          : <span className="text-muted-foreground">Not specified</span>}
+                      <td className="py-3 px-4">
+                        {req.budget ? `Rs. ${req.budget}` : "Not specified"}
                       </td>
 
-                      {/* ✅ ADDED NOTES CELL */}
-                      <td className="py-3 px-4 hidden lg:table-cell text-muted-foreground">
-                        {req.notes?.trim()
-                          ? req.notes
-                          : <span className="italic">—</span>}
+                      <td className="py-3 px-4 text-muted-foreground">
+                        {req.notes || "—"}
                       </td>
 
-                      <td className="py-3 px-4 hidden lg:table-cell text-muted-foreground">
+                      <td className="py-3 px-4 text-muted-foreground">
                         {new Date(req.created_at).toLocaleDateString("en-PK", {
                           day: "numeric",
                           month: "short",
