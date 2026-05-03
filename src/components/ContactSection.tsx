@@ -12,7 +12,6 @@ const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const EmailCard = () => {
   const email = "hamzanaveed1@gmail.com";
 
-  // Links
   const gmailDesktop = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`;
   const mailtoLink = `mailto:${email}`;
 
@@ -25,50 +24,52 @@ const EmailCard = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.16 }}
-      className="flex flex-col items-center gap-3 p-6 rounded-xl bg-yellow-50 border border-yellow-200 hover:bg-yellow-100 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+      className="flex flex-col items-center gap-2 p-4 rounded-xl bg-yellow-50 border border-yellow-200 hover:bg-yellow-100 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
       onClick={(e) => {
         if (isMobile()) {
           e.preventDefault();
-          window.location.href = mailtoLink; // opens phone mail composer
+          window.location.href = mailtoLink;
         }
       }}
     >
-      <div className="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center">
-        <Mail size={24} className="text-white" />
+      <div className="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">
+        <Mail size={20} className="text-white" />
       </div>
 
-      <span className="font-semibold text-foreground font-body text-sm">
+      <span className="font-semibold text-gray-950 text-sm">
         Email
       </span>
 
-      <span className="text-muted-foreground text-xs font-body">
+      <span className="text-gray-700 text-xs">
         {email}
       </span>
     </motion.a>
   );
 };
 
-// Main ContactSection (export only this)
+// Main ContactSection
 const ContactSection = () => (
-  <section id="contact" className="py-16 bg-background">
+  <section id="contact" className="py-14 bg-background">
     <div className="section-container max-w-3xl">
-      {/* Section heading */}
+
+      {/* Heading */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-10"
+        className="text-center mb-8"
       >
-        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+        <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-950">
           Get in Touch
         </h2>
-        <p className="mt-3 text-muted-foreground font-body">
+        <p className="mt-2 text-gray-700 text-sm">
           Contact the owner directly through any of these channels.
         </p>
       </motion.div>
 
-      {/* Contact cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
         {/* WhatsApp */}
         <motion.a
           href={`https://wa.me/${WHATSAPP_NUMBER}`}
@@ -77,14 +78,19 @@ const ContactSection = () => (
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0 }}
-          className="flex flex-col items-center gap-3 p-6 rounded-xl bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/15 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+          className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/15 hover:-translate-y-1 hover:shadow-md transition-all duration-200"
         >
-          <div className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center">
-            <MessageCircle size={24} className="text-white" />
+          <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center">
+            <MessageCircle size={20} className="text-white" />
           </div>
-          <span className="font-semibold text-foreground font-body text-sm">WhatsApp</span>
-          <span className="text-muted-foreground text-xs font-body">+92 321 9454136</span>
+
+          <span className="font-semibold text-gray-950 text-sm">
+            WhatsApp
+          </span>
+
+          <span className="text-gray-700 text-xs">
+            +92 321 9454136
+          </span>
         </motion.a>
 
         {/* Call */}
@@ -93,18 +99,24 @@ const ContactSection = () => (
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.08 }}
-          className="flex flex-col items-center gap-3 p-6 rounded-xl bg-primary/5 border border-primary/10 hover:bg-primary/10 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-pointer"
+          className="flex flex-col items-center gap-2 p-4 rounded-xl bg-primary/5 border border-primary/10 hover:bg-primary/10 hover:-translate-y-1 hover:shadow-md transition-all duration-200"
         >
-          <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-            <Phone size={24} className="text-primary-foreground" />
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+            <Phone size={20} className="text-primary-foreground" />
           </div>
-          <span className="font-semibold text-foreground font-body text-sm">Call Owner</span>
-          <span className="text-muted-foreground text-xs font-body">{CALL_NUMBER}</span>
+
+          <span className="font-semibold text-gray-950 text-sm">
+            Call Owner
+          </span>
+
+          <span className="text-gray-700 text-xs">
+            {CALL_NUMBER}
+          </span>
         </motion.a>
 
         {/* Email */}
         <EmailCard />
+
       </div>
     </div>
   </section>
