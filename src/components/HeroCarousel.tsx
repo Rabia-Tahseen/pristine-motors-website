@@ -93,11 +93,7 @@ const HeroCarousel = () => {
             <div
               key={i}
               onClick={() => {
-                navigate(
-                  item.product_type === "car"
-                    ? `/cars/${item.id}`
-                    : `/parts/${item.id}`
-                );
+                navigate(`/parts/${item.id}`);
               }}
               className="
                 relative flex-shrink-0 cursor-pointer rounded-2xl overflow-hidden
