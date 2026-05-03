@@ -5,10 +5,13 @@ import {
   Tag,
   Settings,
   LogOut,
+  MessageCircle, // ✅ added
 } from "lucide-react";
+
 import { NavLink } from "@/components/NavLink";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { useNavigate } from "react-router-dom";
+
 import {
   Sidebar,
   SidebarContent,
@@ -25,6 +28,10 @@ const navItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Products", url: "/admin/products", icon: Package },
   { title: "Orders", url: "/admin/orders", icon: ShoppingCart },
+
+  // ✅ NEW: Requests page
+  { title: "Requests", url: "/admin/requests", icon: MessageCircle },
+
   { title: "Categories", url: "/admin/categories", icon: Tag },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
@@ -32,6 +39,7 @@ const navItems = [
 const AdminSidebar = () => {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+
   const { signOut } = useAdminAuth();
   const navigate = useNavigate();
 
@@ -43,10 +51,13 @@ const AdminSidebar = () => {
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
       <SidebarContent>
+
+        {/* Top label */}
         <SidebarGroup>
           <SidebarGroupLabel className="font-display text-xs uppercase tracking-wider">
             {!collapsed && "Pristine Auto Hub"}
           </SidebarGroupLabel>
+
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
@@ -59,7 +70,11 @@ const AdminSidebar = () => {
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     >
                       <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span className="font-body text-sm">{item.title}</span>}
+                      {!collapsed && (
+                        <span className="font-body text-sm">
+                          {item.title}
+                        </span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -68,18 +83,25 @@ const AdminSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Logout */}
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} className="hover:bg-destructive/10 text-destructive">
+                <SidebarMenuButton
+                  onClick={handleLogout}
+                  className="hover:bg-destructive/10 text-destructive"
+                >
                   <LogOut className="mr-2 h-4 w-4" />
-                  {!collapsed && <span className="font-body text-sm">Logout</span>}
+                  {!collapsed && (
+                    <span className="font-body text-sm">Logout</span>
+                  )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
       </SidebarContent>
     </Sidebar>
   );
