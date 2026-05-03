@@ -29,18 +29,31 @@ const FeaturedCars = () => {
   if (loading || cars.length === 0) return null;
 
   return (
-    <section className="py-12 bg-background">
+    <section className="py-6 bg-background"> {/* reduced padding */}
+
       <div className="section-container">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+
+        <div className="flex items-center justify-between mb-4"> {/* reduced */}
+
+          <h2
+            className="font-display text-2xl md:text-3xl font-bold"
+            style={{
+              color: "#06142e",
+            }}
+          >
             Featured Cars
           </h2>
+
           <Link
             to="/cars"
-            className="text-sm font-medium text-primary hover:underline font-body"
+            className="text-sm font-medium hover:underline font-body"
+            style={{
+              color: "#06142e",
+            }}
           >
             View All →
           </Link>
+
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -53,6 +66,7 @@ const FeaturedCars = () => {
             />
           ))}
         </div>
+
       </div>
     </section>
   );
