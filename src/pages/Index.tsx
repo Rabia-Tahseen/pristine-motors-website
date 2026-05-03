@@ -1,4 +1,6 @@
 import Hero from "@/components/Hero";
+
+import HeroCarousel from "@/components/HeroCarousel";
 import BrowseByCategory from "@/components/BrowseByCategory";
 import FeaturedParts from "@/components/FeaturedParts";
 import FeaturedCars from "@/components/FeaturedCars"; 
@@ -8,6 +10,7 @@ import ContactSection from "@/components/ContactSection";
 const Index = () => (
   <main>
     <Hero />
+    <HeroCarousel />
     <BrowseByCategory />
     <FeaturedParts />
     <FeaturedCars />
