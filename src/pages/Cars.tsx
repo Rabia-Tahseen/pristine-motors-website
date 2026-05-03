@@ -15,13 +15,9 @@ const Cars = () => {
   const search = searchParams.get("search") || "";
   const activeVehicle = searchParams.get("brand") || "All";
 
-  // 👉 USER INPUT IS IN LACS
-  const minPriceLacs = searchParams.get("minPrice") || "";
-  const maxPriceLacs = searchParams.get("maxPrice") || "";
-
-  // 👉 CONVERT LACS → RUPEES
-  const minPrice = minPriceLacs ? Number(minPriceLacs) * 100000 : 0;
-  const maxPrice = maxPriceLacs ? Number(maxPriceLacs) * 100000 : Infinity;
+  // 👇 PRICE IN LACS
+  const minPrice = Number(searchParams.get("minPrice") || 0) * 100000;
+  const maxPrice = Number(searchParams.get("maxPrice") || Infinity) * 100000;
 
   const updateParam = (key: string, value: string) => {
     setSearchParams(prev => {
@@ -31,6 +27,8 @@ const Cars = () => {
       return next;
     });
   };
+
+  const resetFilters = () => setSearchParams({});
 
   useEffect(() => {
     async function fetchCars() {
@@ -107,10 +105,7 @@ const Cars = () => {
 
         {/* SEARCH */}
         <div className="relative w-full mb-6">
-          <Search
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-            size={18}
-          />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
             placeholder="Search by car name..."
             value={search}
@@ -119,45 +114,29 @@ const Cars = () => {
           />
         </div>
 
-        {/* PRICE FILTER (LACS SYSTEM) */}
-        <div className="flex gap-3 mb-6">
+        {/* PRICE FILTER (LACS) */}
+        <div className="flex gap-3 mb-6 items-center">
+          <input
+            type="number"
+            placeholder="Min (Lacs)"
+            value={searchParams.get("minPrice") || ""}
+            onChange={(e) => updateParam("minPrice", e.target.value)}
+            className="border rounded-lg px-3 py-2 w-full"
+          />
 
-          <div className="w-full">
-            <label className="text-xs text-gray-500">Min Price (Lacs)</label>
-            <div className="flex items-center gap-2 border rounded-lg px-3 py-2">
-              <input
-                type="number"
-                placeholder="e.g. 5"
-                value={minPriceLacs}
-                onChange={(e) => updateParam("minPrice", e.target.value)}
-                className="w-full outline-none"
-              />
-              <span className="text-sm text-gray-500 whitespace-nowrap">
-                Lacs
-              </span>
-            </div>
-          </div>
+          <span className="text-sm text-gray-500">to</span>
 
-          <div className="w-full">
-            <label className="text-xs text-gray-500">Max Price (Lacs)</label>
-            <div className="flex items-center gap-2 border rounded-lg px-3 py-2">
-              <input
-                type="number"
-                placeholder="e.g. 20"
-                value={maxPriceLacs}
-                onChange={(e) => updateParam("maxPrice", e.target.value)}
-                className="w-full outline-none"
-              />
-              <span className="text-sm text-gray-500 whitespace-nowrap">
-                Lacs
-              </span>
-            </div>
-          </div>
-
+          <input
+            type="number"
+            placeholder="Max (Lacs)"
+            value={searchParams.get("maxPrice") || ""}
+            onChange={(e) => updateParam("maxPrice", e.target.value)}
+            className="border rounded-lg px-3 py-2 w-full"
+          />
         </div>
 
         {/* VEHICLE FILTER */}
-        <div className="mb-8">
+        <div className="mb-6">
           <p className="text-xs mb-2">Vehicle</p>
           <div className="flex gap-2 flex-wrap">
             {vehicles.map(vehicle => (
@@ -171,6 +150,14 @@ const Cars = () => {
             ))}
           </div>
         </div>
+
+        {/* RESET */}
+        <button
+          onClick={resetFilters}
+          className="mb-6 text-sm text-red-600 hover:underline"
+        >
+          Reset all filters
+        </button>
 
         <p className="text-sm text-gray-500 mb-5">
           Showing {filtered.length} cars
@@ -192,7 +179,7 @@ const Cars = () => {
           <div className="text-center py-16">
             <p className="text-gray-500 text-lg">No cars found.</p>
             <button
-              onClick={() => setSearchParams({})}
+              onClick={resetFilters}
               className="mt-3 text-blue-700 hover:underline"
             >
               Clear filters

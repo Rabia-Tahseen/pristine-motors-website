@@ -6,30 +6,23 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
 const normalize = (v: string) =>
-  (v || "")
-    .replace(/[\n\r]+/g, "")
-    .trim()
-    .toLowerCase();
+  (v || "").replace(/[\n\r]+/g, "").trim().toLowerCase();
 
 const AllParts = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [vehicles, setVehicles] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const search = searchParams.get("search") || "";
-  const activeCategory = searchParams.get("category") || "All";
-  const activeVehicle = searchParams.get("vehicle") || "All";
 
-  // 👉 PRICE IN THOUSANDS
-  const minPriceK = searchParams.get("minPrice") || "";
-  const maxPriceK = searchParams.get("maxPrice") || "";
+  const activeCategory = normalize(searchParams.get("category") || "All");
+  const activeVehicle = normalize(searchParams.get("vehicle") || "All");
 
-  // 👉 CONVERT THOUSANDS → RUPEES
-  const minPrice = minPriceK ? Number(minPriceK) * 1000 : 0;
-  const maxPrice = maxPriceK ? Number(maxPriceK) * 1000 : Infinity;
+  // 👇 PRICE IN THOUSANDS
+  const minPrice = Number(searchParams.get("minPrice") || 0) * 1000;
+  const maxPrice = Number(searchParams.get("maxPrice") || Infinity) * 1000;
 
   const updateParam = (key: string, value: string) => {
     setSearchParams(prev => {
@@ -40,9 +33,10 @@ const AllParts = () => {
     });
   };
 
-  // FETCH PRODUCTS
+  const resetFilters = () => setSearchParams({});
+
   useEffect(() => {
-    const fetchProducts = async () => {
+    async function fetchProducts() {
       const { data, error } = await supabase
         .from("products")
         .select("*, category:categories(name)")
@@ -63,14 +57,13 @@ const AllParts = () => {
       }
 
       setLoading(false);
-    };
+    }
 
     fetchProducts();
   }, []);
 
-  // FETCH CATEGORIES
   useEffect(() => {
-    const fetchCategories = async () => {
+    async function fetchCategories() {
       const { data, error } = await supabase
         .from("categories")
         .select("name")
@@ -79,31 +72,27 @@ const AllParts = () => {
       if (!error && data) {
         setCategories(["All", ...data.map((c: any) => c.name)]);
       }
-    };
+    }
 
     fetchCategories();
   }, []);
 
-  // FILTER LOGIC
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
 
-    return products.filter((p) => {
+    return products.filter(p => {
       const catName = normalize(p.category?.name || "");
 
       const matchCategory =
-        activeCategory === "All" ||
-        catName === normalize(activeCategory);
+        activeCategory === "all" || catName === activeCategory;
 
       const compatibleModels = p.model_compatibility
-        ? p.model_compatibility
-            .split(",")
-            .map((v: string) => normalize(v))
+        ? p.model_compatibility.split(",").map((v: string) => normalize(v))
         : [];
 
       const matchVehicle =
-        activeVehicle === "All" ||
-        compatibleModels.includes(normalize(activeVehicle));
+        activeVehicle === "all" ||
+        compatibleModels.includes(activeVehicle);
 
       const matchSearch =
         !q || (p.title || "").toLowerCase().includes(q);
@@ -115,26 +104,17 @@ const AllParts = () => {
 
       return matchCategory && matchVehicle && matchSearch && matchPrice;
     });
-  }, [products, search, activeCategory, activeVehicle, minPrice, maxPrice]);
+  }, [search, activeCategory, activeVehicle, products, minPrice, maxPrice]);
 
   const filterBtn = (active: boolean) =>
     `px-4 py-2 rounded-lg text-xs transition ${
       active ? "bg-blue-900 text-white" : "bg-gray-100 hover:bg-gray-200"
     }`;
 
-  if (loading) {
-    return (
-      <main className="pt-24 pb-20 section-container text-center min-h-screen">
-        <p>Loading parts...</p>
-      </main>
-    );
-  }
-
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
 
-        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,10 +128,7 @@ const AllParts = () => {
 
         {/* SEARCH */}
         <div className="relative w-full mb-6">
-          <Search
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-            size={18}
-          />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
             placeholder="Search by part name..."
             value={search}
@@ -160,54 +137,37 @@ const AllParts = () => {
           />
         </div>
 
-        {/* PRICE FILTER (THOUSANDS SYSTEM) */}
-        <div className="flex gap-3 mb-6">
+        {/* PRICE FILTER (THOUSANDS) */}
+        <div className="flex gap-3 mb-6 items-center">
+          <input
+            type="number"
+            placeholder="Min (K)"
+            value={searchParams.get("minPrice") || ""}
+            onChange={(e) => updateParam("minPrice", e.target.value)}
+            className="border rounded-lg px-3 py-2 w-full"
+          />
 
-          <div className="w-full">
-            <label className="text-xs text-gray-500">
-              Min Price (Thousands)
-            </label>
-            <div className="flex items-center gap-2 border rounded-lg px-3 py-2">
-              <input
-                type="number"
-                placeholder="e.g. 5"
-                value={minPriceK}
-                onChange={(e) => updateParam("minPrice", e.target.value)}
-                className="w-full outline-none"
-              />
-              <span className="text-sm text-gray-500">K</span>
-            </div>
-          </div>
+          <span className="text-sm text-gray-500">to</span>
 
-          <div className="w-full">
-            <label className="text-xs text-gray-500">
-              Max Price (Thousands)
-            </label>
-            <div className="flex items-center gap-2 border rounded-lg px-3 py-2">
-              <input
-                type="number"
-                placeholder="e.g. 50"
-                value={maxPriceK}
-                onChange={(e) => updateParam("maxPrice", e.target.value)}
-                className="w-full outline-none"
-              />
-              <span className="text-sm text-gray-500">K</span>
-            </div>
-          </div>
-
+          <input
+            type="number"
+            placeholder="Max (K)"
+            value={searchParams.get("maxPrice") || ""}
+            onChange={(e) => updateParam("maxPrice", e.target.value)}
+            className="border rounded-lg px-3 py-2 w-full"
+          />
         </div>
 
         {/* FILTERS */}
-        <div className="flex flex-col sm:flex-row gap-5 mb-8">
-
+        <div className="flex flex-col sm:flex-row gap-5 mb-6">
           <div className="flex-1">
             <p className="text-xs mb-2">Category</p>
             <div className="flex gap-2 flex-wrap">
-              {categories.map((cat) => (
+              {categories.map(cat => (
                 <button
                   key={cat}
                   onClick={() => updateParam("category", cat)}
-                  className={filterBtn(activeCategory === cat)}
+                  className={filterBtn(activeCategory === normalize(cat))}
                 >
                   {cat}
                 </button>
@@ -218,46 +178,54 @@ const AllParts = () => {
           <div className="flex-1">
             <p className="text-xs mb-2">Model</p>
             <div className="flex gap-2 flex-wrap">
-              {vehicles.map((v) => (
+              {vehicles.map(v => (
                 <button
                   key={v}
                   onClick={() => updateParam("vehicle", v)}
-                  className={filterBtn(activeVehicle === v)}
+                  className={filterBtn(activeVehicle === normalize(v))}
                 >
                   {v}
                 </button>
               ))}
             </div>
           </div>
-
         </div>
 
-        {/* RESULTS */}
-        <p className="text-sm text-gray-500 mb-5">
-          Showing {filtered.length} parts
-        </p>
+        {/* RESET */}
+        <button
+          onClick={resetFilters}
+          className="mb-6 text-sm text-red-600 hover:underline"
+        >
+          Reset all filters
+        </button>
 
-        {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((p, i) => (
-              <ProductCard
-                key={p.id}
-                product={p}
-                index={i}
-                section="parts"
-              />
-            ))}
-          </div>
+        {/* RESULTS */}
+        {loading ? (
+          <p className="text-gray-400 text-sm">Loading parts...</p>
         ) : (
-          <div className="text-center py-16">
-            <p className="text-gray-500 text-lg">No parts found.</p>
-            <button
-              onClick={() => setSearchParams({})}
-              className="mt-3 text-blue-700 hover:underline"
-            >
-              Clear filters
-            </button>
-          </div>
+          <>
+            <p className="text-sm text-gray-500 mb-5">
+              Showing {filtered.length} parts
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={i} section="parts" />
+              ))}
+            </div>
+
+            {filtered.length === 0 && (
+              <div className="text-center py-16">
+                <p className="text-gray-500 text-lg">No parts found.</p>
+                <button
+                  onClick={resetFilters}
+                  className="mt-3 text-blue-700 hover:underline"
+                >
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </>
         )}
 
       </div>
