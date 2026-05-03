@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Cog, Disc3, Lightbulb, Layers, RectangleEllipsis, Armchair } from "lucide-react";
+import {
+  Cog,
+  Disc3,
+  Lightbulb,
+  Layers,
+  RectangleEllipsis,
+  Armchair
+} from "lucide-react";
 
+// CLEAN SLUGS (URL SAFE)
 const categoryData = [
   { name: "Body Parts", icon: Layers, filter: "Body Parts" },
   { name: "Lighting", icon: Lightbulb, filter: "Lighting" },
@@ -11,13 +19,23 @@ const categoryData = [
   { name: "Nose Cut", icon: Cog, filter: "Nose Cut" },
 ];
 
+// 🔥 REAL FIX (removes \n, spaces, weird chars)
+const clean = (v: string) =>
+  v
+    ?.replace(/[\n\r]+/g, "")   // remove ALL newlines
+    .trim();
+
 const BrowseByCategory = () => (
-  <section className="py-12 section-alt">
+  <section className="py-6 section-alt">
     <div className="section-container">
-      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
+
+      <h2 className="font-display text-2xl md:text-3xl font-bold mb-6"
+        style={{ color: "#06142e" }}>
         Browse Parts by Category
       </h2>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+
         {categoryData.map((cat, i) => (
           <motion.div
             key={cat.name}
@@ -27,19 +45,23 @@ const BrowseByCategory = () => (
             transition={{ delay: i * 0.05 }}
           >
             <Link
-              to={`/parts?category=${encodeURIComponent(cat.filter)}`}
-              className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md hover:-translate-y-1 transition-all duration-200 group"
+              to={`/parts?category=${encodeURIComponent(clean(cat.filter))}`}
+              className="flex flex-col items-center gap-3 p-5 rounded-xl
+                bg-gradient-to-bl from-blue-200/40 via-card to-transparent
+                dark:from-blue-900/30 dark:via-card dark:to-transparent
+                border border-border
+                hover:shadow-md hover:-translate-y-1
+                transition-all duration-200 group"
             >
-              <cat.icon
-                size={32}
-                className="text-muted-foreground group-hover:text-primary transition-colors duration-200"
-              />
-              <span className="text-sm font-medium text-foreground font-body text-center">
+              <cat.icon size={32} className="text-muted-foreground group-hover:text-primary" />
+
+              <span className="text-sm font-medium text-foreground text-center">
                 {cat.name}
               </span>
             </Link>
           </motion.div>
         ))}
+
       </div>
     </div>
   </section>
