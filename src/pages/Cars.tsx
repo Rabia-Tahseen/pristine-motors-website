@@ -13,7 +13,7 @@ const Cars = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const search = searchParams.get("search") || "";
-  const activeVehicle = searchParams.get("vehicle") || "All";
+  const activeVehicle = searchParams.get("brand") || "All";
 
   const updateParam = (key: string, value: string) => {
     setSearchParams(prev => {
@@ -37,7 +37,7 @@ const Cars = () => {
         const uniqueVehicles = [
           "All",
           ...new Set(
-            data.map((c: any) => c.model_compatibility).filter(Boolean)
+            data.map((c: any) => c.brand).filter(Boolean)
           ),
         ];
         setVehicles(uniqueVehicles);
@@ -50,10 +50,15 @@ const Cars = () => {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
+
     return cars.filter(car => {
-      const matchVehicle = activeVehicle === "All" || car.model_compatibility === activeVehicle;
-      const matchSearch = !q || car.title?.toLowerCase().includes(q);
-      return matchVehicle && matchSearch;
+      const matchBrand =
+        activeVehicle === "All" || car.brand === activeVehicle;
+
+      const matchSearch =
+        !q || car.title?.toLowerCase().includes(q);
+
+      return matchBrand && matchSearch;
     });
   }, [cars, search, activeVehicle]);
 
@@ -90,7 +95,7 @@ const Cars = () => {
           <p className="text-xs mb-2">Vehicle</p>
           <div className="flex gap-2 flex-wrap">
             {vehicles.map(vehicle => (
-              <button key={vehicle} onClick={() => updateParam("vehicle", vehicle)} className={filterBtn(activeVehicle === vehicle)}>
+              <button key={vehicle} onClick={() => updateParam("brand", vehicle)} className={filterBtn(activeVehicle === vehicle)}>
                 {vehicle}
               </button>
             ))}
