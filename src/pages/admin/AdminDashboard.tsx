@@ -21,6 +21,16 @@ interface RecentOrder {
   created_at: string;
 }
 
+/* ✅ FIXED STATUS COLORS (same system as AdminOrders) */
+const statusColor: Record<string, string> = {
+  new: "bg-blue-100 text-blue-800",
+  confirmed: "bg-emerald-100 text-emerald-800",
+  processing: "bg-yellow-100 text-yellow-800",
+  shipped: "bg-purple-100 text-purple-800",
+  delivered: "bg-green-100 text-green-800",
+  cancelled: "bg-red-100 text-red-800",
+};
+
 const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalProducts: 0,
@@ -147,17 +157,7 @@ const AdminDashboard = () => {
 
           return (
             <Link key={card.label} to={card.link} className="h-full">
-              <Card
-                className="
-                  h-full
-                  bg-gradient-to-br from-white to-blue-50
-                  dark:from-card dark:to-blue-900/10
-                  border
-                  hover:shadow-lg
-                  transition-all
-                  hover:-translate-y-1
-                "
-              >
+              <Card className="h-full bg-gradient-to-br from-white to-blue-50 dark:from-card dark:to-blue-900/10 border hover:shadow-lg transition-all hover:-translate-y-1">
                 <CardContent className="p-5 flex items-center justify-between h-full">
 
                   <div>
@@ -208,7 +208,17 @@ const AdminDashboard = () => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Badge>{order.order_status}</Badge>
+
+                    {/* ✅ FIXED BADGE */}
+                    <Badge
+                      className={
+                        statusColor[order.order_status] ??
+                        "bg-gray-100 text-gray-700"
+                      }
+                    >
+                      {order.order_status}
+                    </Badge>
+
                     <span className="font-bold">
                       Rs. {Number(order.total_price).toLocaleString()}
                     </span>
