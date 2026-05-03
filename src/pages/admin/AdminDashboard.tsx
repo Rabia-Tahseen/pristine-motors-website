@@ -34,27 +34,23 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Total Products
         const { count: totalProducts } = await supabase
           .from("products")
           .select("id", { count: "exact", head: true });
 
-        // Total Orders
         const { count: totalOrders } = await supabase
           .from("orders")
           .select("id", { count: "exact", head: true });
 
-        // Total Cars
         const { count: totalCars } = await supabase
           .from("products")
           .select("id", { count: "exact", head: true })
           .eq("product_type", "car");
 
-        // Total Car Parts
         const { count: totalParts } = await supabase
           .from("products")
           .select("id", { count: "exact", head: true })
-          .eq("product_type", "car_part"); // <-- fixed to count all car parts
+          .eq("product_type", "car_part");
 
         setStats({
           totalProducts: totalProducts ?? 0,
@@ -63,7 +59,6 @@ const AdminDashboard = () => {
           totalParts: totalParts ?? 0,
         });
 
-        // Recent Orders
         const { data: recentData } = await supabase
           .from("orders")
           .select("id, customer_name, total_price, order_status, created_at")
@@ -82,10 +77,38 @@ const AdminDashboard = () => {
   }, []);
 
   const statCards = [
-    { label: "Total Products", value: stats.totalProducts, icon: Package, color: "text-primary", link: "/admin/products" },
-    { label: "Cars Listed", value: stats.totalCars, icon: Car, color: "text-gold", link: "/admin/products?filter=cars" },
-    { label: "Car Parts", value: stats.totalParts, icon: Package, color: "text-emerald-600", link: "/admin/products?filter=car-parts" },
-    { label: "Total Orders", value: stats.totalOrders, icon: ShoppingCart, color: "text-purple-600", link: "/admin/orders" },
+    {
+      label: "Total Products",
+      value: stats.totalProducts,
+      icon: Package,
+      link: "/admin/products",
+      gradient: "from-sky-100 to-blue-200",
+      iconColor: "text-blue-600",
+    },
+    {
+      label: "Cars Listed",
+      value: stats.totalCars,
+      icon: Car,
+      link: "/admin/products?filter=cars",
+      gradient: "from-blue-100 to-sky-200",
+      iconColor: "text-sky-600",
+    },
+    {
+      label: "Car Parts",
+      value: stats.totalParts,
+      icon: Package,
+      link: "/admin/products?filter=car-parts",
+      gradient: "from-cyan-100 to-blue-200",
+      iconColor: "text-cyan-600",
+    },
+    {
+      label: "Total Orders",
+      value: stats.totalOrders,
+      icon: ShoppingCart,
+      link: "/admin/orders",
+      gradient: "from-indigo-100 to-blue-200",
+      iconColor: "text-indigo-600",
+    },
   ];
 
   if (loading) {
@@ -98,52 +121,90 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-6">
+
+      {/* Header */}
       <div>
-        <h1 className="font-display text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground font-body text-sm">Welcome to your store management panel</p>
+        <h1 className="font-display text-2xl font-bold text-foreground">
+          Dashboard
+        </h1>
+        <p className="text-muted-foreground font-body text-sm">
+          Welcome to your store management panel
+        </p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards (UPDATED STYLE ONLY) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map(card => {
+
+        {statCards.map((card) => {
           const Icon = card.icon;
+
           return (
             <Link key={card.label} to={card.link}>
-              <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
+              <Card
+                className="
+                  overflow-hidden
+                  border border-border
+                  bg-gradient-to-bl from-blue-200/40 via-card to-transparent
+                  dark:from-blue-900/20 dark:via-card dark:to-transparent
+                  shadow-sm hover:shadow-md
+                  transition-all cursor-pointer
+                  hover:-translate-y-1
+                "
+              >
+                <CardContent className="relative p-5">
+
+                  {/* soft glow */}
+                  <div className="absolute inset-0 opacity-10 bg-white blur-2xl" />
+
+                  <div className="relative flex items-center justify-between">
+
                     <div>
-                      <p className="text-muted-foreground font-body text-xs uppercase tracking-wide">{card.label}</p>
-                      <p className="font-display text-3xl font-bold text-foreground mt-1">{card.value}</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wide font-body">
+                        {card.label}
+                      </p>
+
+                      <p className="font-display text-3xl font-bold text-foreground mt-1">
+                        {card.value}
+                      </p>
                     </div>
-                    <Icon className={`h-10 w-10 ${card.color} opacity-70`} />
+
+                    <Icon className={`h-9 w-9 ${card.iconColor} opacity-80`} />
+
                   </div>
                 </CardContent>
               </Card>
             </Link>
           );
         })}
+
       </div>
 
-      {/* Recent Orders */}
+      {/* Recent Orders (UNCHANGED) */}
       <Card>
         <CardHeader>
           <CardTitle className="font-display text-lg flex items-center gap-2">
             <Clock size={18} /> Recent Orders
           </CardTitle>
         </CardHeader>
+
         <CardContent>
           {recentOrders.length === 0 ? (
-            <p className="text-muted-foreground font-body text-sm py-4 text-center">No orders yet</p>
+            <p className="text-muted-foreground font-body text-sm py-4 text-center">
+              No orders yet
+            </p>
           ) : (
             <div className="space-y-3">
-              {recentOrders.map(order => (
+
+              {recentOrders.map((order) => (
                 <div
                   key={order.id}
                   className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
                 >
                   <div>
-                    <p className="font-body font-medium text-foreground text-sm">{order.customer_name}</p>
+                    <p className="font-body font-medium text-foreground text-sm">
+                      {order.customer_name}
+                    </p>
+
                     <p className="text-muted-foreground text-xs font-body">
                       {new Date(order.created_at).toLocaleDateString("en-PK", {
                         day: "numeric",
@@ -152,7 +213,9 @@ const AdminDashboard = () => {
                       })}
                     </p>
                   </div>
+
                   <div className="flex items-center gap-3">
+
                     <Badge
                       className={`${
                         {
@@ -167,22 +230,27 @@ const AdminDashboard = () => {
                     >
                       {order.order_status}
                     </Badge>
+
                     <span className="font-body font-bold text-foreground text-sm">
                       Rs. {Number(order.total_price).toLocaleString()}
                     </span>
+
                   </div>
                 </div>
               ))}
+
               <Link
                 to="/admin/orders"
                 className="block text-center text-primary text-sm font-body font-medium hover:underline pt-2"
               >
                 View All Orders →
               </Link>
+
             </div>
           )}
         </CardContent>
       </Card>
+
     </div>
   );
 };
