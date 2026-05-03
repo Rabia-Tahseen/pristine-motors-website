@@ -5,6 +5,13 @@ import ProductCard from "@/components/ProductCard";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
+// ✅ CLEAN NORMALIZER (CRITICAL FIX)
+const normalize = (v: string) =>
+  (v || "")
+    .replace(/[\n\r]+/g, "")   // remove %0A
+    .trim()
+    .toLowerCase();
+
 const AllParts = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,19 +20,25 @@ const AllParts = () => {
   const [loading, setLoading] = useState(true);
 
   const search = searchParams.get("search") || "";
-  const activeCategory = searchParams.get("category") || "All";
-  const activeVehicle = searchParams.get("vehicle") || "All";
+
+  // ✅ FIXED: normalize URL value
+  const activeCategory = normalize(searchParams.get("category") || "All");
+  const activeVehicle = normalize(searchParams.get("vehicle") || "All");
 
   const updateParam = (key: string, value: string) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (value === "" || value === "All") next.delete(key);
-      else next.set(key, value);
+
+      const cleanValue = (value || "").replace(/[\n\r]+/g, "").trim();
+
+      if (!cleanValue || cleanValue === "All") next.delete(key);
+      else next.set(key, cleanValue);
+
       return next;
     });
   };
 
-  // Fetch products
+  // FETCH PRODUCTS
   useEffect(() => {
     async function fetchProducts() {
       const { data, error } = await supabase
@@ -38,58 +51,58 @@ const AllParts = () => {
       if (!error && data) {
         setProducts(data);
 
-        // Extract all models robustly
-        const allModels = data.flatMap((p: any) => {
-          if (!p.model_compatibility) return [];
-          return p.model_compatibility
-            .split(",") // split by comma
-            .map((v: string) => v.trim()) // trim spaces
-            .filter(Boolean); // remove empty strings
-        });
+        const allModels = data.flatMap((p: any) =>
+          p.model_compatibility
+            ? p.model_compatibility.split(",").map((v: string) => v.trim())
+            : []
+        );
 
-        const uniqueModels = ["All", ...Array.from(new Set(allModels))];
-        setVehicles(uniqueModels);
-
-        // Optional debug log
-        console.log("Models extracted:", uniqueModels);
+        setVehicles(["All", ...Array.from(new Set(allModels))]);
       }
+
       setLoading(false);
     }
+
     fetchProducts();
   }, []);
 
-  // Fetch categories
+  // FETCH CATEGORIES
   useEffect(() => {
     async function fetchCategories() {
       const { data, error } = await supabase
         .from("categories")
         .select("name")
         .order("name");
+
       if (!error && data) {
         setCategories(["All", ...data.map((c: any) => c.name)]);
       }
     }
+
     fetchCategories();
   }, []);
 
-  // Filter products
+  // FILTER
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
 
     return products.filter((p) => {
-      const catName = p.category?.name ?? "";
-      const matchCategory = activeCategory === "All" || catName === activeCategory;
+      const catName = normalize(p.category?.name || "");
+
+      const matchCategory =
+        activeCategory === "all" ||
+        catName === activeCategory;
 
       const compatibleModels = p.model_compatibility
-        ? p.model_compatibility
-            .split(",")
-            .map((v: string) => v.trim())
-            .filter(Boolean)
+        ? p.model_compatibility.split(",").map((v: string) => normalize(v))
         : [];
-      const matchVehicle =
-        activeVehicle === "All" || compatibleModels.includes(activeVehicle);
 
-      const matchSearch = !q || p.title?.toLowerCase().includes(q);
+      const matchVehicle =
+        activeVehicle === "all" ||
+        compatibleModels.includes(activeVehicle);
+
+      const matchSearch =
+        !q || (p.title || "").toLowerCase().includes(q);
 
       return matchCategory && matchVehicle && matchSearch;
     });
@@ -103,6 +116,7 @@ const AllParts = () => {
   return (
     <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,11 +128,9 @@ const AllParts = () => {
           </p>
         </motion.div>
 
+        {/* SEARCH */}
         <div className="relative w-full mb-6">
-          <Search
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-            size={18}
-          />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
             placeholder="Search by part name..."
             value={search}
@@ -127,7 +139,9 @@ const AllParts = () => {
           />
         </div>
 
+        {/* FILTERS */}
         <div className="flex flex-col sm:flex-row gap-5 mb-8">
+
           <div className="flex-1">
             <p className="text-xs mb-2">Category</p>
             <div className="flex gap-2 flex-wrap">
@@ -135,7 +149,7 @@ const AllParts = () => {
                 <button
                   key={cat}
                   onClick={() => updateParam("category", cat)}
-                  className={filterBtn(activeCategory === cat)}
+                  className={filterBtn(activeCategory === normalize(cat))}
                 >
                   {cat}
                 </button>
@@ -150,15 +164,17 @@ const AllParts = () => {
                 <button
                   key={v}
                   onClick={() => updateParam("vehicle", v)}
-                  className={filterBtn(activeVehicle === v)}
+                  className={filterBtn(activeVehicle === normalize(v))}
                 >
                   {v}
                 </button>
               ))}
             </div>
           </div>
+
         </div>
 
+        {/* RESULTS */}
         {loading ? (
           <p className="text-gray-400 text-sm">Loading parts...</p>
         ) : (
@@ -166,11 +182,13 @@ const AllParts = () => {
             <p className="text-sm text-gray-500 mb-5">
               Showing {filtered.length} parts
             </p>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((p, i) => (
                 <ProductCard key={p.id} product={p} index={i} section="parts" />
               ))}
             </div>
+
             {filtered.length === 0 && (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg">No parts found.</p>
@@ -184,6 +202,7 @@ const AllParts = () => {
             )}
           </>
         )}
+
       </div>
     </main>
   );
