@@ -2,7 +2,8 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import ProductCard from "@/components/ProductCard";
-import { Search } from "lucide-react";
+import CompareCars from "@/components/CompareCars";
+import { Search, GitCompareArrows } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
 const Cars = () => {
@@ -10,17 +11,28 @@ const Cars = () => {
   const [vehicles, setVehicles] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
 
+  const [openCompare, setOpenCompare] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const search = searchParams.get("search") || "";
   const activeVehicle = searchParams.get("brand") || "All";
 
-  // 👇 PRICE IN LACS
-  const minPrice = Number(searchParams.get("minPrice") || 0) * 100000;
-  const maxPrice = Number(searchParams.get("maxPrice") || Infinity) * 100000;
+  const minRaw = searchParams.get("minPrice");
+  const maxRaw = searchParams.get("maxPrice");
+
+  const minPrice =
+    minRaw === null || minRaw === ""
+      ? 0
+      : Number(minRaw) * 100000;
+
+  const maxPrice =
+    maxRaw === null || maxRaw === ""
+      ? Infinity
+      : Number(maxRaw) * 100000;
 
   const updateParam = (key: string, value: string) => {
-    setSearchParams(prev => {
+    setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       if (!value || value === "All") next.delete(key);
       else next.set(key, value);
@@ -58,14 +70,16 @@ const Cars = () => {
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
 
-    return cars.filter(car => {
+    return cars.filter((car) => {
       const matchBrand =
-        activeVehicle === "All" || car.brand === activeVehicle;
+        activeVehicle === "All" ||
+        car.brand?.toLowerCase().trim() ===
+          activeVehicle.toLowerCase().trim();
 
       const matchSearch =
         !q || car.title?.toLowerCase().includes(q);
 
-      const price = Number(car.price || 0);
+      const price = Number(String(car.price || 0).replace(/,/g, ""));
 
       const matchPrice =
         price >= minPrice && price <= maxPrice;
@@ -91,17 +105,38 @@ const Cars = () => {
     <main className="pt-24 pb-20 bg-white min-h-screen">
       <div className="section-container">
 
-        {/* HEADER */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="text-3xl font-bold">All Cars</h1>
-          <p className="text-gray-500 mt-2">
-            Browse our complete collection of available vehicles.
-          </p>
-        </motion.div>
+        {/* HEADER + BUTTON */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">All Cars</h1>
+            <p className="text-gray-500 mt-2">
+              Browse & compare smartly
+            </p>
+          </div>
+
+       <button
+  onClick={() => setOpenCompare(true)}
+  className="
+    flex items-center gap-2
+    bg-blue-950
+    text-white
+    px-4 py-2 md:px-6 md:py-3
+    text-xs md:text-sm lg:text-base
+    rounded-xl
+    font-medium
+    shadow-md
+    transition-all duration-300
+    hover:bg-blue-900
+    hover:shadow-xl
+    hover:scale-[1.05]
+    active:scale-95
+    whitespace-nowrap
+  "
+>
+  <GitCompareArrows size={18} />
+  Compare Cars
+</button>
+        </div>
 
         {/* SEARCH */}
         <div className="relative w-full mb-6">
@@ -114,7 +149,7 @@ const Cars = () => {
           />
         </div>
 
-        {/* PRICE FILTER (LACS) */}
+        {/* PRICE */}
         <div className="flex gap-3 mb-6 items-center">
           <input
             type="number"
@@ -135,11 +170,11 @@ const Cars = () => {
           />
         </div>
 
-        {/* VEHICLE FILTER */}
+        {/* VEHICLE */}
         <div className="mb-6">
           <p className="text-xs mb-2">Vehicle</p>
           <div className="flex gap-2 flex-wrap">
-            {vehicles.map(vehicle => (
+            {vehicles.map((vehicle) => (
               <button
                 key={vehicle}
                 onClick={() => updateParam("brand", vehicle)}
@@ -156,7 +191,7 @@ const Cars = () => {
           onClick={resetFilters}
           className="mb-6 text-sm text-red-600 hover:underline"
         >
-          Reset all filters
+          Reset filters
         </button>
 
         <p className="text-sm text-gray-500 mb-5">
@@ -184,6 +219,32 @@ const Cars = () => {
             >
               Clear filters
             </button>
+          </div>
+        )}
+
+        {/* 🔥 COMPARE MODAL */}
+        {openCompare && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg">
+
+              <div className="flex justify-between items-center px-4 py-3 border-b">
+                <h2 className="font-semibold text-sm text-gray-700">
+                  Compare Cars
+                </h2>
+
+                <button
+                  onClick={() => setOpenCompare(false)}
+                  className="text-xl px-2"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="p-5">
+                <CompareCars cars={cars} />
+              </div>
+
+            </div>
           </div>
         )}
 
