@@ -47,8 +47,8 @@ const BrowseByCategory = () => (
             <Link
               to={`/parts?category=${encodeURIComponent(clean(cat.filter))}`}
               className="flex flex-col items-center gap-3 p-5 rounded-xl
-                bg-gradient-to-bl from-blue-200/40 via-card to-transparent
-                dark:from-blue-900/30 dark:via-card dark:to-transparent
+                bg-gradient-to-bl from-blue-200/50 via-card to-blue-200/50
+                dark:from-blue-900/70 dark:via-card dark:to-transparent
                 border border-border
                 hover:shadow-md hover:-translate-y-1
                 transition-all duration-200 group"
