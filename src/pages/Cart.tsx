@@ -11,7 +11,9 @@ const Cart = () => {
       <main className="pt-24 pb-20 bg-background min-h-screen">
         <div className="section-container text-center py-20">
           <ShoppingCart size={64} className="mx-auto text-muted-foreground mb-6" />
-          <h1 className="font-display text-2xl font-bold text-foreground mb-2">Your Cart is Empty</h1>
+           <h2 className="text-3xl font-bold text-center text-blue-1000 mb-6">
+          Your Cart is Empty
+        </h2>
           <p className="text-muted-foreground font-body mb-6">Browse our collection and add items to your cart.</p>
           <Link to="/parts" className="btn-primary">Browse Parts</Link>
         </div>
