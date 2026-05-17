@@ -1,58 +1,170 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+
 import { supabase } from "@/integrations/supabase/client";
-import type { User, Session } from "@supabase/supabase-js";
 
-interface AdminAuthContextType {
-  user: User | null;
-  session: Session | null;
+type AuthContextType = {
+  user: any;
+  role: string | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+
+  signIn: (email: string, password: string) => Promise<any>;
+  adminSignIn: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<void>;
-}
+};
 
-const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
+const AdminAuthContext = createContext<AuthContextType | null>(null);
 
-export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+export const AdminAuthProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const [user, setUser] = useState<any>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
+  // FETCH ROLE
+  const fetchRole = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .maybeSingle();
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    if (error) {
+      console.error(error);
+      return "user";
+    }
 
-    return () => subscription.unsubscribe();
-  }, []);
+    const userRole = data?.role || "user";
+    setRole(userRole);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
+    return userRole;
   };
 
+  // INIT AUTH
+  useEffect(() => {
+    const init = async () => {
+      const { data } = await supabase.auth.getUser();
+
+      const currentUser = data.user;
+
+      setUser(currentUser);
+
+      if (currentUser) {
+        await fetchRole(currentUser.id);
+      }
+
+      setLoading(false);
+    };
+
+    init();
+
+    const { data: listener } =
+      supabase.auth.onAuthStateChange(async (_, session) => {
+        const currentUser = session?.user || null;
+
+        setUser(currentUser);
+
+        if (currentUser) {
+          await fetchRole(currentUser.id);
+        } else {
+          setRole(null);
+        }
+
+        setLoading(false);
+      });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  // LOGIN
+  const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    const user = data.user;
+
+    if (!user) {
+      return { error: "Login failed" };
+    }
+
+    setUser(user);
+
+    const userRole = await fetchRole(user.id);
+
+    return {
+      user,
+      role: userRole,
+    };
+  };
+
+  // ADMIN LOGIN
+  const adminSignIn = async (email: string, password: string) => {
+    const res = await signIn(email, password);
+
+    if (res?.error) return res;
+
+    if (res.role !== "admin") {
+      await supabase.auth.signOut();
+
+      setUser(null);
+      setRole(null);
+
+      return {
+        error: "Access denied. Admins only.",
+      };
+    }
+
+    return res;
+  };
+
+  // LOGOUT
   const signOut = async () => {
     await supabase.auth.signOut();
+
+    setUser(null);
+    setRole(null);
+
+    window.location.href = "/";
   };
 
   return (
-    <AdminAuthContext.Provider value={{ user, session, loading, signIn, signOut }}>
+    <AdminAuthContext.Provider
+      value={{
+        user,
+        role,
+        loading,
+        signIn,
+        adminSignIn,
+        signOut,
+      }}
+    >
       {children}
     </AdminAuthContext.Provider>
   );
 };
 
 export const useAdminAuth = () => {
-  const ctx = useContext(AdminAuthContext);
-  if (!ctx) throw new Error("useAdminAuth must be used within AdminAuthProvider");
-  return ctx;
+  const context = useContext(AdminAuthContext);
+
+  if (!context) {
+    throw new Error("useAdminAuth must be used inside AdminAuthProvider");
+  }
+
+  return context;
 };
