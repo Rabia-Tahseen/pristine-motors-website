@@ -28,12 +28,10 @@ const clean = (v: string) =>
 const BrowseByCategory = () => (
   <section className="py-6 section-alt">
     <div className="section-container">
-
-      <h2 className="font-display text-2xl md:text-3xl font-bold mb-6"
-        style={{ color: "#06142e" }}>
-        Browse Parts by Category
-      </h2>
-
+      
+<h2 className="text-2xl font-bold mb-6">
+  Browse Parts by Category
+</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
 
         {categoryData.map((cat, i) => (
