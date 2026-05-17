@@ -40,14 +40,17 @@ const ProductCard = ({ product, index = 0, section = "parts" }: Props) => {
           navigate(`/parts/${product.id}`, { state: { section } })
         }
         className="
-          group block rounded-2xl overflow-hidden cursor-pointer
-          bg-gradient-to-br from-blue-100/90 via-white/70 to-blue-100/50
-          dark:from-blue-500/40 dark:via-card dark:to-transparent
-          border border-blue-200/40 dark:border-border
-          transition-all duration-300
-          hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-200/30
-        "
-      >
+  group block rounded-2xl overflow-hidden cursor-pointer
+  bg-gradient-to-br from-blue-100/90 via-white/70 to-blue-100/50
+  dark:from-blue-500/40 dark:via-card dark:to-black-300
+  border border-blue-100/40 dark:border-border
+  transition-all duration-200
+
+  hover:-translate-y-1
+  hover:shadow-lg hover:shadow-black/20
+  hover:bg-gray-50/60
+  dark:hover:bg-white/5
+">
         <div className="flex flex-col h-full">
 
           {/* IMAGE */}
