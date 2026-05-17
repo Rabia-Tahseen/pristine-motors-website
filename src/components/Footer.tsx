@@ -8,10 +8,17 @@ const Footer = () => (
         <div>
           <div className="flex items-center gap-3 mb-4">
             <img src={logo} alt="Pristine Auto Hub" className="h-10 w-10 rounded-full object-cover" />
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-lg font-bold text-white">Pristine</span>
-              <span className="text-[10px] font-body uppercase tracking-[0.15em] text-white/50">Auto Hub</span>
-            </div>
+            <div className="flex flex-col leading-none"></div>
+              
+              <div className="flex flex-col leading-tight">
+  <span className="font-body font-semibold text-white text-sm">
+    Pristine
+  </span>
+
+  <span className="text-white/60 text-[10px] tracking-[0.3em]">
+    AUTO HUB
+  </span>
+</div>
           </div>
           <p className="text-white/50 text-sm leading-relaxed max-w-xs font-body">
             Your trusted source for genuine Japanese auto parts & vehicles.
