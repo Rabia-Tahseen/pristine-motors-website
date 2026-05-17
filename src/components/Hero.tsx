@@ -227,18 +227,18 @@ const Hero = () => {
               text-[#0b1b3a]
 
               bg-gradient-to-bl
-              from-blue-300/100
+              from-blue-200/100
               via-white/100
-              to-blue-300/100
+              to-blue-200/100
 
-              border border-blue-200/50
+              border border-blue-200/80
               backdrop-blur-md
 
               hover:-translate-y-1
               hover:from-blue-300
               hover:to-blue-300
 
-              transition-all duration-300
+              transition-all duration-200
             "
           >
             Explore Cars
@@ -254,18 +254,18 @@ const Hero = () => {
               text-[#0b1b3a]
 
               bg-gradient-to-bl
-              from-blue-300/100
+              from-blue-200/100
               via-white/100
-              to-blue-300/100
+              to-blue-200/100
 
-              border border-blue-200/50
+              border border-blue-200/80
               backdrop-blur-md
 
               hover:-translate-y-1
               hover:from-blue-300
               hover:to-blue-300
 
-              transition-all duration-300
+              transition-all duration-200
             "
           >
             Explore Parts
