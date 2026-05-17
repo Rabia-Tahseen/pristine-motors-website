@@ -35,14 +35,10 @@ const FeaturedCars = () => {
 
         <div className="flex items-center justify-between mb-4"> {/* reduced */}
 
-          <h2
-            className="font-display text-2xl md:text-3xl font-bold"
-            style={{
-              color: "#06142e",
-            }}
-          >
-            Featured Cars
-          </h2>
+          
+           <h2 className="text-2xl font-bold mb-6">
+  Featured Cars
+</h2>
 
           <Link
             to="/cars"
