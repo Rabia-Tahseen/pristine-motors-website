@@ -312,7 +312,7 @@ const CompareCars = ({ cars }: { cars: Car[] }) => {
                 <ul className="text-sm space-y-2">
                   {getPoints(car).map((p, i) => (
                     <li key={i} className="flex gap-2 items-start">
-                      <span className="text-blue-900">🚗</span>
+                      <span className="text-blue-900">○</span>
                       <span>{p}</span>
                     </li>
                   ))}
