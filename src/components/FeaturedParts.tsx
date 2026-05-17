@@ -26,14 +26,10 @@ const FeaturedParts = () => {
     <section className="py-8 section-alt"> {/* reduced from py-10 → py-8 */}
       <div className="section-container">
 
-        <h2
-          className="font-display text-2xl md:text-3xl font-bold mb-6"
-          style={{
-            color: "#06142e", // very dark blue (950–1000 feel)
-          }}
-        >
-          Featured Parts
-        </h2>
+         <h2 className="text-2xl font-bold mb-6">
+  Featured Parts
+</h2>
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((p, i) => (
