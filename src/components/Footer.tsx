@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/image.png";
 
 const Footer = () => (
-  <footer className="bg-[#1D2A55] py-14">
+  <footer className="bg-blue-950 py-14 bg-gradient-to-r from-[#081120] via-[#13264a] to-[#081120] backdrop-blur-xl">
     <div className="section-container">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         <div>
