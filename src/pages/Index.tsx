@@ -10,8 +10,8 @@ import ContactSection from "@/components/ContactSection";
 const Index = () => (
   <main>
     <Hero />
-    <HeroCarousel />
     <BrowseByCategory />
+    <HeroCarousel />
     <FeaturedParts />
     <FeaturedCars />
     <TrustIndicators />
