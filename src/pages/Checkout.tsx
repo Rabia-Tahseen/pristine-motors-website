@@ -214,7 +214,7 @@ useEffect(() => {
                 </Link>
 
                 <Link to="/signup">
-                  <Button className="border-blue-950 bg-white hover:bg-blue-500 text-white">
+                  <Button className="border-blue-950 bg-white text-blue-950 hover:bg-blue-500 text-white">
                     Create Account
                   </Button>
                 </Link>
