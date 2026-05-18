@@ -1,214 +1,238 @@
 import { useEffect, useState } from "react";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
-import { Package, MessageCircle, ShoppingCart, ArrowLeft } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 
 const Profile = () => {
   const { user } = useAdminAuth();
+  const location = useLocation();
 
   const [orders, setOrders] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!user?.email) return;
+  const fetchData = async () => {
+    if (!user?.id) return;
 
-    const fetchData = async () => {
+    try {
       setLoading(true);
 
-      const [{ data: orderData }, { data: requestData }] = await Promise.all([
-        supabase
-          .from("orders")
-          .select("*")
-          .eq("email", user.email)
-          .order("created_at", { ascending: false }),
+      const userId = user.id;
 
-        supabase
-          .from("part_requests")
-          .select("*")
-          .eq("user_email", user.email)
-          .order("id", { ascending: false }),
-      ]);
+      // ORDERS
+      const { data: orderData } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      // REQUESTS
+      const { data: requestData } = await supabase
+        .from("part_requests")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      // CART ITEMS (NEW FIX)
+      const { data: cartData } = await supabase
+        .from("cart_items")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
       setOrders(orderData || []);
       setRequests(requestData || []);
+      setCartItems(cartData || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
       setLoading(false);
-    };
+    }
+  };
 
+  // initial load
+  useEffect(() => {
     fetchData();
   }, [user]);
 
+  // refetch when returning to page
+  useEffect(() => {
+    if (location.pathname === "/profile") {
+      fetchData();
+    }
+  }, [location.pathname]);
+
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-700 bg-[#f5f9ff]">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         Please login first.
       </div>
     );
   }
 
-  return (
-    <main className="min-h-screen pt-16 pb-12 bg-[#f5f9ff] text-gray-900">
+  const totalSpent = orders.reduce(
+    (acc, order) => acc + (Number(order.total_price) || 0),
+    0
+  );
 
-      <div className="max-w-5xl mx-auto px-6 space-y-10">
+  const getOrderName = (order: any) => {
+    const items = order.items_ordered;
+
+    if (Array.isArray(items) && items.length > 0) {
+      return items.map((i: any) => i.name || i.title || "Item").join(" + ");
+    }
+
+    if (items && typeof items === "object") {
+      return items.name || items.title || "Car Part";
+    }
+
+    return "Car Part";
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "new":
+      case "pending":
+        return "bg-blue-100 text-blue-800";
+      case "processing":
+        return "bg-yellow-100 text-yellow-800";
+      case "shipped":
+        return "bg-purple-100 text-purple-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-gray-50 pt-14 pb-10">
+      <div className="max-w-5xl mx-auto px-6 space-y-8">
 
         {/* HEADER */}
-        <div className="flex items-start justify-between">
+        <div>
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-700 transition"
+          >
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
 
-          {/* LEFT */}
-          <div className="space-y-1">
-            
-            {/* BACK BUTTON (TOP LEFT REAL STYLE) */}
-            <Link
-              to="/"
-              className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#0b1b3a] transition"
-            >
-              <ArrowLeft size={16} />
-              Back to Home
-            </Link>
+          <h1 className="text-3xl font-bold mt-3 text-gray-900">
+            Welcome back
+          </h1>
 
-            <h1 className="text-3xl font-bold text-[#0b1b3a]">
-              My Dashboard
-            </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            {user.email}
+          </p>
+        </div>
 
-            <p className="text-gray-500 text-sm">
-              {user.email}
+        {/* SUMMARY */}
+        <div className="flex gap-6 text-sm text-gray-700">
+          <span>Orders: <b>{orders.length}</b></span>
+          <span>Requests: <b>{requests.length}</b></span>
+          <span>Cart Items: <b>{cartItems.length}</b></span>
+          <span>Total Spent: <b>Rs {totalSpent}</b></span>
+        </div>
+
+        {/* CART */}
+        <Link
+          to="/cart"
+          className="flex items-center gap-3 bg-white border rounded-xl p-4 hover:shadow transition"
+        >
+          <ShoppingBag className="text-blue-600" />
+          <div>
+            <p className="font-semibold">View Cart</p>
+            <p className="text-sm text-gray-500">
+              Checkout your items ({cartItems.length})
             </p>
-
           </div>
-
-        </div>
-
-        {/* STATS */}
-        <div className="flex flex-wrap gap-10 text-sm border-b border-gray-200 pb-6">
-
-          <div className="flex items-center gap-2">
-            <ShoppingCart className="text-blue-500" size={18} />
-            <span className="font-medium text-[#0b1b3a]">{orders.length}</span>
-            <span className="text-gray-500">Orders</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <MessageCircle className="text-cyan-500" size={18} />
-            <span className="font-medium text-[#0b1b3a]">{requests.length}</span>
-            <span className="text-gray-500">Requests</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Package className="text-green-500" size={18} />
-            <span className="font-medium text-[#0b1b3a]">
-              Rs {orders.reduce((acc, o) => acc + (o.total_price || 0), 0)}
-            </span>
-            <span className="text-gray-500">Spent</span>
-          </div>
-
-        </div>
-
-        {/* QUICK LINKS */}
-        <div className="flex gap-6 text-sm text-blue-600 pt-2">
-
-          <Link to="/cart" className="hover:underline">
-            View Cart
-          </Link>
-
-          <Link to="/parts" className="hover:underline">
-            Browse Parts
-          </Link>
-
-          <Link to="/request-part" className="hover:underline">
-            Request a Part
-          </Link>
-
-        </div>
+        </Link>
 
         {/* ORDERS */}
-        <div className="pt-6 border-t border-gray-200">
-
-          <h2 className="text-lg font-semibold text-[#0b1b3a] mb-4">
-            Order History
-          </h2>
+        <section className="bg-white border rounded-2xl p-5">
+          <h2 className="text-lg font-semibold mb-5">Your Orders</h2>
 
           {loading ? (
-            <p className="text-gray-500 text-sm">Loading orders...</p>
+            <p>Loading...</p>
           ) : orders.length === 0 ? (
-            <p className="text-gray-500 text-sm">
-              You haven’t placed any orders yet.
-            </p>
+            <p>No orders yet</p>
           ) : (
-            <div className="space-y-3">
-
-              {orders.map((order) => (
+            <div className="space-y-4">
+              {orders.map((order, index) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between py-3 border-b border-gray-100"
+                  className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 via-white to-blue-100 p-5 shadow-sm"
                 >
-
-                  {/* LEFT */}
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-[#0b1b3a]">
-                      Order #{order.id.slice(0, 6)}
+                  <div className="flex justify-between">
+                    <p className="font-semibold">
+                      Order {index + 1}: {getOrderName(order)}
                     </p>
 
-                    <p className="text-xs text-gray-500">
-                      {new Date(order.created_at).toLocaleDateString()} • {order.order_status}
-                    </p>
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full ${getStatusColor(
+                        order.order_status || "new"
+                      )}`}
+                    >
+                      {order.order_status || "new"}
+                    </span>
                   </div>
 
-                  {/* RIGHT */}
-                  <p className="text-sm font-semibold text-blue-600">
+                  <p className="text-sm text-gray-600 mt-2">
                     Rs {order.total_price}
                   </p>
-
                 </div>
               ))}
-
             </div>
           )}
-        </div>
+        </section>
 
         {/* REQUESTS */}
-        <div className="pt-6 border-t border-gray-200">
-
-          <h2 className="text-lg font-semibold text-[#0b1b3a] mb-4">
-            Part Requests
-          </h2>
+        <section className="bg-white border rounded-2xl p-5">
+          <h2 className="text-lg font-semibold mb-5">Your Requests</h2>
 
           {loading ? (
-            <p className="text-gray-500 text-sm">Loading requests...</p>
+            <p>Loading...</p>
           ) : requests.length === 0 ? (
-            <p className="text-gray-500 text-sm">
-              You haven’t requested any parts yet.
-            </p>
+            <p>No requests yet</p>
           ) : (
-            <div className="space-y-3">
-
-              {requests.map((req) => (
+            <div className="space-y-4">
+              {requests.map((req, index) => (
                 <div
                   key={req.id}
-                  className="flex items-center justify-between py-3 border-b border-gray-100"
+                  className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 via-white to-blue-100 p-5"
                 >
-
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-[#0b1b3a]">
-                      {req.part}
+                  <div className="flex justify-between">
+                    <p className="font-semibold">
+                      Request {index + 1}: {req.part}
                     </p>
 
-                    <p className="text-xs text-gray-500">
-                      {req.brand} • {req.model}
-                    </p>
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full ${getStatusColor(
+                        req.status || "pending"
+                      )}`}
+                    >
+                      {req.status || "pending"}
+                    </span>
                   </div>
 
-                  <p className="text-xs text-cyan-600 font-medium">
-                    {req.budget || "No budget"}
+                  <p className="text-sm text-gray-600 mt-1">
+                    {req.brand} • {req.model}
                   </p>
 
+                  <p className="text-sm mt-2">
+                    Budget: Rs {req.budget || "Not set"}
+                  </p>
                 </div>
               ))}
-
             </div>
           )}
-
-        </div>
+        </section>
 
       </div>
     </main>
