@@ -197,11 +197,7 @@ useEffect(() => {
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 {/* LOGIN WARNING */}
 {!user && (
-  <div className="mb-6 rounded-xl border border-blue-200 bg-white p-5 shadow-sm">
-    
-    <h2 className="text-lg font-semibold text-blue-950">
-      Login Required
-    </h2>
+  <div className="mb-6 rounded-xl border border-blue-200 bg-white/85 p-5 shadow-sm">
 
     <p className="text-sm text-gray-600 mt-2">
       Please login or create an account before placing your order.
@@ -217,7 +213,7 @@ useEffect(() => {
       <Link to="/signup">
         <Button
           variant="outline"
-          className="border-blue-900 text-blue-900 hover:bg-blue-500 hover:text-white"
+          className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
         >
           Create Account
         </Button>
