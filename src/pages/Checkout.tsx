@@ -202,8 +202,11 @@ useEffect(() => {
         <div className="grid lg:grid-cols-3 gap-8">
 
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
-{!user && (
-      <div className="mb-6 rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
+
+            <div className="rounded-xl border p-6 space-y-4">
+ {/* LOGIN BOX INSIDE CARD */}
+    {!user && (
+      <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
         <p className="text-sm text-blue-950 font-medium">
           Please login or create an account before placing your order.
         </p>
@@ -226,7 +229,6 @@ useEffect(() => {
         </div>
       </div>
     )}
-            <div className="rounded-xl border p-6 space-y-4">
 
               {/* Full Name */}
               <div>
