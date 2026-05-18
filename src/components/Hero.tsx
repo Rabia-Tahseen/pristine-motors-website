@@ -214,7 +214,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="flex flex-col sm:flex-row justify-center gap-5 mt-7 sm:mt-8"
+          className="flex flex-col sm:flex-row justify-center gap-5 mt-7 sm:mt-7"
         >
 
           <Link
@@ -258,12 +258,12 @@ const Hero = () => {
               via-white/100
               to-blue-200/100
 
-              border border-blue-200/80
+              border border-blue-200/90
               backdrop-blur-md
 
               hover:-translate-y-1
-              hover:from-blue-300
-              hover:to-blue-300
+              hover:from-blue-400
+              hover:to-blue-600
 
               transition-all duration-200
             "
