@@ -153,14 +153,14 @@ const RequestPart = () => {
 
         {/* ✅ LOGIN WARNING */}
         {!user && (
-          <div className="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-center shadow-sm">
-            <p className="text-sm text-yellow-800 font-medium">
+          <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-center shadow-sm">
+            <p className="text-sm text-blue-950 font-medium">
               Please login or create an account before submitting a part request.
             </p>
 
             <div className="flex justify-center gap-3 mt-4">
               <Link to="/login">
-                <Button className="bg-blue-900 hover:bg-blue-800 text-white">
+                <Button className="bg-blue-950 hover:bg-blue-700 text-white">
                   Login
                 </Button>
               </Link>
@@ -168,7 +168,7 @@ const RequestPart = () => {
               <Link to="/signup">
                 <Button
                   variant="outline"
-                  className="border-blue-900 text-blue-900 hover:bg-blue-50"
+                  className="border-blue-900 text-blue-900 hover:bg-white text-blue-950"
                 >
                   Create Account
                 </Button>
