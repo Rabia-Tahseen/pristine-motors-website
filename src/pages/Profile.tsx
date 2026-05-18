@@ -35,7 +35,7 @@ const Profile = () => {
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
-      // CART ITEMS (NEW FIX)
+      // CART ITEMS
       const { data: cartData } = await supabase
         .from("cart_items")
         .select("*")
@@ -46,23 +46,25 @@ const Profile = () => {
       setRequests(requestData || []);
       setCartItems(cartData || []);
     } catch (err) {
-      console.error(err);
+      console.error("Profile fetch error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // initial load
+  // ✅ FIX: only run when user is ready
   useEffect(() => {
-    fetchData();
-  }, [user]);
-
-  // refetch when returning to page
-  useEffect(() => {
-    if (location.pathname === "/profile") {
+    if (user?.id) {
       fetchData();
     }
-  }, [location.pathname]);
+  }, [user?.id]);
+
+  // ✅ refetch when coming back to page
+  useEffect(() => {
+    if (location.pathname === "/profile" && user?.id) {
+      fetchData();
+    }
+  }, [location.pathname, user?.id]);
 
   if (!user) {
     return (
