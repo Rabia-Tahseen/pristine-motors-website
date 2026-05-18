@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -87,11 +88,12 @@ const RequestPart = () => {
 
   const handleSubmit = async () => {
 
-    // ✅ LOGIN CHECK ADDED HERE
-    if (!user) {
-      navigate("/signup");
-      return;
-    }
+     // LOGIN REQUIRED
+  if (!user) {
+    toast.error("Please login before placing an order");
+    navigate("/login");
+    return;
+  }
 
     const validation = validate();
 
