@@ -112,12 +112,12 @@ const Hero = () => {
             tracking-tight
           "
         >
-          <span className="italic drop-shadow-[0_0_10px_rgba(255,255,255,0.55)]">
-            Premium Cars
+          <span className=" drop-shadow-[0_0_10px_rgba(255,255,255,0.55)]">
+            Premium Cars &
           </span>
           <br />
-          <span className="italic drop-shadow-[0_0_10px_rgba(255,255,255,0.55)]">
-            & Genuine Parts
+          <span className=" drop-shadow-[0_0_10px_rgba(255,255,255,0.55)]">
+            Auto Parts
           </span>
         </motion.h1>
 
