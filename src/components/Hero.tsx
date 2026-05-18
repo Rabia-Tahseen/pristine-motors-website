@@ -235,8 +235,8 @@ const Hero = () => {
               backdrop-blur-md
 
               hover:-translate-y-1
-              hover:from-blue-300
-              hover:to-blue-350
+              hover:from-blue-350
+              hover:to-blue-300
 
               transition-all duration-200
             "
@@ -262,8 +262,8 @@ const Hero = () => {
               backdrop-blur-md
 
               hover:-translate-y-1
-              hover:from-blue-300
-              hover:to-blue-350
+              hover:from-blue-350
+              hover:to-blue-300
 
               transition-all duration-200
             "
