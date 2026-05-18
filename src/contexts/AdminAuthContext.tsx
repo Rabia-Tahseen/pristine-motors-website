@@ -133,15 +133,14 @@ export const AdminAuthProvider = ({
     return res;
   };
 
-  // LOGOUT
-  const signOut = async () => {
-    await supabase.auth.signOut();
+ const signOut = async () => {
+  setUser(null);
+  setRole(null);
 
-    setUser(null);
-    setRole(null);
+  await supabase.auth.signOut();
 
-    window.location.href = "/";
-  };
+  window.location.href = "/";
+};
 
   return (
     <AdminAuthContext.Provider
