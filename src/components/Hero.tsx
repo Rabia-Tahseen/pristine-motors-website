@@ -214,7 +214,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="flex flex-col sm:flex-row justify-center gap-5 mt-8 sm:mt-10"
+          className="flex flex-col sm:flex-row justify-center gap-5 mt-7 sm:mt-8"
         >
 
           <Link
