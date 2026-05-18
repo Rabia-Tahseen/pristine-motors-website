@@ -185,148 +185,93 @@ useEffect(() => {
     );
   }
 
-  return (
-    <main className="pt-24 pb-20 bg-background min-h-screen">
-      <div className="section-container">
+ return (
+  <main className="pt-24 pb-20 bg-background min-h-screen">
+    <div className="section-container">
+      <Link to="/cart" className="inline-flex items-center gap-2 mb-6 text-sm">
+        <ArrowLeft size={16} />
+        Back to Cart
+      </Link>
 
-        <Link to="/cart" className="inline-flex items-center gap-2 mb-6 text-sm">
-          <ArrowLeft size={16} />
-          Back to Cart
-        </Link>
+      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+      <div className="grid lg:grid-cols-3 gap-8">
+        <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
 
+          {!user && (
+            <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
+              <p className="text-sm text-blue-950 font-medium">
+                Please login or create an account before placing your order.
+              </p>
 
-  </div>
+              <div className="flex justify-center gap-3 mt-4">
+                <Link to="/login">
+                  <Button className="bg-blue-950 hover:bg-blue-500 text-white">
+                    Login
+                  </Button>
+                </Link>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-
-   <div className="grid lg:grid-cols-3 gap-8">
-
-      <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
-
-        {/* LOGIN BOX (same width as form card) */}
-        {!user && (
-          <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
-            <p className="text-sm text-blue-950 font-medium">
-              Please login or create an account before placing your order.
-            </p>
-
-            <div className="flex justify-center gap-3 mt-4">
-              <Link to="/login">
-                <Button className="bg-blue-950 hover:bg-blue-500 text-white">
-                  Login
-                </Button>
-              </Link>
-
-              <Link to="/signup">
-                <Button
-                  variant="outline"
-                  className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
-                >
-                  Create Account
-                </Button>
-              </Link>
+                <Link to="/signup">
+                  <Button variant="outline">
+                    Create Account
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* FORM CARD */}
-        <div className="rounded-xl border p-6 space-y-4">
+          <div className="rounded-xl border p-6 space-y-4">
 
-          {/* Full Name */}
-          <div>
-            <Label>Full Name *</Label>
-            <Input
-              name="fullName"
-              value={form.fullName}
-              onChange={handleChange}
-              className={inputClass}
-            />
-            {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
-          </div>
-
-              {/* Phone */}
-              <div>
-                <Label>Phone Number *</Label>
-                <Input
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-                {errors.phone && <p className={errorClass}>{errors.phone}</p>}
-              </div>
-
-              {/* Email */}
-              <div>
-                <Label>Email *</Label>
-                <Input
-  name="email"
-  value={form.email}
-  onChange={handleChange}
-  readOnly={!!user}
-  className={`${inputClass} ${
-    user ? "bg-gray-100 cursor-not-allowed" : ""
-  }`}
-/>
-                {errors.email && <p className={errorClass}>{errors.email}</p>}
-              </div>
-
-              {/* Address */}
-              <div>
-                <Label>Address *</Label>
-                <Input
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-                {errors.address && <p className={errorClass}>{errors.address}</p>}
-              </div>
-
-              {/* City (FIXED + NON EDITABLE) */}
-              <div>
-                <Label>City *</Label>
-
-                <Input
-                  name="city"
-                  value="Lahore"
-                  readOnly
-                  className={`${inputClass} bg-gray-100 cursor-not-allowed`}
-                />
-
-                <p className="text-xs mt-2 px-3 py-2 rounded-md bg-blue-50 text-blue-700 border border-blue-100">
-                  We only deliver in Lahore currently.
-                </p>
-
-                {errors.city && <p className={errorClass}>{errors.city}</p>}
-              </div>
-
-              {/* Notes */}
-              <div>
-                <Label>Notes</Label>
-                <Textarea
-                  name="notes"
-                  value={form.notes}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-                {errors.notes && <p className={errorClass}>{errors.notes}</p>}
-              </div>
-
+            <div>
+              <Label>Full Name *</Label>
+              <Input name="fullName" value={form.fullName} onChange={handleChange} className={inputClass} />
+              {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
             </div>
 
-            <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting ? "Placing Order..." : "Place Order"}
-            </Button>
+            <div>
+              <Label>Phone Number *</Label>
+              <Input name="phone" value={form.phone} onChange={handleChange} className={inputClass} />
+              {errors.phone && <p className={errorClass}>{errors.phone}</p>}
+            </div>
 
-          </form>
+            <div>
+              <Label>Email *</Label>
+              <Input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                readOnly={!!user}
+                className={`${inputClass} ${user ? "bg-gray-100" : ""}`}
+              />
+              {errors.email && <p className={errorClass}>{errors.email}</p>}
+            </div>
 
-        </div>
+            <div>
+              <Label>Address *</Label>
+              <Input name="address" value={form.address} onChange={handleChange} className={inputClass} />
+              {errors.address && <p className={errorClass}>{errors.address}</p>}
+            </div>
+
+            <div>
+              <Label>City *</Label>
+              <Input value="Lahore" readOnly className={`${inputClass} bg-gray-100`} />
+            </div>
+
+            <div>
+              <Label>Notes</Label>
+              <Textarea name="notes" value={form.notes} onChange={handleChange} className={inputClass} />
+              {errors.notes && <p className={errorClass}>{errors.notes}</p>}
+            </div>
+          </div>
+
+          <Button type="submit" className="w-full" disabled={submitting}>
+            {submitting ? "Placing Order..." : "Place Order"}
+          </Button>
+        </form>
       </div>
-    </main>
-  );
+    </div>
+  </main>
+);
 };
 
 export default Checkout;
