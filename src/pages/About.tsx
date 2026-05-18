@@ -24,8 +24,7 @@ const About = () => (
         </div>
 
         <h1 className="text-2xl font-bold mb-6">
-  About Pristine Auto Hub
-          
+               About Pristine Auto Hub       
 </h1>
 
         <p className="text-center text-muted-foreground text-sm font-body mt-2 uppercase tracking-wider">
