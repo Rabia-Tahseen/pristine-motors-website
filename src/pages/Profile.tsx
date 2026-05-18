@@ -12,38 +12,19 @@ const Profile = () => {
   const [requests, setRequests] = useState<any[]>([]);
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const fetchData = async () => {
-    if (!user?.id) return;
+ const fetchData = async (userId: string) => {
+    if (!userId) return;
 
     try {
       setLoading(true);
 
-      const userId = user.id;
-
-      const [orderRes, requestRes, cartRes] = await Promise.all([
-        supabase
-          .from("orders")
-          .select("*")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false }),
-
-        supabase
-          .from("part_requests")
-          .select("*")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false }),
-
-        supabase
-          .from("cart_items")
-          .select("*")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false }),
+      const [orderRes, requestRes] = await Promise.all([
+        supabase.from("orders").select("*").eq("user_id", userId),
+        supabase.from("part_requests").select("*").eq("user_id", userId),
       ]);
 
-      setOrders(orderRes.data || []);
-      setRequests(requestRes.data || []);
-      setCartItems(cartRes.data || []);
+      setOrders(orderRes.data ?? []);
+      setRequests(requestRes.data ?? []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -51,17 +32,40 @@ const Profile = () => {
     }
   };
 
-  // ✅ FIX 1: initial load
+  // ✅ 1. INITIAL LOAD
   useEffect(() => {
-    fetchData();
+    if (user?.id) fetchData(user.id);
   }, [user?.id]);
 
-  // ✅ FIX 2: refetch when you come back to profile tab
+  // ✅ 2. REFRESH WHEN COMING BACK
   useEffect(() => {
-    if (location.pathname === "/profile" && user?.id) {
-      fetchData();
+    if (user?.id && location.pathname === "/profile") {
+      fetchData(user.id);
     }
   }, [location.pathname, user?.id]);
+
+  // ✅ 3. REALTIME UPDATES
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const channel = supabase
+      .channel("profile-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        () => fetchData(user.id)
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "part_requests" },
+        () => fetchData(user.id)
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id]);
 
   if (!user) {
     return (
@@ -135,7 +139,6 @@ const Profile = () => {
         <div className="flex gap-6 text-sm text-gray-700">
           <span>Orders: <b>{orders.length}</b></span>
           <span>Requests: <b>{requests.length}</b></span>
-          <span>Cart Items: <b>{cartItems.length}</b></span>
           <span>Total Spent: <b>Rs {totalSpent}</b></span>
         </div>
 
