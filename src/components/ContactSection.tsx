@@ -59,8 +59,8 @@ const ContactSection = () => (
         viewport={{ once: true }}
         className="text-center mb-8"
       >
-        <h1 className="text-3xl font-bold mb-6 text-center">
-  Get in Touch
+       <h1 className="text-3xl font-bold mb-6 text-center">
+ Get in Touch
 </h1>
         
         <p className="mt-2 text-gray-700 text-sm">
