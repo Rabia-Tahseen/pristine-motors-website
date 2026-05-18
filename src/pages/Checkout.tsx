@@ -195,11 +195,10 @@ useEffect(() => {
         </Link>
 
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-{/* LOGIN WARNING */}
-{!user && (
-  <div className="mb-6 rounded-xl border border-blue-200 bg-white/85 p-5 shadow-sm">
 
-    <p className="text-sm text-gray-600 mt-2">
+{!user && (
+  <div className="mb-6 rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
+            <p className="text-sm text-blue-950 font-medium">
       Please login or create an account before placing your order.
     </p>
 
