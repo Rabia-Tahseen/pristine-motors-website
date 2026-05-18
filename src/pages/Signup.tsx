@@ -8,6 +8,7 @@ const Signup = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [step, setStep] = useState(0);
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,7 @@ const handleSignup = async (e: React.FormEvent) => {
       if (msg.includes("already") || msg.includes("exists")) {
         setGeneralError("Account already exists. Redirecting to login...");
         setLoading(false);
-        setTimeout(() => navigate("/login"), 1200);
+        setTimeout(() => navigate("/login"), 1500);
         return;
       }
 
@@ -74,10 +75,10 @@ const handleSignup = async (e: React.FormEvent) => {
     const session = data?.session;
 
     if (session) {
-      setSuccess("Account created successfully! Redirecting..");
+      setSuccess("Account created successfully!");
       setLoading(false);
 
-      setTimeout(() => navigate("/"), 1000);
+      setTimeout(() => navigate("/"), 700);
       return;
     }
 
@@ -195,13 +196,34 @@ const handleSignup = async (e: React.FormEvent) => {
         </div>
 
         {/* BUTTON */}
-        <button
-          disabled={loading}
-          className="w-full h-12 rounded-xl bg-[#0b1b3a] text-white font-semibold text-base transition 
-  hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-60"
-        >
-          {loading ? "Creating..." : "Create Account"}
-        </button>
+       <button
+  type="submit"
+  disabled={loading}
+  className="
+    w-full h-12 rounded-xl
+    bg-[#0b1b3a]
+    text-white
+    font-semibold
+    text-base
+    transition
+    hover:shadow-lg
+    hover:-translate-y-0.5
+    active:scale-[0.98]
+    disabled:opacity-60
+    disabled:cursor-not-allowed
+    flex items-center justify-center
+  "
+>
+  {loading ? (
+    <span className="flex items-center gap-2">
+      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      {step === 0 && "Creating account..."}
+      {step === 1 && "Setting up profile..."}
+    </span>
+  ) : (
+    "Create Account"
+  )}
+</button>
 
         <p className="text-center text-[15px] text-gray-500">
           Already have an account?{" "}
