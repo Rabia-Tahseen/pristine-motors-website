@@ -231,11 +231,11 @@ const Hero = () => {
               via-white/100
               to-blue-200/100
 
-              border border-blue-200/80
+              border border-blue-200/100
               backdrop-blur-md
 
               hover:-translate-y-1
-              hover:from-blue-350
+              hover:from-blue-400
               hover:to-blue-300
 
               transition-all duration-200
@@ -258,11 +258,11 @@ const Hero = () => {
               via-white/100
               to-blue-200/100
 
-              border border-blue-200/80
+              border border-blue-200/100
               backdrop-blur-md
 
               hover:-translate-y-1
-              hover:from-blue-350
+              hover:from-blue-400
               hover:to-blue-300
 
               transition-all duration-200
