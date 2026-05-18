@@ -201,50 +201,50 @@ useEffect(() => {
 
         <div className="grid lg:grid-cols-3 gap-8">
 
-          <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
+   <div className="grid lg:grid-cols-3 gap-8">
 
-  {/* LOGIN BOX */}
-  {!user && (
-    <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
-      <p className="text-sm text-blue-950 font-medium">
-        Please login or create an account before placing your order.
-      </p>
+      <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
 
-      <div className="flex justify-center gap-3 mt-4">
-        <Link to="/login">
-          <Button className="bg-blue-950 hover:bg-blue-500 text-white">
-            Login
-          </Button>
-        </Link>
+        {/* LOGIN BOX (same width as form card) */}
+        {!user && (
+          <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
+            <p className="text-sm text-blue-950 font-medium">
+              Please login or create an account before placing your order.
+            </p>
 
-        <Link to="/signup">
-          <Button
-            variant="outline"
-            className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
-          >
-            Create Account
-          </Button>
-        </Link>
-      </div>
-    </div>
-  )}
+            <div className="flex justify-center gap-3 mt-4">
+              <Link to="/login">
+                <Button className="bg-blue-950 hover:bg-blue-500 text-white">
+                  Login
+                </Button>
+              </Link>
 
-  {/* FULL FORM CARD (ALL FIELDS INSIDE) */}
-  <div className="rounded-xl border p-6 space-y-4">
+              <Link to="/signup">
+                <Button
+                  variant="outline"
+                  className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
+                >
+                  Create Account
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
 
-   
+        {/* FORM CARD */}
+        <div className="rounded-xl border p-6 space-y-4">
 
-              {/* Full Name */}
-              <div>
-                <Label>Full Name *</Label>
-                <Input
-                  name="fullName"
-                  value={form.fullName}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
-                {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
-              </div>
+          {/* Full Name */}
+          <div>
+            <Label>Full Name *</Label>
+            <Input
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              className={inputClass}
+            />
+            {errors.fullName && <p className={errorClass}>{errors.fullName}</p>}
+          </div>
 
               {/* Phone */}
               <div>
