@@ -207,8 +207,8 @@ useEffect(() => {
               </p>
 
               <div className="flex justify-center gap-3 mt-4">
-                 <Link to="/login">
-    <Button className="bg-blue-950 text-white hover:-translate-y-1 transition-all duration-200">
+                  <Link to="/login">
+    <Button className="bg-blue-950 text-white hover:bg-blue-300 hover:-translate-y-1 transition-all duration-200">
       Login
     </Button>
   </Link>
@@ -216,7 +216,7 @@ useEffect(() => {
   <Link to="/signup">
     <Button
       variant="outline"
-      className="border-blue-900 text-blue-950 hover:-translate-y-1 transition-all duration-200 hover:bg-blue-50"
+      className="border-blue-950 text-blue-950 hover:bg-blue-300 hover:-translate-y-1 transition-all duration-200"
     >
       Create Account
     </Button>
