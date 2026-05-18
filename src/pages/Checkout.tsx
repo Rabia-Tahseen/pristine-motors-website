@@ -196,35 +196,36 @@ useEffect(() => {
 
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
-{!user && (
-  <div className="mb-6 w-full rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
-            <p className="text-sm text-blue-950 font-medium">
-      Please login or create an account before placing your order.
-    </p>
-
-    <div className="flex justify-center gap-3 mt-4">
-      <Link to="/login">
-        <Button className="bg-blue-950 hover:bg-blue-500 text-white">
-          Login
-        </Button>
-      </Link>
-
-      <Link to="/signup">
-        <Button
-          variant="outline"
-          className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
-        >
-          Create Account
-        </Button>
-      </Link>
-    </div>
 
   </div>
-)}
+
         <div className="grid lg:grid-cols-3 gap-8">
 
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
+{!user && (
+      <div className="mb-6 rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
+        <p className="text-sm text-blue-950 font-medium">
+          Please login or create an account before placing your order.
+        </p>
 
+        <div className="flex justify-center gap-3 mt-4">
+          <Link to="/login">
+            <Button className="bg-blue-950 hover:bg-blue-500 text-white">
+              Login
+            </Button>
+          </Link>
+
+          <Link to="/signup">
+            <Button
+              variant="outline"
+              className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
+            >
+              Create Account
+            </Button>
+          </Link>
+        </div>
+      </div>
+    )}
             <div className="rounded-xl border p-6 space-y-4">
 
               {/* Full Name */}
