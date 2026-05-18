@@ -5,13 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CURRENT_YEAR = new Date().getFullYear();
 
 const RequestPart = () => {
   const navigate = useNavigate();
+
+  // ✅ ADD THIS
+  const { user } = useAdminAuth();
 
   const [form, setForm] = useState({
     user_email: "",
@@ -27,6 +31,16 @@ const RequestPart = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  // ✅ AUTO FILL EMAIL WHEN USER LOGGED IN
+  useEffect(() => {
+    if (user?.email) {
+      setForm((prev) => ({
+        ...prev,
+        user_email: user.email || "",
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -72,6 +86,13 @@ const RequestPart = () => {
   };
 
   const handleSubmit = async () => {
+
+    // ✅ LOGIN CHECK ADDED HERE
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
     const validation = validate();
 
     if (Object.keys(validation).length > 0) {
@@ -100,7 +121,7 @@ const RequestPart = () => {
       setSuccess(true);
 
       setForm({
-        user_email: "",
+        user_email: user?.email || "",
         brand: "",
         model: "",
         year: "",
@@ -112,7 +133,7 @@ const RequestPart = () => {
     }
   };
 
-  // ✅ FIXED AUTO SCROLL (THIS IS THE IMPORTANT PART)
+  // ✅ FIXED AUTO SCROLL
   useEffect(() => {
     if (success) {
       window.scrollTo({
@@ -130,6 +151,32 @@ const RequestPart = () => {
           Request a Part
         </h1>
 
+        {/* ✅ LOGIN WARNING */}
+        {!user && (
+          <div className="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-center shadow-sm">
+            <p className="text-sm text-yellow-800 font-medium">
+              Please login or create an account before submitting a part request.
+            </p>
+
+            <div className="flex justify-center gap-3 mt-4">
+              <Link to="/login">
+                <Button className="bg-blue-900 hover:bg-blue-800 text-white">
+                  Login
+                </Button>
+              </Link>
+
+              <Link to="/signup">
+                <Button
+                  variant="outline"
+                  className="border-blue-900 text-blue-900 hover:bg-blue-50"
+                >
+                  Create Account
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
+
         <AnimatePresence mode="wait">
 
           {success ? (
@@ -143,8 +190,8 @@ const RequestPart = () => {
               </h2>
 
               <p className="text-gray-600 mt-4">
-               We’ve received your request and will get back to you soon with availability and pricing details.
-               </p>
+                We’ve received your request and will get back to you soon with availability and pricing details.
+              </p>
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
 
@@ -189,20 +236,40 @@ const RequestPart = () => {
                   value={form.user_email}
                   onChange={handleChange}
                   placeholder="example@gmail.com"
+                  readOnly={!!user}
+                  className={user ? "bg-gray-100 cursor-not-allowed" : ""}
                 />
-                {errors.user_email && <p className="text-red-500 text-sm">{errors.user_email}</p>}
+                {errors.user_email && (
+                  <p className="text-red-500 text-sm">
+                    {errors.user_email}
+                  </p>
+                )}
               </div>
 
               <div>
                 <Label>Brand *</Label>
-                <Input name="brand" value={form.brand} onChange={handleChange} placeholder="Toyota" />
-                {errors.brand && <p className="text-red-500 text-sm">{errors.brand}</p>}
+                <Input
+                  name="brand"
+                  value={form.brand}
+                  onChange={handleChange}
+                  placeholder="Toyota"
+                />
+                {errors.brand && (
+                  <p className="text-red-500 text-sm">{errors.brand}</p>
+                )}
               </div>
 
               <div>
                 <Label>Model *</Label>
-                <Input name="model" value={form.model} onChange={handleChange} placeholder="Corolla" />
-                {errors.model && <p className="text-red-500 text-sm">{errors.model}</p>}
+                <Input
+                  name="model"
+                  value={form.model}
+                  onChange={handleChange}
+                  placeholder="Corolla"
+                />
+                {errors.model && (
+                  <p className="text-red-500 text-sm">{errors.model}</p>
+                )}
               </div>
 
               <div>
@@ -214,29 +281,39 @@ const RequestPart = () => {
                   placeholder="e.g. 2018"
                   maxLength={4}
                 />
-                {errors.year && <p className="text-red-500 text-sm">{errors.year}</p>}
+                {errors.year && (
+                  <p className="text-red-500 text-sm">{errors.year}</p>
+                )}
               </div>
 
               <div>
                 <Label>Part *</Label>
-                <Input name="part" value={form.part} onChange={handleChange} placeholder="Headlight" />
-                 {errors.part && <p className="text-red-500 text-sm">{errors.part}</p>}
+                <Input
+                  name="part"
+                  value={form.part}
+                  onChange={handleChange}
+                  placeholder="Headlight"
+                />
+                {errors.part && (
+                  <p className="text-red-500 text-sm">{errors.part}</p>
+                )}
               </div>
 
-             <div>
-  <Label>Condition</Label>
+              <div>
+                <Label>Condition</Label>
 
-  <select
-    name="condition"
-    value={form.condition}
-    onChange={handleChange}
-    className="w-full border p-2 rounded"
-  >
-    <option value="Either">Either</option>
-    <option value="New">New</option>
-    <option value="Used">Used</option>
-  </select>
-</div>
+                <select
+                  name="condition"
+                  value={form.condition}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                >
+                  <option value="Either">Either</option>
+                  <option value="New">New</option>
+                  <option value="Used">Used</option>
+                </select>
+              </div>
+
               <div>
                 <Label>Budget (optional)</Label>
                 <Input
