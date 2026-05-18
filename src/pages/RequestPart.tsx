@@ -153,7 +153,7 @@ const RequestPart = () => {
 
         {/* ✅ LOGIN WARNING */}
         {!user && (
-          <div className="mb-6 rounded-xl border border-blue-50 bg-blue-50 p-4 text-center shadow-sm">
+          <div className="mb-6 rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
             <p className="text-sm text-blue-950 font-medium">
               Please login or create an account before submitting a part request.
             </p>
