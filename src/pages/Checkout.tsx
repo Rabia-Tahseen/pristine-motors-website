@@ -196,6 +196,8 @@ useEffect(() => {
       <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
+
+        {/* LEFT SIDE (2/3 FORM) */}
         <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
 
           {!user && (
@@ -220,6 +222,7 @@ useEffect(() => {
             </div>
           )}
 
+          {/* FORM CARD */}
           <div className="rounded-xl border p-6 space-y-4">
 
             <div>
@@ -268,10 +271,35 @@ useEffect(() => {
             {submitting ? "Placing Order..." : "Place Order"}
           </Button>
         </form>
+
+        {/* RIGHT SIDE (1/3 SUMMARY) */}
+        <div className="space-y-4">
+          <div className="rounded-xl border p-5 shadow-sm bg-white">
+            <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+
+            <div className="space-y-2 text-sm">
+              {items.map((i) => (
+                <div key={i.product.id} className="flex justify-between">
+                  <span>
+                    {i.product.title} × {i.quantity}
+                  </span>
+                  <span>{formatPrice(i.product.price * i.quantity)}</span>
+                </div>
+              ))}
+            </div>
+
+            <hr className="my-3" />
+
+            <div className="flex justify-between font-semibold">
+              <span>Total</span>
+              <span>{formattedSubtotal}</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
 );
 };
-
 export default Checkout;
