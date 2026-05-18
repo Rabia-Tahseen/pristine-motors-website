@@ -23,11 +23,9 @@ const About = () => (
           </div>
         </div>
 
-     <div className="flex justify-center">
-  <h1 className="text-2xl font-bold mb-6">
-    About Pristine Auto Hub
-  </h1>
-</div>
+    <h1 className="text-3xl font-bold mb-6 text-center">
+  About Pristine Auto Hub
+</h1>
 
         <p className="text-center text-muted-foreground text-sm font-body mt-2 uppercase tracking-wider">
           Est. 2025 — Genuine Japanese Auto Parts
