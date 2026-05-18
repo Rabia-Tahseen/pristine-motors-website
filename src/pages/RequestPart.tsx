@@ -89,7 +89,7 @@ const RequestPart = () => {
 
     // ✅ LOGIN CHECK ADDED HERE
     if (!user) {
-      navigate("/login");
+      navigate("/auth");
       return;
     }
 
