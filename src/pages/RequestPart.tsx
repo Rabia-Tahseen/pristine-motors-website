@@ -160,7 +160,7 @@ const RequestPart = () => {
 
             <div className="flex justify-center gap-3 mt-4">
               <Link to="/login">
-                <Button className="bg-blue-950 hover:bg-blue-700 text-white">
+                <Button className="bg-blue-950 hover:bg-blue-500 text-white">
                   Login
                 </Button>
               </Link>
@@ -168,7 +168,7 @@ const RequestPart = () => {
               <Link to="/signup">
                 <Button
                   variant="outline"
-                  className="border-blue-900 text-blue-900 hover:bg-blue-950"
+                  className="border-blue-900 text-blue-900 hover:bg-blue-599"
                 >
                   Create Account
                 </Button>
