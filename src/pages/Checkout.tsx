@@ -197,7 +197,7 @@ useEffect(() => {
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
 
 {!user && (
-  <div className="mb-6 w-full bg-white/90 p-5 rounded-xl shadow-md border border-blue-100 text-center">
+  <div className="mb-6 w-full rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
             <p className="text-sm text-blue-950 font-medium">
       Please login or create an account before placing your order.
     </p>
