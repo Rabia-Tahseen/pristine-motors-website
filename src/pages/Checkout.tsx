@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart, formatPrice } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 
 // Validation schema
 const checkoutSchema = z.object({
@@ -25,19 +26,28 @@ type CheckoutData = z.infer<typeof checkoutSchema>;
 const Checkout = () => {
   const { items, subtotal, formattedSubtotal, clearCart } = useCart();
   const navigate = useNavigate();
+  const { user } = useAdminAuth();
 
   const [form, setForm] = useState<CheckoutData>({
-    fullName: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "Lahore", // fixed default
-    notes: "",
-  });
+  fullName: "",
+  phone: "",
+  email: user?.email || "",
+  address: "",
+  city: "Lahore",
+  notes: "",
+});
 
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
+useEffect(() => {
+  if (user?.email) {
+    setForm((prev) => ({
+      ...prev,
+      email: user.email || "",
+    }));
+  }
+}, [user]);
+  
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -63,9 +73,16 @@ const Checkout = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setSubmitted(true);
+  // LOGIN REQUIRED
+  if (!user) {
+    toast.error("Please login before placing an order");
+    navigate("/login");
+    return;
+  }
+
+  setSubmitted(true);
 
     const errors = getErrors();
 
@@ -178,7 +195,37 @@ const Checkout = () => {
         </Link>
 
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+{/* LOGIN WARNING */}
+{!user && (
+  <div className="mb-6 rounded-xl border border-blue-200 bg-white p-5 shadow-sm">
+    
+    <h2 className="text-lg font-semibold text-blue-950">
+      Login Required
+    </h2>
 
+    <p className="text-sm text-gray-600 mt-2">
+      Please login or create an account before placing your order.
+    </p>
+
+    <div className="flex justify-center gap-3 mt-4">
+      <Link to="/login">
+        <Button className="bg-blue-950 hover:bg-blue-500 text-white">
+          Login
+        </Button>
+      </Link>
+
+      <Link to="/signup">
+        <Button
+          variant="outline"
+          className="border-blue-900 text-blue-900 hover:bg-blue-500 hover:text-white"
+        >
+          Create Account
+        </Button>
+      </Link>
+    </div>
+
+  </div>
+)}
         <div className="grid lg:grid-cols-3 gap-8">
 
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
@@ -213,11 +260,14 @@ const Checkout = () => {
               <div>
                 <Label>Email *</Label>
                 <Input
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  className={inputClass}
-                />
+  name="email"
+  value={form.email}
+  onChange={handleChange}
+  readOnly={!!user}
+  className={`${inputClass} ${
+    user ? "bg-gray-100 cursor-not-allowed" : ""
+  }`}
+/>
                 {errors.email && <p className={errorClass}>{errors.email}</p>}
               </div>
 
