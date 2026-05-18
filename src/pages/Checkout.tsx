@@ -203,32 +203,36 @@ useEffect(() => {
 
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
 
-            <div className="rounded-xl border p-6 space-y-4">
- {/* LOGIN BOX INSIDE CARD */}
-    {!user && (
-      <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
-        <p className="text-sm text-blue-950 font-medium">
-          Please login or create an account before placing your order.
-        </p>
+  {/* LOGIN BOX */}
+  {!user && (
+    <div className="rounded-xl border border-blue-200 bg-white/85 p-4 text-center shadow-sm">
+      <p className="text-sm text-blue-950 font-medium">
+        Please login or create an account before placing your order.
+      </p>
 
-        <div className="flex justify-center gap-3 mt-4">
-          <Link to="/login">
-            <Button className="bg-blue-950 hover:bg-blue-500 text-white">
-              Login
-            </Button>
-          </Link>
+      <div className="flex justify-center gap-3 mt-4">
+        <Link to="/login">
+          <Button className="bg-blue-950 hover:bg-blue-500 text-white">
+            Login
+          </Button>
+        </Link>
 
-          <Link to="/signup">
-            <Button
-              variant="outline"
-              className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
-            >
-              Create Account
-            </Button>
-          </Link>
-        </div>
+        <Link to="/signup">
+          <Button
+            variant="outline"
+            className="border-blue-900 text-blue-950 hover:bg-blue-500 hover:text-white"
+          >
+            Create Account
+          </Button>
+        </Link>
       </div>
-    )}
+    </div>
+  )}
+
+  {/* FULL FORM CARD (ALL FIELDS INSIDE) */}
+  <div className="rounded-xl border p-6 space-y-4">
+
+   
 
               {/* Full Name */}
               <div>
