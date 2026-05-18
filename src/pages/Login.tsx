@@ -6,6 +6,7 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 const Login = () => {
   const navigate = useNavigate();
 
+  const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,10 +18,15 @@ const Login = () => {
   const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const messages = [
+  "Signing in...",
+  "Checking credentials...",
+  "Almost there...",
+];
   const validateEmail = (v: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-  const handleLogin = async (e: React.FormEvent) => {
+ const handleLogin = async (e: React.FormEvent) => {
   e.preventDefault();
 
   setEmailError("");
@@ -28,11 +34,16 @@ const Login = () => {
   setGeneralError("");
   setSuccess("");
 
-  if (!email.trim()) return setEmailError("Email required");
-  if (!validateEmail(email)) return setEmailError("Invalid email");
-  if (!password.trim()) return setPasswordError("Password required");
-
   setLoading(true);
+
+  let index = 0;
+  setStep(0);
+
+  // 🔁 LOOP messages every 500ms
+  const interval = setInterval(() => {
+    index = (index + 1) % messages.length;
+    setStep(index);
+  }, 4200);
 
   try {
     const { error } = await supabase.auth.signInWithPassword({
@@ -41,19 +52,27 @@ const Login = () => {
     });
 
     if (error) {
+      clearInterval(interval);
       setGeneralError("Invalid email or password");
+      setLoading(false);
+      setStep(0);
       return;
     }
 
-    setSuccess("Welcome back! Redirecting...");
-    setTimeout(() => navigate("/"), 1600);
+    // stop loader
+    clearInterval(interval);
+
+    setSuccess("Login successful!");
+    setTimeout(() => navigate("/"), 600);
 
   } catch (err) {
+    clearInterval(interval);
     setGeneralError("Something went wrong. Try again.");
   } finally {
     setLoading(false);
   }
 };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] px-4 py-10">
 
@@ -149,10 +168,30 @@ const Login = () => {
 <button
   type="submit"
   disabled={loading}
-  className="w-full h-12 rounded-xl bg-[#0b1b3a] text-white font-semibold text-base transition 
-  hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.68] disabled:opacity-60"
+  className="
+    w-full h-12 rounded-xl
+    bg-[#0b1b3a]
+    text-white
+    font-semibold
+    text-base
+    transition
+    hover:shadow-lg
+    hover:-translate-y-0.5
+    active:scale-[0.98]
+    disabled:opacity-60
+    disabled:cursor-not-allowed
+    flex items-center justify-center
+  "
 >
-  {loading ? "Signing in..." : "Login"}
+ {loading ? (
+  <span className="flex items-center gap-2">
+    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+
+    <span>{messages[step]}</span>
+  </span>
+) : (
+  "Login"
+)}
 </button>
 
         {/* FOOTER */}
