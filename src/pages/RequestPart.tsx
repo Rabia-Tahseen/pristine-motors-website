@@ -161,20 +161,20 @@ const RequestPart = () => {
             </p>
 
             <div className="flex justify-center gap-3 mt-4">
-              <Link to="/login">
-                <Button className="bg-blue-950 hover:bg-blue-500 text-white">
-                  Login
-                </Button>
-              </Link>
+               <Link to="/login">
+    <Button className="bg-blue-950 text-white hover:-translate-y-1 transition-all duration-200">
+      Login
+    </Button>
+  </Link>
 
-              <Link to="/signup">
-                <Button
-                  variant="outline"
-                  className="border-blue-900 text-blue-900 hover:bg-blue-500"
-                >
-                  Create Account
-                </Button>
-              </Link>
+  <Link to="/signup">
+    <Button
+      variant="outline"
+      className="border-blue-900 text-blue-950 hover:-translate-y-1 transition-all duration-200 hover:bg-blue-50"
+    >
+      Create Account
+    </Button>
+  </Link>
             </div>
           </div>
         )}
