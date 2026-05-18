@@ -147,9 +147,6 @@ const Profile = () => {
           <ShoppingBag className="text-blue-600" />
           <div>
             <p className="font-semibold">View Cart</p>
-            <p className="text-sm text-gray-500">
-              Checkout your items ({cartItems.length})
-            </p>
           </div>
         </Link>
 
