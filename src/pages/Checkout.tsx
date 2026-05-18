@@ -214,7 +214,7 @@ useEffect(() => {
                 </Link>
 
                 <Link to="/signup">
-                  <Button variant="outline">
+                  <Button className="border-blue-950 bg-white hover:bg-blue-500 text-white">
                     Create Account
                   </Button>
                 </Link>
@@ -272,30 +272,6 @@ useEffect(() => {
           </Button>
         </form>
 
-        {/* RIGHT SIDE (1/3 SUMMARY) */}
-        <div className="space-y-4">
-          <div className="rounded-xl border p-5 shadow-sm bg-white">
-            <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-
-            <div className="space-y-2 text-sm">
-              {items.map((i) => (
-                <div key={i.product.id} className="flex justify-between">
-                  <span>
-                    {i.product.title} × {i.quantity}
-                  </span>
-                  <span>{formatPrice(i.product.price * i.quantity)}</span>
-                </div>
-              ))}
-            </div>
-
-            <hr className="my-3" />
-
-            <div className="flex justify-between font-semibold">
-              <span>Total</span>
-              <span>{formattedSubtotal}</span>
-            </div>
-          </div>
-        </div>
 
       </div>
     </div>
