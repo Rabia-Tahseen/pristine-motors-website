@@ -21,45 +21,42 @@ const Profile = () => {
 
       const userId = user.id;
 
-      // ORDERS
-      const { data: orderData } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+      const [orderRes, requestRes, cartRes] = await Promise.all([
+        supabase
+          .from("orders")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false }),
 
-      // REQUESTS
-      const { data: requestData } = await supabase
-        .from("part_requests")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+        supabase
+          .from("part_requests")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false }),
 
-      // CART ITEMS
-      const { data: cartData } = await supabase
-        .from("cart_items")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+        supabase
+          .from("cart_items")
+          .select("*")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false }),
+      ]);
 
-      setOrders(orderData || []);
-      setRequests(requestData || []);
-      setCartItems(cartData || []);
+      setOrders(orderRes.data || []);
+      setRequests(requestRes.data || []);
+      setCartItems(cartRes.data || []);
     } catch (err) {
-      console.error("Profile fetch error:", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ FIX: only run when user is ready
+  // ✅ FIX 1: initial load
   useEffect(() => {
-    if (user?.id) {
-      fetchData();
-    }
+    fetchData();
   }, [user?.id]);
 
-  // ✅ refetch when coming back to page
+  // ✅ FIX 2: refetch when you come back to profile tab
   useEffect(() => {
     if (location.pathname === "/profile" && user?.id) {
       fetchData();
@@ -82,7 +79,7 @@ const Profile = () => {
   const getOrderName = (order: any) => {
     const items = order.items_ordered;
 
-    if (Array.isArray(items) && items.length > 0) {
+    if (Array.isArray(items)) {
       return items.map((i: any) => i.name || i.title || "Item").join(" + ");
     }
 
