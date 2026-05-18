@@ -59,9 +59,9 @@ const ContactSection = () => (
         viewport={{ once: true }}
         className="text-center mb-8"
       >
-        <h2 className="text-2xl font-bold mb-6">
+        <h1 className="text-2xl font-bold mb-6">
  Get in Touch
-</h2>
+</h1>
         <p className="mt-2 text-gray-700 text-sm">
           Contact the owner directly through any of these channels.
         </p>
