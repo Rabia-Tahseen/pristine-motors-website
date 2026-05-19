@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 type HeroCar = {
-  image_url: string;
+  images: string[];
 };
 
 const Hero = () => {
@@ -25,7 +25,7 @@ const Hero = () => {
     const fetchCars = async () => {
       const { data } = await supabase
         .from("products")
-        .select("image_url")
+        .select("images")
         .eq("product_type", "car")
         .eq("is_featured", true);
 
@@ -74,7 +74,6 @@ const Hero = () => {
   };
 
   const currentImage =
-    cars[index]?.image_url ||
     "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
 
   return (
