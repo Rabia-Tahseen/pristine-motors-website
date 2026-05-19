@@ -30,63 +30,74 @@ export const AdminAuthProvider = ({
   const [loading, setLoading] = useState(true);
 
   // FETCH ROLE
-  const fetchRole = async (userId: string) => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", userId)
-      .maybeSingle();
+ const fetchRole = async (userId: string) => {
+  if (!userId) return "user";
 
-    if (error) {
-      console.error(error);
-      return "user";
-    }
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
 
-    const userRole = data?.role || "user";
-    setRole(userRole);
-
-    return userRole;
-  };
-
-  // INIT AUTH
-  useEffect(() => {
-    const getInitialSession = async () => {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const currentUser = session?.user || null;
-
-  setUser(currentUser);
-
-  if (currentUser) {
-    await fetchRole(currentUser.id);
+  if (error) {
+    console.error(error);
+    return "user";
   }
 
-  setLoading(false);
+  const userRole = data?.role || "user";
+  setRole(userRole);
+
+  return userRole;
 };
+  // INIT AUTH
+useEffect(() => {
+  let mounted = true;
 
-getInitialSession();
+  const init = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    const { data: listener } =
-      supabase.auth.onAuthStateChange(async (_, session) => {
-        const currentUser = session?.user || null;
+    if (!mounted) return;
 
-        setUser(currentUser);
+    const currentUser = session?.user ?? null;
 
-        if (currentUser) {
-          await fetchRole(currentUser.id);
-        } else {
-          setRole(null);
-        }
+    setUser(currentUser);
 
-        setLoading(false);
-      });
+    if (currentUser) {
+      await fetchRole(currentUser.id);
+    }
 
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
+    setLoading(false);
+  };
+
+  init();
+
+  const { data: listener } = supabase.auth.onAuthStateChange(
+    async (_event, session) => {
+      if (!mounted) return;
+
+      setLoading(true);
+
+      const currentUser = session?.user ?? null;
+
+      setUser(currentUser);
+
+      if (currentUser) {
+        await fetchRole(currentUser.id);
+      } else {
+        setRole(null);
+      }
+
+      setLoading(false);
+    }
+  );
+
+  return () => {
+    mounted = false;
+    listener.subscription.unsubscribe();
+  };
+}, []);
 
   // LOGIN
   const signIn = async (email: string, password: string) => {
@@ -104,8 +115,6 @@ getInitialSession();
     if (!user) {
       return { error: "Login failed" };
     }
-
-    setUser(user);
 
     const userRole = await fetchRole(user.id);
 
@@ -135,15 +144,19 @@ getInitialSession();
     return res;
   };
 
- const signOut = async () => {
-  await supabase.auth.signOut();
+const signOut = async () => {
+  setLoading(true);
 
   setUser(null);
   setRole(null);
 
-  window.location.href = "/";
-};
+  await supabase.auth.signOut({ scope: "global" });
 
+  setLoading(false);
+
+  window.location.replace("/");
+};
+  
   return (
     <AdminAuthContext.Provider
       value={{
