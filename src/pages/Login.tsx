@@ -1,77 +1,99 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
 
+  const { signIn } = useAdminAuth();
+
   const [step, setStep] = useState(0);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
   const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
 
   const messages = [
-  "Signing in...",
-  "Checking credentials...",
-  "Almost there...",
-];
+    "Signing in...",
+    "Checking credentials...",
+    "Almost there...",
+  ];
+
   const validateEmail = (v: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
- const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  setEmailError("");
-  setPasswordError("");
-  setGeneralError("");
-  setSuccess("");
+    setEmailError("");
+    setPasswordError("");
+    setGeneralError("");
+    setSuccess("");
 
-  setLoading(true);
-
-  let index = 0;
-  setStep(0);
-
-  // 🔁 LOOP messages every 500ms
-  const interval = setInterval(() => {
-    index = (index + 1) % messages.length;
-    setStep(index);
-  }, 4200);
-
-  try {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password: password.trim(),
-    });
-
-    if (error) {
-      clearInterval(interval);
-      setGeneralError("Invalid email or password");
-      setLoading(false);
-      setStep(0);
+    if (!email.trim()) {
+      setEmailError("Email required");
       return;
     }
 
-    // stop loader
-    clearInterval(interval);
+    if (!validateEmail(email)) {
+      setEmailError("Invalid email");
+      return;
+    }
 
-    setSuccess("Login successful!");
-    setTimeout(() => navigate("/"), 600);
+    if (!password.trim()) {
+      setPasswordError("Password required");
+      return;
+    }
 
-  } catch (err) {
-    clearInterval(interval);
-    setGeneralError("Something went wrong. Try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+
+    let index = 0;
+
+    const interval = setInterval(() => {
+      index = (index + 1) % messages.length;
+      setStep(index);
+    }, 1200);
+
+    try {
+      const res = await signIn(
+        email.trim(),
+        password.trim()
+      );
+
+      clearInterval(interval);
+
+      if (res?.error) {
+        setGeneralError(res.error);
+        setLoading(false);
+        return;
+      }
+
+      setSuccess("Login successful!");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 700);
+
+    } catch (err) {
+      clearInterval(interval);
+
+      setGeneralError("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] px-4 py-10">
@@ -86,18 +108,20 @@ const Login = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-[#0b1b3a]">
             Welcome Back
           </h1>
+
           <p className="text-sm text-gray-500 mt-1">
             Login to continue
           </p>
         </div>
 
-        {/* ERRORS / SUCCESS */}
+        {/* ERRORS */}
         {generalError && (
           <p className="text-red-500 text-sm text-center">
             {generalError}
           </p>
         )}
 
+        {/* SUCCESS */}
         {success && (
           <p className="text-green-600 text-sm text-center">
             {success}
@@ -107,7 +131,11 @@ const Login = () => {
         {/* EMAIL */}
         <div>
           <div className="relative">
-            <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
+            <Mail
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
 
             <input
               value={email}
@@ -119,21 +147,30 @@ const Login = () => {
               className={`
                 w-full h-12 pl-11 pr-4 rounded-xl border text-sm outline-none
                 transition
-                focus:ring-1 focus:ring-[#0b1b3a] focus:border-[#0b1b3a]
-                ${emailError ? "border-red-400" : "border-gray-200"}
+                focus:ring-1 focus:ring-[#0b1b3a]
+                focus:border-[#0b1b3a]
+                ${emailError
+                  ? "border-red-400"
+                  : "border-gray-200"}
               `}
             />
           </div>
 
           {emailError && (
-            <p className="text-red-500 text-xs mt-1">{emailError}</p>
+            <p className="text-red-500 text-xs mt-1">
+              {emailError}
+            </p>
           )}
         </div>
 
         {/* PASSWORD */}
         <div>
           <div className="relative">
-            <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
+            <Lock
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
 
             <input
               type={showPassword ? "text" : "password"}
@@ -146,60 +183,73 @@ const Login = () => {
               className={`
                 w-full h-12 pl-11 pr-12 rounded-xl border text-sm outline-none
                 transition
-                focus:ring-1 focus:ring-[#0b1b3a] focus:border-[#0b1b3a]
-                ${passwordError ? "border-red-400" : "border-gray-200"}
+                focus:ring-1 focus:ring-[#0b1b3a]
+                focus:border-[#0b1b3a]
+                ${passwordError
+                  ? "border-red-400"
+                  : "border-gray-200"}
               `}
             />
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#0b1b3a]"
             >
-              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              {showPassword
+                ? <Eye size={18} />
+                : <EyeOff size={18} />}
             </button>
           </div>
 
           {passwordError && (
-            <p className="text-red-500 text-xs mt-1">{passwordError}</p>
+            <p className="text-red-500 text-xs mt-1">
+              {passwordError}
+            </p>
           )}
         </div>
-{/* BUTTON */}
-<button
-  type="submit"
-  disabled={loading}
-  className="
-    w-full h-12 rounded-xl
-    bg-[#0b1b3a]
-    text-white
-    font-semibold
-    text-base
-    transition
-    hover:shadow-lg
-    hover:-translate-y-0.5
-    active:scale-[0.98]
-    disabled:opacity-60
-    disabled:cursor-not-allowed
-    flex items-center justify-center
-  "
->
- {loading ? (
-  <span className="flex items-center gap-2">
-    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
 
-    <span>{messages[step]}</span>
-  </span>
-) : (
-  "Login"
-)}
-</button>
+        {/* BUTTON */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="
+            w-full h-12 rounded-xl
+            bg-[#0b1b3a]
+            text-white
+            font-semibold
+            text-base
+            transition
+            hover:shadow-lg
+            hover:-translate-y-0.5
+            active:scale-[0.98]
+            disabled:opacity-60
+            disabled:cursor-not-allowed
+            flex items-center justify-center
+          "
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+
+              <span>{messages[step]}</span>
+
+            </span>
+          ) : (
+            "Login"
+          )}
+        </button>
 
         {/* FOOTER */}
         <p className="text-center text-[15px] text-gray-500">
           Don&apos;t have an account?{" "}
+
           <Link
             to="/signup"
-            className="text-[#0b1b3a] font-semibold transition hover:underline underline-offset-4"
+            className="text-[#0b1b3a] font-semibold hover:underline underline-offset-4"
           >
             Create account
           </Link>
