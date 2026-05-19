@@ -30,8 +30,11 @@ export const AdminAuthProvider = ({
   const [loading, setLoading] = useState(true);
 
   // FETCH ROLE
- const fetchRole = async (userId: string) => {
-  if (!userId) return "user";
+const fetchRole = async (userId: string) => {
+  if (!userId) {
+    setRole("user");
+    return "user";
+  }
 
   const { data, error } = await supabase
     .from("profiles")
@@ -41,6 +44,7 @@ export const AdminAuthProvider = ({
 
   if (error) {
     console.error(error);
+    setRole("user");
     return "user";
   }
 
@@ -75,22 +79,18 @@ useEffect(() => {
 
   const { data: listener } = supabase.auth.onAuthStateChange(
     async (_event, session) => {
-      if (!mounted) return;
+  const currentUser = session?.user ?? null;
 
-      setLoading(true);
+  setUser(currentUser);
 
-      const currentUser = session?.user ?? null;
+  if (currentUser?.id) {
+    await fetchRole(currentUser.id);
+  } else {
+    setRole(null);
+  }
 
-      setUser(currentUser);
-
-      if (currentUser) {
-        await fetchRole(currentUser.id);
-      } else {
-        setRole(null);
-      }
-
-      setLoading(false);
-    }
+  queueMicrotask(() => setLoading(false));
+}
   );
 
   return () => {
@@ -147,14 +147,9 @@ useEffect(() => {
 const signOut = async () => {
   setLoading(true);
 
-  setUser(null);
-  setRole(null);
-
   await supabase.auth.signOut({ scope: "global" });
 
-  setLoading(false);
-
-  window.location.replace("/");
+  window.location.replace("/login");
 };
   
   return (
