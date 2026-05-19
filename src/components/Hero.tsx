@@ -65,7 +65,7 @@ const Hero = () => {
 
     setLoading(true);
 
-    const isCar = /car|bmw|toyota|honda|suv|suzuki|corolla|daihatsu|sedan|taft|jdm/i.test(q);
+    const isCar = /car|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm/i.test(q);
 
     setTimeout(() => {
       navigate(isCar ? `/cars?search=${q}` : `/parts?search=${q}`);
