@@ -161,28 +161,26 @@ const Hero = () => {
 
           {/* INPUT */}
           <input
+  id="hero-search"
+  name="search"
   value={query}
   onChange={(e) => setQuery(e.target.value)}
   onFocus={() => setFocus(true)}
   onBlur={() => setFocus(false)}
   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
   placeholder={placeholder}
+  autoComplete="off"
   className="
     flex-1
     h-full
-
     px-2 sm:px-3
-
     text-xs sm:text-sm md:text-base
     text-black
-
     outline-none
     bg-transparent
-
     placeholder:text-gray-500
   "
 />
-
           {/* BUTTON */}
           <button
   onClick={handleSearch}
