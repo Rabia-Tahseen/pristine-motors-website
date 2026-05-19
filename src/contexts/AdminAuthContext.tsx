@@ -50,21 +50,23 @@ export const AdminAuthProvider = ({
 
   // INIT AUTH
   useEffect(() => {
-    const init = async () => {
-      const { data } = await supabase.auth.getUser();
+    const getInitialSession = async () => {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-      const currentUser = data.user;
+  const currentUser = session?.user || null;
 
-      setUser(currentUser);
+  setUser(currentUser);
 
-      if (currentUser) {
-        await fetchRole(currentUser.id);
-      }
+  if (currentUser) {
+    await fetchRole(currentUser.id);
+  }
 
-      setLoading(false);
-    };
+  setLoading(false);
+};
 
-    init();
+getInitialSession();
 
     const { data: listener } =
       supabase.auth.onAuthStateChange(async (_, session) => {
@@ -134,10 +136,10 @@ export const AdminAuthProvider = ({
   };
 
  const signOut = async () => {
+  await supabase.auth.signOut();
+
   setUser(null);
   setRole(null);
-
-  await supabase.auth.signOut();
 
   window.location.href = "/";
 };
