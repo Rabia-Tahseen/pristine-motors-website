@@ -15,16 +15,12 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // ✅ only redirect once loading is done and user is confirmed admin
+  // ✅ if already logged in as admin, redirect to panel
   useEffect(() => {
     if (!loading && user && role === "admin") {
       navigate("/admin", { replace: true });
     }
   }, [user, role, loading, navigate]);
-
-  // ✅ show nothing while auth is still initializing
-  // prevents flash and stuck button
-  if (loading) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +32,7 @@ const AdminLogin = () => {
 
       if (res?.error) {
         setError(res.error);
-        return; // ✅ finally will still run and clear submitting
+        return;
       }
 
       navigate("/admin", { replace: true });
@@ -44,9 +40,16 @@ const AdminLogin = () => {
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
     } finally {
-      setSubmitting(false); // ✅ always clears
+      setSubmitting(false);
     }
   };
+
+  // ✅ show spinner while auth initializes, not a blank screen
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-muted/30">
+      <span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
