@@ -39,6 +39,13 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+  SLIDE_IMAGES.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}, []);
+
   const handleSearch = () => {
     const q = query.trim();
     if (!q || loading) return;
@@ -55,16 +62,16 @@ const Hero = () => {
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
       {/* BACKGROUND SLIDESHOW */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.img
-          key={SLIDE_IMAGES[index]}
-          src={SLIDE_IMAGES[index]}
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          transition={{ duration: 1.0, ease: "easeInOut" }}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+  key={SLIDE_IMAGES[index]}
+  src={SLIDE_IMAGES[index]}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0, transition: { duration: 0.3, ease: "easeOut" } }}
+  transition={{ duration: 0.8, ease: "easeIn" }}
+  className="absolute inset-0 w-full h-full object-cover"
+/>
       </AnimatePresence>
 
       {/* OVERLAY */}
