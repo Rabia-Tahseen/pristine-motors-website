@@ -10,6 +10,7 @@ const SLIDE_IMAGES = [
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644886610-z4sclqo0agd.jpeg",
 ];
 
+
 const FULL_PLACEHOLDER = "Search cars or parts...";
 
 const CAR_REGEX =
