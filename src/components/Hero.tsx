@@ -11,7 +11,6 @@ const SLIDE_IMAGES = [
 ];
 
 const FULL_PLACEHOLDER = "Search cars or parts...";
-
 const PARTS_OVERRIDE_REGEX =
   /\b(part|parts|spare|spares|engine|oil|filter|brake|tyre|tire|rim|bumper|mirror|headlight|taillight|sensor|clutch|gearbox|alternator|battery|exhaust|radiator|shock|absorber|suspension|belt|bulb|fuse|wiper|seat|interior|exterior|accessory|accessories)\b/i;
 
