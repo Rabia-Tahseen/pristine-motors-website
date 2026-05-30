@@ -24,7 +24,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
-    }, 5000);
+    }, 5500);
     return () => clearInterval(t);
   }, []);
 
@@ -35,7 +35,7 @@ const Hero = () => {
       setPlaceholder(fullText.slice(0, i + 1));
       i++;
       if (i === fullText.length) clearInterval(interval);
-    }, 45);
+    }, 60);
     return () => clearInterval(interval);
   }, []);
 
@@ -68,7 +68,7 @@ const Hero = () => {
   src={SLIDE_IMAGES[index]}
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
-  exit={{ opacity: 0, transition: { duration: 0.3, ease: "easeOut" } }}
+  exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeOut" } }}
   transition={{ duration: 0.8, ease: "easeIn" }}
   className="absolute inset-0 w-full h-full object-cover"
 />
