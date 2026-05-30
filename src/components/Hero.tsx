@@ -59,7 +59,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
+    <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b1b3a] via-[#1e3a8a] to-[#0ea5e9]">
 
       {/* BACKGROUND SLIDESHOW */}
       <AnimatePresence mode="wait">
@@ -75,7 +75,7 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
