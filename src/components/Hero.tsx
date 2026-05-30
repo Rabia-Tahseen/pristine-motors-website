@@ -26,10 +26,8 @@ const Hero = () => {
     const q = query.trim();
     if (!q || loading) return;
     setLoading(true);
-
     const isCar =
       /car|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm/i.test(q);
-
     setTimeout(() => {
       navigate(isCar ? `/cars?search=${q}` : `/parts?search=${q}`);
       setLoading(false);
@@ -40,7 +38,7 @@ const Hero = () => {
     "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
 
   return (
-    <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
+    <section className="relative h-[420px] sm:h-[480px] md:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
       {/* BACKGROUND IMAGE */}
       <AnimatePresence mode="wait">
@@ -55,49 +53,42 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY — heavier in center where image is lightest */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/65 to-black/80" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
+      {/* OVERLAY — consistent dark across the whole hero */}
+      <div className="absolute inset-0 bg-black/55" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30" />
 
       {/* CONTENT */}
-      <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white">
+      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white gap-5">
 
-        {/* TITLE — smaller, tighter */}
+        {/* TITLE */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
-          className="
-            text-[22px] sm:text-[30px] md:text-[40px]
-            font-bold leading-[1.1] tracking-tight
-            drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]
-          "
+          className="text-[28px] sm:text-[38px] md:text-[48px] font-bold leading-tight tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
         >
           Premium Cars &amp; Auto Parts
         </motion.h1>
 
-        {/* SEARCH BAR — narrower, tighter top margin */}
+        {/* SEARCH BAR */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6 }}
           className={`
-            mt-5 sm:mt-6
             flex items-center
             rounded-full overflow-hidden
-            w-[92%] sm:w-[80%] md:w-[70%]
-            max-w-[560px]
-            h-[40px] sm:h-[46px] md:h-[50px]
+            w-full max-w-[580px]
+            h-[50px] sm:h-[54px]
             border transition-all duration-300
-            ${
-              focus
-                ? "border-blue-400/60 shadow-[0_0_0_3px_rgba(96,165,250,0.15)] bg-white"
-                : "border-white/20 bg-white shadow-lg shadow-black/40"
+            ${focus
+              ? "border-blue-400/70 shadow-[0_0_0_3px_rgba(96,165,250,0.2)] bg-white"
+              : "border-transparent bg-white shadow-xl shadow-black/40"
             }
           `}
         >
           <div className="pl-4 pr-2 flex items-center text-gray-400 flex-shrink-0">
-            <Search size={16} />
+            <Search size={17} />
           </div>
 
           <input
@@ -110,19 +101,13 @@ const Hero = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder={placeholder}
             autoComplete="off"
-            className="
-              flex-1 h-full px-2
-              text-sm
-              text-gray-800
-              bg-transparent outline-none
-              placeholder:text-gray-400
-            "
+            className="flex-1 h-full px-2 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
           />
 
           <button
             onClick={handleSearch}
             className="
-              flex-shrink-0 h-full px-5 sm:px-6
+              flex-shrink-0 h-full px-6
               rounded-r-full
               bg-[#0b1b3a] text-white
               text-sm font-semibold
@@ -144,33 +129,34 @@ const Hero = () => {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="flex gap-3 mt-4 sm:mt-5"
+          className="flex gap-3"
         >
-          {/* Primary — solid white */}
+          {/* Primary — solid dark navy, always visible */}
           <Link
             to="/cars"
             className="
-              px-6 py-2 rounded-xl
+              px-7 py-2.5 rounded-xl
               font-semibold text-sm
-              bg-white text-[#0b1b3a]
-              shadow-md shadow-black/30
-              hover:bg-blue-50 hover:-translate-y-px
+              bg-[#0b1b3a] text-white
+              border border-[#0b1b3a]
+              shadow-lg shadow-black/30
+              hover:bg-[#162d5e] hover:border-[#162d5e] hover:-translate-y-px
               transition-all duration-200
             "
           >
             Explore Cars
           </Link>
 
-          {/* Secondary — dark ghost so it shows on light bg */}
+          {/* Secondary — white, always visible */}
           <Link
             to="/parts"
             className="
-              px-6 py-2 rounded-xl
+              px-7 py-2.5 rounded-xl
               font-semibold text-sm
-              bg-white/20 text-white
-              border border-white/70
-              hover:bg-white/30 hover:border-white hover:-translate-y-px
-              backdrop-blur-sm
+              bg-white text-[#0b1b3a]
+              border border-white
+              shadow-lg shadow-black/30
+              hover:bg-gray-100 hover:-translate-y-px
               transition-all duration-200
             "
           >
@@ -184,4 +170,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
