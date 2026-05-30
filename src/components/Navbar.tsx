@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -19,6 +19,7 @@ const Navbar = () => {
   const [partCategories, setPartCategories] = useState<string[]>([]);
 
   const location = useLocation();
+const navigate = useNavigate();
   const { totalItems } = useCart();
   const { user, signOut } = useAdminAuth();
 
@@ -75,6 +76,7 @@ const Navbar = () => {
   const handleLogout = async () => {
   try {
     await signOut();
+    navigate("/login");
   } catch (error) {
     console.error("Logout failed:", error);
   }
@@ -287,9 +289,9 @@ const Navbar = () => {
           </div>
         ) : (
           <button
-            onClick={() => {
-              handleLogout();
-              setMobileOpen(false);
+            onClick={async () => {
+  await handleLogout();
+  setMobileOpen(false);
             }}
             className="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg"
           >
