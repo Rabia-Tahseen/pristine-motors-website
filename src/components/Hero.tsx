@@ -53,8 +53,8 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY — slightly darker than before */}
-      <div className="absolute inset-0 bg-black/45" />
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/42" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
       {/* CONTENT */}
@@ -67,8 +67,8 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 0.07 }}
           className="
             text-[24px] sm:text-[32px] md:text-[42px]
-            font-bold leading-[1.1] tracking-[-0.01em]
-            drop-shadow-[0_2px_16px_rgba(0,0,0,0.6)]
+            font-semibold leading-[1.1] tracking-[-0.01em]
+            drop-shadow-[0_2px_16px_rgba(0,0,0,0.4)]
             mb-7
           "
         >
@@ -133,7 +133,7 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* CTA BUTTONS — bigger, more presence */}
+        {/* CTA BUTTONS */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,6 +171,16 @@ const Hero = () => {
             Explore Parts
           </Link>
         </motion.div>
+
+        {/* STATS ROW */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35, duration: 0.6 }}
+          className="mt-6 text-white/40 text-xs tracking-wide"
+        >
+          500+ Cars &nbsp;·&nbsp; 2,000+ Parts &nbsp;·&nbsp; Trusted Since 2020
+        </motion.p>
 
       </div>
     </section>
