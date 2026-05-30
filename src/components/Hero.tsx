@@ -55,20 +55,10 @@ const Hero = () => {
 
       {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/52" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/25" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/80" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-12 sm:-mt-14 md:-mt-16">
-
-        {/* EYEBROW */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-3 text-[11px] sm:text-xs font-medium tracking-[0.22em] uppercase text-white/55"
-        >
-          Pakistan's Trusted Auto Marketplace
-        </motion.p>
 
         {/* TITLE — refined weight, elegant sizing */}
         <motion.h1
@@ -82,8 +72,7 @@ const Hero = () => {
             mb-7
           "
         >
-          Premium Cars &amp;{" "}
-          <span className="text-blue-300">Auto Parts</span>
+          Premium Cars &amp Auto Parts
         </motion.h1>
 
         {/* SEARCH BAR — longer, shorter height, no scale on focus */}
