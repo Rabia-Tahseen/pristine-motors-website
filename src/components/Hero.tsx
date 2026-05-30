@@ -73,13 +73,14 @@ const Hero = () => {
         key={src}
         src={src}
         className="absolute inset-0 w-full h-full object-cover"
+        initial={false}
         animate={{
           opacity: active ? 1 : 0,
-          scale: active ? 1.05 : 1.15,
+          scale: active ? 1.06 : 1.12,
         }}
-        transition={{ duration: 1.4, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
         style={{
-          filter: active ? "blur(0px)" : "blur(8px)",
+          filter: active ? "blur(0px)" : "blur(10px)",
         }}
       />
     );
