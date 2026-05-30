@@ -70,17 +70,17 @@ const Hero = () => {
       key={src}
       src={src}
       className="absolute inset-0 w-full h-full object-cover"
-      initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+      initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
       animate={{
         opacity: i === index ? 1 : 0,
         scale: i === index ? 1.05 : 1.1,
-        filter: i === index ? "blur(0px)" : "blur(12px)",
+        filter: i === index ? "blur(0px)" : "blur(8px)",
       }}
-      transition={{ duration: 1.2, ease: "easeOut" }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
     />
   ))}
 </div>
-      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/40 to-transparent" />
+      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
