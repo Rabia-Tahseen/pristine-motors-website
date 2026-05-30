@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Lock, Mail } from "lucide-react";
 
 const AdminLogin = () => {
-  const { adminSignIn, user, role, loading } = useAdminAuth();
+  const { adminSignIn, user, role } = useAdminAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -15,20 +15,12 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // ✅ once we know user is admin, redirect
+  // ✅ if already logged in as admin, redirect silently in background
   useEffect(() => {
-    if (!loading && user && role === "admin") {
+    if (user && role === "admin") {
       navigate("/admin", { replace: true });
     }
-  }, [user, role, loading, navigate]);
-
-  // ✅ only show spinner while loading
-  // as soon as loading is false and no admin → show the form instantly
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30">
-      <span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+  }, [user, role, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +44,7 @@ const AdminLogin = () => {
     }
   };
 
+  // ✅ always show the form immediately, no loading check
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
       <div className="w-full max-w-md bg-card border rounded-2xl shadow-xl p-8">
