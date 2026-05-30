@@ -68,14 +68,14 @@ const Hero = () => {
   src={SLIDE_IMAGES[index]}
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
-  exit={{ opacity: 0, transition: { duration: 0.7, ease: "easeOut" } }}
+  exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeOut" } }}
   transition={{ duration: 0.8, ease: "easeIn" }}
   className="absolute inset-0 w-full h-full object-cover"
 />
       </AnimatePresence>
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/70" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
