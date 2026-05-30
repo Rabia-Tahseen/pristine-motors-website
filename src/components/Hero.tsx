@@ -75,11 +75,11 @@ const Hero = () => {
         className="absolute inset-0 w-full h-full object-cover"
         initial={false}
         animate={{
-          opacity: active ? 1 : 0,
-          scale: active ? 1.05 : 1.1,
-          filter: active ? "blur(0px)" : "blur(8px)",
-        }}
-        transition={{ duration: 1.4, ease: "easeOut" }}
+  opacity: active ? 1 : 0,
+  scale: active ? 1.05 : 1.12,
+  filter: active ? "blur(0px)" : "blur(12px)",
+}}
+transition={{ duration: 1.5, ease: "easeInOut" }}
       />
     );
   })}
