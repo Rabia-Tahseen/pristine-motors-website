@@ -10,27 +10,43 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [carBrands, setCarBrands] = useState<string[]>([]);
   const [partCategories, setPartCategories] = useState<string[]>([]);
-
-  // ✅ own local user state, read directly from Supabase
   const [user, setUser] = useState<any>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
   const { totalItems } = useCart();
-
   const activePath = location.pathname;
 
-  // ✅ listen to Supabase session directly, no AdminAuthContext
+  // ✅ check role — if admin, don't treat as logged in on public site
+  const resolveUser = async (sessionUser: any) => {
+    if (!sessionUser) {
+      setUser(null);
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", sessionUser.id)
+      .maybeSingle();
+
+    if (profile?.role === "admin") {
+      setUser(null); // admin is invisible on public site
+    } else {
+      setUser(sessionUser);
+    }
+  };
+
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      await resolveUser(user);
     };
 
     getUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      resolveUser(session?.user ?? null);
     });
 
     return () => listener.subscription.unsubscribe();
@@ -75,7 +91,6 @@ const Navbar = () => {
     return a.slice(0, 6);
   };
 
-  // ✅ calls Supabase directly, navigates home
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -218,7 +233,6 @@ const Navbar = () => {
                   </Link>
                 </div>
               ) : (
-                // ✅ close menu first, then logout
                 <button
                   onClick={() => {
                     setMobileOpen(false);
