@@ -81,18 +81,20 @@ const Hero = () => {
           className="mt-6 sm:mt-8 w-[94%] sm:w-[88%] md:w-[80%] max-w-[720px]"
         >
           <div
-            className={`
-              flex items-center
-              rounded-full overflow-hidden
-              h-[42px] sm:h-[48px] md:h-[52px]
-              bg-white/90
-              transition-shadow duration-200
-              ${focus
-                ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
-                : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
-              }
-            `}
-          >
+  className={`
+    flex items-center
+    rounded-full overflow-hidden
+    h-[42px] sm:h-[48px] md:h-[52px]
+    transition-shadow duration-200
+    bg-white/95
+    hover:bg-white
+    focus-within:bg-white
+    ${focus
+      ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
+      : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+    }
+  `}
+>
             <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
               <Search size={16} />
             </div>
