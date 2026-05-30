@@ -65,7 +65,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
           className="
-    text-[24px] sm:text-[32px] md:text-[42px]
+    text-[22px] sm:text-[30px] md:text-[40px]
     font-semibold leading-[1.05] tracking-tight
     drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]
           "
@@ -144,7 +144,7 @@ const Hero = () => {
             className="
               px-8 py-3 rounded-xl
               font-semibold text-sm sm:text-base
-              bg-white text-[#0b1b3a]
+              bg-white/85 text-[#0b1b3a]
               border border-blue-950/80
               shadow-lg shadow-black/30
               hover:bg-blue-50 hover:-translate-y-px
