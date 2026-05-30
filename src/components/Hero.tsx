@@ -53,11 +53,11 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/55" />
-      
+      {/* OVERLAY — heavy top/bottom, medium center */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/70" />
+
       {/* CONTENT */}
-      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-12 sm:-mt-14 md:-mt-16">
+      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-20 sm:-mt-24 md:-mt-28">
 
         {/* TITLE */}
         <motion.h1
@@ -172,7 +172,6 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-     
       </div>
     </section>
   );
