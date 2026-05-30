@@ -24,7 +24,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
-    }, 5500);
+    }, 4500);
     return () => clearInterval(t);
   }, []);
 
