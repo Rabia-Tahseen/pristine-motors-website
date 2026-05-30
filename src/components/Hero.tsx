@@ -2,16 +2,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+type HeroCar = {
+  images: string[];
+};
+
+const FALLBACK_IMAGE =
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cars, setCars] = useState<HeroCar[]>([]);
+  const [index, setIndex] = useState(0);
 
   const navigate = useNavigate();
   const fullText = "Search cars or parts...";
 
+  // Typewriter placeholder
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -21,6 +32,32 @@ const Hero = () => {
     }, 60);
     return () => clearInterval(interval);
   }, []);
+
+  // Fetch hero cars from Supabase
+  useEffect(() => {
+    supabase
+      .from("cars")
+      .select("images")
+      .not("images", "is", null)
+      .limit(5)
+      .then(({ data }) => {
+        if (data && data.length > 0) setCars(data as HeroCar[]);
+      });
+  }, []);
+
+  // Auto-advance slideshow
+  useEffect(() => {
+    if (cars.length <= 1) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % cars.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [cars.length]);
+
+  const currentImage =
+    cars.length > 0 && cars[index]?.images?.[0]
+      ? cars[index].images[0]
+      : FALLBACK_IMAGE;
 
   const handleSearch = () => {
     const q = query.trim();
@@ -34,13 +71,10 @@ const Hero = () => {
     }, 200);
   };
 
-  const currentImage =
-    "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
-
   return (
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
-      {/* BACKGROUND IMAGE */}
+      {/* BACKGROUND SLIDESHOW */}
       <AnimatePresence mode="wait">
         <motion.img
           key={currentImage}
@@ -56,7 +90,7 @@ const Hero = () => {
       {/* OVERLAY — heavy top/bottom, lighter center */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/70" />
 
-      {/* CONTENT — naturally centered, no negative margin hacks */}
+      {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
 
         {/* TITLE */}
@@ -65,9 +99,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
           className="
-    text-[22px] sm:text-[30px] md:text-[40px]
-    font-semibold leading-[1.05] tracking-tight
-    drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]
+            text-[22px] sm:text-[30px] md:text-[40px]
+            font-semibold leading-[1.05] tracking-tight
+            drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]
           "
         >
           Premium Cars &amp; Auto Parts
@@ -81,20 +115,20 @@ const Hero = () => {
           className="mt-6 sm:mt-8 w-[94%] sm:w-[88%] md:w-[80%] max-w-[720px]"
         >
           <div
-  className={`
-    flex items-center
-    rounded-full overflow-hidden
-    h-[42px] sm:h-[48px] md:h-[52px]
-    transition-shadow duration-200
-    bg-white/95
-    hover:bg-white
-    focus-within:bg-white
-    ${focus
-      ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
-      : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
-    }
-  `}
->
+            className={`
+              flex items-center
+              rounded-full overflow-hidden
+              h-[42px] sm:h-[48px] md:h-[52px]
+              transition-shadow duration-200
+              bg-white/95
+              hover:bg-white
+              focus-within:bg-white
+              ${focus
+                ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
+                : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+              }
+            `}
+          >
             <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
               <Search size={16} />
             </div>
@@ -109,7 +143,7 @@ const Hero = () => {
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder={placeholder}
               autoComplete="off"
-             className="flex-1 h-full px-1 text-sm md:text-base text-[#0b1b3a] bg-transparent outline-none placeholder:text-gray-400"
+              className="flex-1 h-full px-1 text-sm md:text-base text-[#0b1b3a] bg-transparent outline-none placeholder:text-gray-400"
             />
 
             <button
@@ -172,6 +206,30 @@ const Hero = () => {
             Explore Parts
           </Link>
         </motion.div>
+
+        {/* SLIDESHOW DOTS — only shown when multiple images are loaded */}
+        {cars.length > 1 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex gap-2 mt-5"
+          >
+            {cars.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`
+                  rounded-full transition-all duration-300
+                  ${i === index
+                    ? "w-5 h-1.5 bg-white"
+                    : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
+                  }
+                `}
+              />
+            ))}
+          </motion.div>
+        )}
 
       </div>
     </section>
