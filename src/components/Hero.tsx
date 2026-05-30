@@ -38,7 +38,7 @@ const Hero = () => {
     "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
 
   return (
-    <section className="relative h-[420px] sm:h-[480px] md:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
+    <section className="relative h-[460px] sm:h-[520px] md:h-[580px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
       {/* BACKGROUND IMAGE */}
       <AnimatePresence mode="wait">
@@ -53,42 +53,48 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY — consistent dark across the whole hero */}
-      <div className="absolute inset-0 bg-black/55" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30" />
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
 
       {/* CONTENT */}
-      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white gap-5">
+      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white">
 
-        {/* TITLE */}
+        {/* TITLE — lighter weight, more elegant */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
-          className="text-[28px] sm:text-[38px] md:text-[48px] font-bold leading-tight tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+          className="
+            text-[26px] sm:text-[34px] md:text-[44px]
+            font-semibold
+            leading-tight tracking-tight
+            drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]
+            mb-7
+          "
         >
           Premium Cars &amp; Auto Parts
         </motion.h1>
 
-        {/* SEARCH BAR */}
+        {/* SEARCH BAR — taller, more spacious */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6 }}
           className={`
             flex items-center
-            rounded-full overflow-hidden
-            w-full max-w-[580px]
-            h-[50px] sm:h-[54px]
-            border transition-all duration-300
+            rounded-2xl overflow-hidden
+            w-full max-w-[600px]
+            h-[56px] sm:h-[60px]
+            transition-all duration-300
             ${focus
-              ? "border-blue-400/70 shadow-[0_0_0_3px_rgba(96,165,250,0.2)] bg-white"
-              : "border-transparent bg-white shadow-xl shadow-black/40"
+              ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_8px_32px_rgba(0,0,0,0.4)] bg-white"
+              : "shadow-[0_4px_32px_rgba(0,0,0,0.45)] bg-white"
             }
           `}
         >
-          <div className="pl-4 pr-2 flex items-center text-gray-400 flex-shrink-0">
-            <Search size={17} />
+          <div className="pl-5 pr-3 flex items-center text-gray-400 flex-shrink-0">
+            <Search size={18} />
           </div>
 
           <input
@@ -101,27 +107,29 @@ const Hero = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder={placeholder}
             autoComplete="off"
-            className="flex-1 h-full px-2 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
+            className="flex-1 h-full px-1 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
           />
 
-          <button
-            onClick={handleSearch}
-            className="
-              flex-shrink-0 h-full px-6
-              rounded-r-full
-              bg-[#0b1b3a] text-white
-              text-sm font-semibold
-              hover:bg-[#162d5e]
-              transition-colors duration-200
-              whitespace-nowrap
-            "
-          >
-            {loading ? (
-              <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              "Search"
-            )}
-          </button>
+          <div className="pr-2 flex-shrink-0">
+            <button
+              onClick={handleSearch}
+              className="
+                h-[44px] px-6
+                rounded-xl
+                bg-[#0b1b3a] text-white
+                text-sm font-semibold
+                hover:bg-[#162d5e]
+                transition-colors duration-200
+                whitespace-nowrap
+              "
+            >
+              {loading ? (
+                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                "Search"
+              )}
+            </button>
+          </div>
         </motion.div>
 
         {/* CTA BUTTONS */}
@@ -129,32 +137,32 @@ const Hero = () => {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="flex gap-3"
+          className="flex gap-3 mt-5"
         >
-          {/* Primary — solid dark navy, always visible */}
+          {/* Primary — navy with white border so it pops off the dark overlay */}
           <Link
             to="/cars"
             className="
               px-7 py-2.5 rounded-xl
               font-semibold text-sm
               bg-[#0b1b3a] text-white
-              border border-[#0b1b3a]
+              border-2 border-white/40
               shadow-lg shadow-black/30
-              hover:bg-[#162d5e] hover:border-[#162d5e] hover:-translate-y-px
+              hover:bg-[#162d5e] hover:border-white/70 hover:-translate-y-px
               transition-all duration-200
             "
           >
             Explore Cars
           </Link>
 
-          {/* Secondary — white, always visible */}
+          {/* Secondary — white, clearly different */}
           <Link
             to="/parts"
             className="
               px-7 py-2.5 rounded-xl
               font-semibold text-sm
               bg-white text-[#0b1b3a]
-              border border-white
+              border-2 border-white
               shadow-lg shadow-black/30
               hover:bg-gray-100 hover:-translate-y-px
               transition-all duration-200
