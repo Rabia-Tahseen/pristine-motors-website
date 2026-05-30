@@ -109,7 +109,7 @@ const Hero = () => {
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder={placeholder}
               autoComplete="off"
-              className="flex-1 h-full px-1 text-sm md:text-base text-gray-850 bg-transparent outline-none placeholder:text-gray-400"
+             className="flex-1 h-full px-1 text-sm md:text-base text-[#0b1b3a] bg-transparent outline-none placeholder:text-gray-400"
             />
 
             <button
