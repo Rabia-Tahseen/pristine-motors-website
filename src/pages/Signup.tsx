@@ -57,29 +57,28 @@ const Signup = () => {
 
     try {
       const { data, error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password: password.trim(),
-      });
+  email: email.trim(),
+  password: password.trim(),
+});
 
-      if (error) {
-  // Existing account
-  if (
-    error.message.toLowerCase().includes("already") ||
-    error.message.toLowerCase().includes("registered") ||
-    error.message.toLowerCase().includes("exists")
-  ) {
-    navigate(`/login?email=${encodeURIComponent(email.trim())}`);
-    return;
-  }
+console.log("SIGNUP RESPONSE:", data, error);
 
+if (error) {
   setGeneralError(error.message);
-  setLoading(false);
   return;
 }
 
-      if (data.user) {
-        setSuccess("Account created successfully!");
-        setTimeout(() => { navigate("/login"); }, 1200);
+// ⚠️ IMPORTANT: Supabase may return null user if already exists
+if (!data.user) {
+  navigate(`/login?email=${encodeURIComponent(email.trim())}`);
+  return;
+}
+
+setSuccess("Account created successfully!");
+
+setTimeout(() => {
+  navigate(`/login?email=${encodeURIComponent(email.trim())}`);
+}, 1200);
       }
     } catch (err) {
       setGeneralError("Something went wrong");
