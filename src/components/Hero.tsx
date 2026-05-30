@@ -67,24 +67,23 @@ const Hero = () => {
 
       {/* SLIDESHOW */}
       <div className="absolute inset-0">
-        {SLIDE_IMAGES.map((src, i) => {
-          const active = i === index;
-          return (
-            {/* inside SLIDE_IMAGES.map */}
-<motion.img
-  key={src}
-  src={src}
-  className="absolute inset-0 w-full h-full object-cover"
-  initial={false}
-  animate={{
-    opacity: active ? 1 : 0,
-    scale: active ? 1.05 : 1.12,
-    filter: active ? "blur(0px)" : "blur(8px)", // ✅ reduced
-  }}
-  transition={{ duration: 1.5, ease: "easeInOut" }}
-/>
-          );
-        })}
+          {SLIDE_IMAGES.map((src, i) => {
+  const active = i === index;
+  return (
+    <motion.img
+      key={src}
+      src={src}
+      className="absolute inset-0 w-full h-full object-cover"
+      initial={false}
+      animate={{
+        opacity: active ? 1 : 0,
+        scale: active ? 1.05 : 1.12,
+        filter: active ? "blur(0px)" : "blur(8px)",
+      }}
+      transition={{ duration: 1.5, ease: "easeInOut" }}
+    />
+  );
+})}
       </div>
 
       {/* OVERLAY */}
