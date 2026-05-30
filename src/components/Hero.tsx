@@ -54,7 +54,7 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* OVERLAY — heavy top/bottom, lighter center */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/65" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/65" />
 
       {/* CONTENT — naturally centered, no negative margin hacks */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white">
@@ -94,7 +94,7 @@ const Hero = () => {
             `}
           >
             <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
-              <Search size={17} />
+              <Search size={16} />
             </div>
 
             <input
@@ -107,7 +107,7 @@ const Hero = () => {
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder={placeholder}
               autoComplete="off"
-              className="flex-1 h-full px-1 text-sm md:text-base text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
+              className="flex-1 h-full px-1 text-sm md:text-base text-gray-850 bg-transparent outline-none placeholder:text-gray-400"
             />
 
             <button
@@ -145,6 +145,7 @@ const Hero = () => {
               px-8 py-3 rounded-xl
               font-semibold text-sm sm:text-base
               bg-white text-[#0b1b3a]
+              border border-blue-950/80
               shadow-lg shadow-black/30
               hover:bg-blue-50 hover:-translate-y-px
               transition-all duration-200
@@ -160,7 +161,7 @@ const Hero = () => {
               px-8 py-3 rounded-xl
               font-semibold text-sm sm:text-base
               bg-[#0b1b3a] text-white
-              border border-white/40
+              border border-white/80
               shadow-lg shadow-black/30
               hover:bg-[#1a3a6e] hover:border-white/60 hover:-translate-y-px
               transition-all duration-200
