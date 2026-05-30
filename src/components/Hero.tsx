@@ -53,14 +53,14 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-black/52" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/80" />
+      {/* OVERLAY — slightly darker than before */}
+      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-12 sm:-mt-14 md:-mt-16">
 
-        {/* TITLE — refined weight, elegant sizing */}
+        {/* TITLE */}
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,10 +72,10 @@ const Hero = () => {
             mb-7
           "
         >
-          Premium Cars &amp Auto Parts
+          Premium Cars &amp; Auto Parts
         </motion.h1>
 
-        {/* SEARCH BAR — longer, shorter height, no scale on focus */}
+        {/* SEARCH BAR */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,39 +133,39 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* CTA BUTTONS */}
+        {/* CTA BUTTONS — bigger, more presence */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22, duration: 0.55 }}
-          className="flex gap-3 mt-4"
+          className="flex gap-3 mt-5"
         >
-          {/* Primary — solid white, slim */}
+          {/* Primary — solid white */}
           <Link
             to="/cars"
             className="
-              px-6 py-2 rounded-lg
-              font-semibold text-[13px]
+              px-8 py-3 rounded-xl
+              font-semibold text-sm
               bg-white text-[#0b1b3a]
-              shadow-md shadow-black/25
-              hover:bg-blue-50
-              transition-colors duration-200
+              shadow-lg shadow-black/30
+              hover:bg-blue-50 hover:-translate-y-px
+              transition-all duration-200
             "
           >
             Explore Cars
           </Link>
 
-          {/* Secondary — dark navy, slim, color shift on hover */}
+          {/* Secondary — navy */}
           <Link
             to="/parts"
             className="
-              px-6 py-2 rounded-lg
-              font-semibold text-[13px]
+              px-8 py-3 rounded-xl
+              font-semibold text-sm
               bg-[#0b1b3a] text-white
-              border border-white/30
-              shadow-md shadow-black/25
-              hover:bg-[#1a3a6e] hover:border-white/50
-              transition-colors duration-200
+              border border-white/40
+              shadow-lg shadow-black/30
+              hover:bg-[#1a3a6e] hover:border-white/60 hover:-translate-y-px
+              transition-all duration-200
             "
           >
             Explore Parts
