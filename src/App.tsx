@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { CartProvider } from "@/contexts/CartContext";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
@@ -61,6 +61,7 @@ const App = () => {
             <BrowserRouter>
               <Routes>
 
+                {/* PUBLIC */}
                 <Route path="/" element={<PublicLayout><Index /></PublicLayout>} />
                 <Route path="/parts" element={<PublicLayout><AllParts /></PublicLayout>} />
                 <Route path="/parts/:id" element={<PublicLayout><ProductDetails /></PublicLayout>} />
@@ -71,15 +72,13 @@ const App = () => {
                 <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
                 <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
                 <Route path="/cars" element={<PublicLayout><Cars /></PublicLayout>} />
-
-                {/* ✅ profile now has Navbar and Footer */}
                 <Route path="/profile" element={<PublicLayout><Profile /></PublicLayout>} />
-
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
 
                 {/* ADMIN */}
                 <Route path="/admin/login" element={<AdminLogin />} />
+
                 <Route
                   path="/admin"
                   element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}
@@ -92,6 +91,7 @@ const App = () => {
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
 
+                {/* 404 */}
                 <Route path="*" element={<PublicLayout><NotFound /></PublicLayout>} />
 
               </Routes>
