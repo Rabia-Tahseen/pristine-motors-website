@@ -54,8 +54,8 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-black/42" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/50" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-12 sm:-mt-14 md:-mt-16">
@@ -172,16 +172,7 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        {/* STATS ROW */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.35, duration: 0.6 }}
-          className="mt-6 text-white/40 text-xs tracking-wide"
-        >
-          500+ Cars &nbsp;·&nbsp; 2,000+ Parts &nbsp;·&nbsp; Trusted Since 2020
-        </motion.p>
-
+     
       </div>
     </section>
   );
