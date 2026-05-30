@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-mail";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,12 +15,20 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // ✅ if already logged in as admin, redirect to panel
+  // ✅ once we know user is admin, redirect
   useEffect(() => {
     if (!loading && user && role === "admin") {
       navigate("/admin", { replace: true });
     }
   }, [user, role, loading, navigate]);
+
+  // ✅ only show spinner while loading
+  // as soon as loading is false and no admin → show the form instantly
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-muted/30">
+      <span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,13 +51,6 @@ const AdminLogin = () => {
       setSubmitting(false);
     }
   };
-
-  // ✅ show spinner while auth initializes, not a blank screen
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30">
-      <span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
