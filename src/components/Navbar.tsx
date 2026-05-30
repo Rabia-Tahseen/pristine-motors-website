@@ -125,7 +125,10 @@ const Navbar = () => {
             <Link to="/cars" className={navLink("/cars")}>
               Cars <ChevronDown size={14} />
             </Link>
-            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition z-50">
+            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3
+opacity-0 pointer-events-none
+group-hover:opacity-100 group-hover:pointer-events-auto
+transition-opacity duration-200 ease-out z-50">
               <div className="w-64 rounded-2xl border border-white/20 bg-[#1f315d] shadow-xl">
                 <div className="px-5 py-3 border-b border-white/10 text-white text-sm font-semibold">Car Brands</div>
                 {carBrands.map((brand) => (
@@ -142,7 +145,10 @@ const Navbar = () => {
             <Link to="/parts" className={navLink("/parts")}>
               Parts <ChevronDown size={14} />
             </Link>
-            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition z-50">
+            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3
+opacity-0 pointer-events-none
+group-hover:opacity-100 group-hover:pointer-events-auto
+transition-opacity duration-200 ease-out z-50">
               <div className="w-64 rounded-2xl border border-white/20 bg-[#1f315d] shadow-xl">
                 <div className="px-5 py-3 border-b border-white/10 text-white text-sm font-semibold">Categories</div>
                 {partCategories.map((cat) => (
