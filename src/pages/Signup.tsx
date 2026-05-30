@@ -41,51 +41,72 @@ const Signup = () => {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
   const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setEmailError("");
-    setPasswordError("");
-    setGeneralError("");
-    setSuccess("");
+  setEmailError("");
+  setPasswordError("");
+  setGeneralError("");
+  setSuccess("");
 
-    if (!email.trim()) { setEmailError("Email required"); return; }
-    if (!validateEmail(email)) { setEmailError("Invalid email"); return; }
-    if (!password.trim()) { setPasswordError("Password required"); return; }
-    if (password.length < 6) { setPasswordError("Minimum 6 characters"); return; }
+  if (!email.trim()) return setEmailError("Email required");
+  if (!password.trim()) return setPasswordError("Password required");
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const { data, error } = await supabase.auth.signUp({
-  email: email.trim(),
-  password: password.trim(),
-});
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim(),
+      password: password.trim(),
+    });
 
-console.log("SIGNUP RESPONSE:", data, error);
+    // 👇 CASE 1: Supabase says error
+    if (error) {
+      const msg = error.message.toLowerCase();
 
-if (error) {
-  setGeneralError(error.message);
-  return;
-}
+      // 👇 detect "user already exists"
+      if (
+        msg.includes("already") ||
+        msg.includes("registered") ||
+        msg.includes("exists") ||
+        msg.includes("user")
+      ) {
+        setGeneralError("Account already exists. Redirecting to login...");
 
-// ⚠️ IMPORTANT: Supabase may return null user if already exists
-if (!data.user) {
-  navigate(`/login?email=${encodeURIComponent(email.trim())}`);
-  return;
-}
+        setTimeout(() => {
+          navigate(`/login?email=${encodeURIComponent(email.trim())}`);
+        }, 800);
 
-setSuccess("Account created successfully!");
+        return;
+      }
 
-setTimeout(() => {
-  navigate(`/login?email=${encodeURIComponent(email.trim())}`);
-}, 1200);
-
-    } catch (err) {
-      setGeneralError("Something went wrong");
-    } finally {
-      setLoading(false);
+      setGeneralError(error.message);
+      return;
     }
-  };
+
+    // 👇 CASE 2: Supabase silent success but no user (common)
+    if (!data.user) {
+      setGeneralError("Account already exists. Redirecting to login...");
+
+      setTimeout(() => {
+        navigate(`/login?email=${encodeURIComponent(email.trim())}`);
+      }, 800);
+
+      return;
+    }
+
+    // 👇 CASE 3: new user created
+    setSuccess("Account created successfully!");
+
+    setTimeout(() => {
+      navigate(`/login?email=${encodeURIComponent(email.trim())}`);
+    }, 1200);
+
+  } catch (err) {
+    setGeneralError("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] px-4 py-10">
