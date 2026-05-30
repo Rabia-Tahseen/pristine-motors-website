@@ -36,7 +36,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % SLIDE_IMAGES.length);
-    }, 6500);
+    }, 7000);
     return () => clearInterval(t);
   }, []);
 
@@ -79,8 +79,8 @@ const Hero = () => {
             className="absolute inset-0 w-full h-full object-cover"
             animate={{
               opacity: i === activeIndex ? 1 : 0,
-              scale: i === activeIndex ? 1.05 : 1.12,
-              filter: i === activeIndex ? "blur(0px)" : "blur(8px)",
+              scale: i === activeIndex ? 1.03 : 1.12,
+              filter: i === activeIndex ? "blur(0px)" : "blur(6px)",
             }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
           />
@@ -101,7 +101,7 @@ const Hero = () => {
           className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
           style={{
             textShadow:
-              "0 0 18px rgba(96,165,250,0.55), 0 2px 16px rgba(0,0,0,0.7)",
+              "0 0 18px rgba(96,165,250,0.65), 0 2px 16px rgba(0,0,0,0.8)",
           }}
         >
           Premium Cars & Auto Parts
