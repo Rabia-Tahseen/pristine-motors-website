@@ -54,10 +54,10 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* OVERLAY — heavy top/bottom, medium center */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/28 to-black/70" />
 
       {/* CONTENT */}
-      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-20 sm:-mt-24 md:-mt-28">
+      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-16 sm:-mt-20 md:-mt-20">
 
         {/* TITLE */}
         <motion.h1
