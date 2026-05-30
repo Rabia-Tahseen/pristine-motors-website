@@ -54,8 +54,7 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* OVERLAY */}
-   <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/30 to-black/50" />
-<div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)' }} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/55" />
       
       {/* CONTENT */}
       <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-12 sm:-mt-14 md:-mt-16">
