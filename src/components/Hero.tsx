@@ -80,7 +80,7 @@ const Hero = () => {
     />
   ))}
 </div>
-      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent" />
+      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
