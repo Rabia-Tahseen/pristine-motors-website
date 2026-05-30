@@ -59,7 +59,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b1b3a] via-[#1e3a8a] to-[#0ea5e9]">
+    <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-neutral-950">
 
       {/* BACKGROUND SLIDESHOW */}
       <AnimatePresence mode="wait">
