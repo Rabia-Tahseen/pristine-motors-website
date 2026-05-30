@@ -21,7 +21,7 @@ const AdminAuthContext = createContext<AuthContextType | null>(null);
 export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // ✅ start as false, no wait
 
   const fetchRole = async (userId: string) => {
     const { data, error } = await supabase
@@ -51,13 +51,10 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
       const currentUser = session?.user ?? null;
       setUser(currentUser);
 
-      // ✅ only fetch role if there's actually a user
-      // if no user, skip the DB call and finish loading immediately
+      // fetch role in background, don't block rendering
       if (currentUser) {
-        await fetchRole(currentUser.id);
+        fetchRole(currentUser.id);
       }
-
-      setLoading(false);
     };
 
     init();
@@ -68,12 +65,10 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(currentUser);
 
         if (currentUser?.id) {
-          await fetchRole(currentUser.id);
+          fetchRole(currentUser.id);
         } else {
           setRole(null);
         }
-
-        queueMicrotask(() => setLoading(false));
       }
     );
 
