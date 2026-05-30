@@ -12,20 +12,12 @@ const SLIDE_IMAGES = [
 
 const FULL_PLACEHOLDER = "Search cars or parts...";
 
-// Words that strongly indicate the user wants PARTS even if a car name is present
 const PARTS_OVERRIDE_REGEX =
   /\b(part|parts|spare|spares|engine|oil|filter|brake|tyre|tire|rim|bumper|mirror|headlight|taillight|sensor|clutch|gearbox|alternator|battery|exhaust|radiator|shock|absorber|suspension|belt|bulb|fuse|wiper|seat|interior|exterior|accessory|accessories)\b/i;
 
-// Words that indicate the user wants a CAR (only checked if no parts keyword found)
 const CAR_REGEX =
   /\b(car|cars|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm|vehicle|vehicles|buy|used|new|imported)\b/i;
 
-/**
- * Routing logic:
- * 1. If query contains a parts keyword → /parts  (handles "parts for my corolla")
- * 2. Else if query contains a car keyword → /cars
- * 3. Otherwise → /parts  (parts is the safer default for ambiguous queries)
- */
 const resolveDestination = (q) => {
   if (PARTS_OVERRIDE_REGEX.test(q)) return `/parts?search=${encodeURIComponent(q)}`;
   if (CAR_REGEX.test(q)) return `/cars?search=${encodeURIComponent(q)}`;
@@ -52,7 +44,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % SLIDE_IMAGES.length);
-    }, 7000);
+    }, 6500);
     return () => clearInterval(t);
   }, []);
 
