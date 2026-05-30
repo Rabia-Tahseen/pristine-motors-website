@@ -57,7 +57,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/65" />
 
       {/* CONTENT — naturally centered, no negative margin hacks */}
-      <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white">
+      <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
 
         {/* TITLE */}
         <motion.h1
@@ -65,9 +65,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
           className="
-            text-[24px] sm:text-[34px] md:text-[46px]
-            font-semibold leading-[1.05] tracking-tight
-            drop-shadow-[0_2px_16px_rgba(0,0,0,0.5)]
+    text-[21px] sm:text-[29px] md:text-[38px]
+    font-semibold leading-[1.05] tracking-tight
+    drop-shadow-[0_2px_16px_rgba(0,0,0,0.5)]
           "
         >
           Premium Cars &amp; Auto Parts
