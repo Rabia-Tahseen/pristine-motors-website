@@ -8,7 +8,7 @@ type HeroCar = {
   images: string[];
 };
 
-const FALLBACK_IMAGE =
+const HARDCODED_IMAGE =
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
 
 const Hero = () => {
@@ -41,11 +41,13 @@ const Hero = () => {
       .not("images", "is", null)
       .limit(5)
       .then(({ data }) => {
-        if (data && data.length > 0) setCars(data as HeroCar[]);
+        if (data && data.length > 0) {
+          setCars(data as HeroCar[]);
+        }
       });
   }, []);
 
-  // Auto-advance slideshow
+  // Auto-advance slideshow every 4.5s
   useEffect(() => {
     if (cars.length <= 1) return;
     const timer = setInterval(() => {
@@ -54,10 +56,11 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, [cars.length]);
 
+  // Use Supabase image if available, otherwise fallback to hardcoded
   const currentImage =
     cars.length > 0 && cars[index]?.images?.[0]
       ? cars[index].images[0]
-      : FALLBACK_IMAGE;
+      : HARDCODED_IMAGE;
 
   const handleSearch = () => {
     const q = query.trim();
@@ -74,7 +77,7 @@ const Hero = () => {
   return (
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
-      {/* BACKGROUND SLIDESHOW */}
+      {/* BACKGROUND SLIDESHOW — key changes on index so AnimatePresence transitions */}
       <AnimatePresence mode="wait">
         <motion.img
           key={currentImage}
@@ -87,7 +90,7 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY — heavy top/bottom, lighter center */}
+      {/* OVERLAY */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/70" />
 
       {/* CONTENT */}
@@ -116,13 +119,10 @@ const Hero = () => {
         >
           <div
             className={`
-              flex items-center
-              rounded-full overflow-hidden
+              flex items-center rounded-full overflow-hidden
               h-[42px] sm:h-[48px] md:h-[52px]
               transition-shadow duration-200
-              bg-white/95
-              hover:bg-white
-              focus-within:bg-white
+              bg-white/95 hover:bg-white focus-within:bg-white
               ${focus
                 ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
                 : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
@@ -132,7 +132,6 @@ const Hero = () => {
             <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
               <Search size={16} />
             </div>
-
             <input
               id="hero-search"
               name="search"
@@ -145,17 +144,13 @@ const Hero = () => {
               autoComplete="off"
               className="flex-1 h-full px-1 text-sm md:text-base text-[#0b1b3a] bg-transparent outline-none placeholder:text-gray-400"
             />
-
             <button
               onClick={handleSearch}
               className="
                 flex-shrink-0 h-full px-5 sm:px-7 md:px-9
-                rounded-r-full
-                bg-[#0b1b3a] text-white
-                text-sm font-semibold
-                hover:bg-[#162d5e]
-                transition-colors duration-200
-                whitespace-nowrap
+                rounded-r-full bg-[#0b1b3a] text-white
+                text-sm font-semibold hover:bg-[#162d5e]
+                transition-colors duration-200 whitespace-nowrap
               "
             >
               {loading ? (
@@ -174,14 +169,11 @@ const Hero = () => {
           transition={{ delay: 0.25, duration: 0.6 }}
           className="flex gap-3 mt-6 sm:mt-7"
         >
-          {/* Primary — solid white */}
           <Link
             to="/cars"
             className="
-              px-8 py-3 rounded-xl
-              font-semibold text-sm sm:text-base
-              bg-white text-[#0b1b3a]
-              border border-blue-950/80
+              px-8 py-3 rounded-xl font-semibold text-sm sm:text-base
+              bg-white text-[#0b1b3a] border border-blue-950/80
               shadow-lg shadow-black/30
               hover:bg-blue-50 hover:-translate-y-px
               transition-all duration-200
@@ -189,15 +181,11 @@ const Hero = () => {
           >
             Explore Cars
           </Link>
-
-          {/* Secondary — navy */}
           <Link
             to="/parts"
             className="
-              px-8 py-3 rounded-xl
-              font-semibold text-sm sm:text-base
-              bg-[#0b1b3a] text-white
-              border border-white/80
+              px-8 py-3 rounded-xl font-semibold text-sm sm:text-base
+              bg-[#0b1b3a] text-white border border-white/80
               shadow-lg shadow-black/30
               hover:bg-[#1a3a6e] hover:border-white/60 hover:-translate-y-px
               transition-all duration-200
@@ -207,7 +195,7 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        {/* SLIDESHOW DOTS — only shown when multiple images are loaded */}
+        {/* SLIDESHOW DOTS — only when multiple slides */}
         {cars.length > 1 && (
           <motion.div
             initial={{ opacity: 0 }}
