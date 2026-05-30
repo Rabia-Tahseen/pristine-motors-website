@@ -10,16 +10,21 @@ const SLIDE_IMAGES = [
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644886610-z4sclqo0agd.jpeg",
 ];
 
+const FULL_PLACEHOLDER = "Search cars or parts...";
+
+const CAR_REGEX =
+  /car|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm/i;
+
 const Hero = () => {
-  const [index, setIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const fullText = "Search cars or parts...";
 
+  // Preload images
   useEffect(() => {
     SLIDE_IMAGES.forEach((src) => {
       const img = new Image();
@@ -27,19 +32,22 @@ const Hero = () => {
     });
   }, []);
 
+  // Slideshow interval
   useEffect(() => {
     const t = setInterval(() => {
-      setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
+      setActiveIndex((prev) => (prev + 1) % SLIDE_IMAGES.length);
     }, 6500);
     return () => clearInterval(t);
   }, []);
 
+  // Typewriter effect
   useEffect(() => {
     let i = 0;
+    setPlaceholder("");
     const interval = setInterval(() => {
-      setPlaceholder(fullText.slice(0, i + 1));
       i++;
-      if (i === fullText.length) clearInterval(interval);
+      setPlaceholder(FULL_PLACEHOLDER.slice(0, i));
+      if (i === FULL_PLACEHOLDER.length) clearInterval(interval);
     }, 70);
     return () => clearInterval(interval);
   }, []);
@@ -48,13 +56,11 @@ const Hero = () => {
     const q = query.trim();
     if (!q || loading) return;
     setLoading(true);
-    const isCar =
-      /car|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm/i.test(q);
-    try {
-      navigate(isCar ? `/cars?search=${q}` : `/parts?search=${q}`);
-    } finally {
-      setLoading(false);
-    }
+    const destination = CAR_REGEX.test(q)
+      ? `/cars?search=${encodeURIComponent(q)}`
+      : `/parts?search=${encodeURIComponent(q)}`;
+    navigate(destination);
+    setLoading(false);
   };
 
   return (
@@ -64,23 +70,20 @@ const Hero = () => {
 
       {/* SLIDESHOW */}
       <div className="absolute inset-0">
-        {SLIDE_IMAGES.map((src, i) => {
-          const active = i === index;
-          return (
-            <motion.img
-              key={src}
-              src={src}
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={false}
-              animate={{
-                opacity: active ? 1 : 0,
-                scale: active ? 1.05 : 1.12,
-                filter: active ? "blur(0px)" : "blur(8px)",
-              }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-          );
-        })}
+        {SLIDE_IMAGES.map((src, i) => (
+          <motion.img
+            key={src}
+            src={src}
+            alt={`Slide ${i + 1}`}
+            className="absolute inset-0 w-full h-full object-cover"
+            animate={{
+              opacity: i === activeIndex ? 1 : 0,
+              scale: i === activeIndex ? 1.05 : 1.12,
+              filter: i === activeIndex ? "blur(0px)" : "blur(8px)",
+            }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+          />
+        ))}
       </div>
 
       {/* OVERLAY */}
@@ -96,7 +99,8 @@ const Hero = () => {
           transition={{ duration: 0.65 }}
           className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
           style={{
-            textShadow: "0 0 18px rgba(96,165,250,0.55), 0 2px 16px rgba(0,0,0,0.7)",
+            textShadow:
+              "0 0 18px rgba(96,165,250,0.55), 0 2px 16px rgba(0,0,0,0.7)",
           }}
         >
           Premium Cars & Auto Parts
@@ -115,9 +119,10 @@ const Hero = () => {
               h-[42px] sm:h-[48px] md:h-[52px]
               transition-shadow duration-200
               bg-white/95 hover:bg-white focus-within:bg-white
-              ${focus
-                ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
-                : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+              ${
+                focus
+                  ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
+                  : "shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
               }
             `}
           >
@@ -127,6 +132,7 @@ const Hero = () => {
             <input
               id="hero-search"
               name="search"
+              type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => setFocus(true)}
@@ -138,7 +144,8 @@ const Hero = () => {
             />
             <button
               onClick={handleSearch}
-              className="flex-shrink-0 h-full px-5 sm:px-7 md:px-9 rounded-r-full bg-[#0b1b3a] text-white text-sm font-semibold hover:bg-[#162d5e] transition-colors duration-200 whitespace-nowrap"
+              disabled={loading}
+              className="flex-shrink-0 h-full px-5 sm:px-7 md:px-9 rounded-r-full bg-[#0b1b3a] text-white text-sm font-semibold hover:bg-[#162d5e] disabled:opacity-70 transition-colors duration-200 whitespace-nowrap"
             >
               {loading ? (
                 <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
