@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 const SLIDE_IMAGES = [
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png",
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774643340698-4un5ega7765.jpeg",
-  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774643772275-xm41amkg99a.jpeg",
-  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774643965283-of0aa48r02.jpeg",
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644340197-3fc3c6xwh5k.jpeg",
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644133312-1wpmazk8qtkj.jpeg",
 ];
 
 const Hero = () => {
