@@ -60,22 +60,24 @@ const Hero = () => {
 
   return (
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-neutral-950">
+      {/* BASE BACKGROUND (ALWAYS VISIBLE) */}
+<div className="absolute inset-0 bg-gradient-to-br from-[#0b1b3a] via-[#1e3a8a] to-[#0ea5e9]" />
 
       {/* BACKGROUND SLIDESHOW */}
-      <AnimatePresence mode="wait">
-     <motion.img
+      <motion.img
   key={SLIDE_IMAGES[index]}
   src={SLIDE_IMAGES[index]}
-  initial={{ opacity: 0, scale: 1.03, filter: "blur(6px)" }}
-  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
   exit={{ opacity: 0 }}
-  transition={{ duration: 0.9, ease: "easeOut" }}
-  className="absolute inset-0 w-full h-full object-cover"
+  transition={{ duration: 1, ease: "easeOut" }}
+  className="absolute inset-0 w-full h-full object-cover scale-105 blur-[6px]"
+  onLoad={(e) => {
+    e.currentTarget.style.filter = "blur(0px)";
+  }}
 />
-      </AnimatePresence>
 
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/50 to-transparent" />
+      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
