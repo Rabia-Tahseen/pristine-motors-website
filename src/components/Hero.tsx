@@ -10,11 +10,27 @@ const SLIDE_IMAGES = [
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644886610-z4sclqo0agd.jpeg",
 ];
 
-
 const FULL_PLACEHOLDER = "Search cars or parts...";
 
+// Words that strongly indicate the user wants PARTS even if a car name is present
+const PARTS_OVERRIDE_REGEX =
+  /\b(part|parts|spare|spares|engine|oil|filter|brake|tyre|tire|rim|bumper|mirror|headlight|taillight|sensor|clutch|gearbox|alternator|battery|exhaust|radiator|shock|absorber|suspension|belt|bulb|fuse|wiper|seat|interior|exterior|accessory|accessories)\b/i;
+
+// Words that indicate the user wants a CAR (only checked if no parts keyword found)
 const CAR_REGEX =
-  /car|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm/i;
+  /\b(car|cars|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm|vehicle|vehicles|buy|used|new|imported)\b/i;
+
+/**
+ * Routing logic:
+ * 1. If query contains a parts keyword → /parts  (handles "parts for my corolla")
+ * 2. Else if query contains a car keyword → /cars
+ * 3. Otherwise → /parts  (parts is the safer default for ambiguous queries)
+ */
+const resolveDestination = (q) => {
+  if (PARTS_OVERRIDE_REGEX.test(q)) return `/parts?search=${encodeURIComponent(q)}`;
+  if (CAR_REGEX.test(q)) return `/cars?search=${encodeURIComponent(q)}`;
+  return `/parts?search=${encodeURIComponent(q)}`;
+};
 
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -40,26 +56,29 @@ const Hero = () => {
     return () => clearInterval(t);
   }, []);
 
-  // Typewriter effect (runs once)
+  // Typewriter effect — runs once per session to avoid feeling repetitive on re-visits
   useEffect(() => {
+    if (sessionStorage.getItem("hero-typed")) {
+      setPlaceholder(FULL_PLACEHOLDER);
+      return;
+    }
     let i = 0;
     setPlaceholder("");
     const interval = setInterval(() => {
       i++;
       setPlaceholder(FULL_PLACEHOLDER.slice(0, i));
-      if (i === FULL_PLACEHOLDER.length) clearInterval(interval);
+      if (i === FULL_PLACEHOLDER.length) {
+        clearInterval(interval);
+        sessionStorage.setItem("hero-typed", "1");
+      }
     }, 70);
     return () => clearInterval(interval);
   }, []);
 
-  // Loading removed — navigate() is synchronous, spinner would never show
   const handleSearch = () => {
     const q = query.trim();
     if (!q) return;
-    const destination = CAR_REGEX.test(q)
-      ? `/cars?search=${encodeURIComponent(q)}`
-      : `/parts?search=${encodeURIComponent(q)}`;
-    navigate(destination);
+    navigate(resolveDestination(q));
   };
 
   return (
@@ -67,7 +86,7 @@ const Hero = () => {
       {/* BASE BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0b1b3a] via-[#1e3a8a] to-[#0ea5e9]" />
 
-      {/* SLIDESHOW */}
+      {/* SLIDESHOW — toned-down scale + blur */}
       <div className="absolute inset-0">
         {SLIDE_IMAGES.map((src, i) => (
           <motion.img
@@ -79,10 +98,10 @@ const Hero = () => {
             className="absolute inset-0 w-full h-full object-cover"
             animate={{
               opacity: i === activeIndex ? 1 : 0,
-              scale: i === activeIndex ? 1.03 : 1.12,
-              filter: i === activeIndex ? "blur(0px)" : "blur(6px)",
+              scale: i === activeIndex ? 1.03 : 1.05,   
+              filter: i === activeIndex ? "blur(0px)" : "blur(4px)", 
             }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            transition={{ duration: 1.2, ease: "easeInOut" }} // slightly snappier
           />
         ))}
       </div>
