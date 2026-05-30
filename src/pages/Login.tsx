@@ -33,20 +33,9 @@ const Login = () => {
     setGeneralError("");
     setSuccess("");
 
-    if (!email.trim()) {
-      setEmailError("Email required");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setEmailError("Invalid email");
-      return;
-    }
-
-    if (!password.trim()) {
-      setPasswordError("Password required");
-      return;
-    }
+    if (!email.trim()) { setEmailError("Email required"); return; }
+    if (!validateEmail(email)) { setEmailError("Invalid email"); return; }
+    if (!password.trim()) { setPasswordError("Password required"); return; }
 
     setLoading(true);
 
@@ -57,7 +46,6 @@ const Login = () => {
     }, 1200);
 
     try {
-      // ✅ directly call Supabase, no AdminAuthContext
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password: password.trim(),
@@ -77,10 +65,21 @@ const Login = () => {
         return;
       }
 
+      // ✅ check role and redirect accordingly
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .maybeSingle();
+
       setSuccess("Login successful!");
 
       setTimeout(() => {
-        navigate("/");
+        if (profile?.role === "admin") {
+          navigate("/admin"); // ✅ admin goes to admin panel
+        } else {
+          navigate("/"); // regular user goes home
+        }
       }, 700);
 
     } catch (err) {
@@ -97,21 +96,13 @@ const Login = () => {
         onSubmit={handleLogin}
         className="w-full max-w-sm sm:max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 space-y-5"
       >
-        {/* HEADER */}
         <div className="text-center">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0b1b3a]">
-            Welcome Back
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0b1b3a]">Welcome Back</h1>
           <p className="text-sm text-gray-500 mt-1">Login to continue</p>
         </div>
 
-        {generalError && (
-          <p className="text-red-500 text-sm text-center">{generalError}</p>
-        )}
-
-        {success && (
-          <p className="text-green-600 text-sm text-center">{success}</p>
-        )}
+        {generalError && <p className="text-red-500 text-sm text-center">{generalError}</p>}
+        {success && <p className="text-green-600 text-sm text-center">{success}</p>}
 
         {/* EMAIL */}
         <div>
@@ -160,9 +151,7 @@ const Login = () => {
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               <span>{messages[step]}</span>
             </span>
-          ) : (
-            "Login"
-          )}
+          ) : "Login"}
         </button>
 
         <p className="text-center text-[15px] text-gray-500">
