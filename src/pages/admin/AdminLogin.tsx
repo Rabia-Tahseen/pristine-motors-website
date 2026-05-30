@@ -1,69 +1,50 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { Lock, Mail } from "lucide-react";
 
 const AdminLogin = () => {
-  const {
-    adminSignIn,
-    user,
-    role,
-    loading,
-  } = useAdminAuth();
-
+  const { adminSignIn, user, role, loading } = useAdminAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] =
-    useState("");
-
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [submitting, setSubmitting] =
-    useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
+  // ✅ only redirect once loading is done and user is confirmed admin
   useEffect(() => {
-    if (
-      !loading &&
-      user &&
-      role === "admin"
-    ) {
-      navigate("/admin", {
-        replace: true,
-      });
+    if (!loading && user && role === "admin") {
+      navigate("/admin", { replace: true });
     }
   }, [user, role, loading, navigate]);
 
-  const handleSubmit = async (
-    e: React.FormEvent
-  ) => {
-    e.preventDefault();
+  // ✅ show nothing while auth is still initializing
+  // prevents flash and stuck button
+  if (loading) return null;
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError("");
     setSubmitting(true);
 
     try {
-      const res = await adminSignIn(
-        email,
-        password
-      );
+      const res = await adminSignIn(email, password);
 
       if (res?.error) {
         setError(res.error);
-        return;
+        return; // ✅ finally will still run and clear submitting
       }
 
-      navigate("/admin", {
-        replace: true,
-      });
+      navigate("/admin", { replace: true });
+
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Something went wrong.");
     } finally {
-      setSubmitting(false);
+      setSubmitting(false); // ✅ always clears
     }
   };
 
@@ -73,25 +54,15 @@ const AdminLogin = () => {
 
         <div className="text-center mb-8">
           <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Lock
-              className="text-primary-foreground"
-              size={28}
-            />
+            <Lock className="text-primary-foreground" size={28} />
           </div>
-
-          <h1 className="text-2xl font-bold">
-            Admin Panel
-          </h1>
-
+          <h1 className="text-2xl font-bold">Admin Panel</h1>
           <p className="text-sm text-muted-foreground">
             Sign in to manage your store
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <div className="bg-red-100 text-red-600 text-sm p-3 rounded-lg">
               {error}
@@ -100,19 +71,12 @@ const AdminLogin = () => {
 
           <div>
             <Label>Email</Label>
-
             <div className="relative mt-1">
-              <Mail
-                className="absolute left-3 top-3 text-gray-400"
-                size={16}
-              />
-
+              <Mail className="absolute left-3 top-3 text-gray-400" size={16} />
               <Input
                 type="email"
                 value={email}
-                onChange={(e) =>
-                  setEmail(e.target.value)
-                }
+                onChange={(e) => setEmail(e.target.value)}
                 className="pl-10"
                 required
               />
@@ -121,19 +85,12 @@ const AdminLogin = () => {
 
           <div>
             <Label>Password</Label>
-
             <div className="relative mt-1">
-              <Lock
-                className="absolute left-3 top-3 text-gray-400"
-                size={16}
-              />
-
+              <Lock className="absolute left-3 top-3 text-gray-400" size={16} />
               <Input
                 type="password"
                 value={password}
-                onChange={(e) =>
-                  setPassword(e.target.value)
-                }
+                onChange={(e) => setPassword(e.target.value)}
                 className="pl-10"
                 required
               />
@@ -145,11 +102,10 @@ const AdminLogin = () => {
             className="w-full h-11 rounded-xl"
             disabled={submitting}
           >
-            {submitting
-              ? "Signing in..."
-              : "Sign In"}
+            {submitting ? "Signing in..." : "Sign In"}
           </Button>
         </form>
+
       </div>
     </div>
   );
