@@ -8,19 +8,42 @@ type HeroCar = {
   images: string[];
 };
 
-const HARDCODED_IMAGE =
+const FALLBACK_IMAGE =
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
 
 const Hero = () => {
+  const [cars, setCars] = useState<HeroCar[]>([]);
+  const [index, setIndex] = useState(0);
   const [query, setQuery] = useState("");
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
   const [loading, setLoading] = useState(false);
-  const [cars, setCars] = useState<HeroCar[]>([]);
-  const [index, setIndex] = useState(0);
 
   const navigate = useNavigate();
   const fullText = "Search cars or parts...";
+
+  // Fetch featured cars for slideshow — exactly from doc 4
+  useEffect(() => {
+    const fetchCars = async () => {
+      const { data } = await supabase
+        .from("products")
+        .select("images")
+        .eq("product_type", "car")
+        .eq("is_featured", true);
+
+      if (data?.length) setCars(data);
+    };
+    fetchCars();
+  }, []);
+
+  // Slideshow — only runs when we actually have images, exactly from doc 4
+  useEffect(() => {
+    if (cars.length < 2) return;
+    const t = setInterval(() => {
+      setIndex((p) => (p + 1) % cars.length);
+    }, 5500);
+    return () => clearInterval(t);
+  }, [cars]);
 
   // Typewriter placeholder
   useEffect(() => {
@@ -33,34 +56,9 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch hero cars from Supabase
-  useEffect(() => {
-    supabase
-      .from("cars")
-      .select("images")
-      .not("images", "is", null)
-      .limit(5)
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          setCars(data as HeroCar[]);
-        }
-      });
-  }, []);
-
-  // Auto-advance slideshow every 4.5s
-  useEffect(() => {
-    if (cars.length <= 1) return;
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % cars.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [cars.length]);
-
-  // Use Supabase image if available, otherwise fallback to hardcoded
+  // Resolve current background — exactly from doc 4
   const currentImage =
-    cars.length > 0 && cars[index]?.images?.[0]
-      ? cars[index].images[0]
-      : HARDCODED_IMAGE;
+    cars.length > 0 ? (cars[index].images?.[0] ?? FALLBACK_IMAGE) : FALLBACK_IMAGE;
 
   const handleSearch = () => {
     const q = query.trim();
@@ -77,23 +75,23 @@ const Hero = () => {
   return (
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
-      {/* BACKGROUND SLIDESHOW — key changes on index so AnimatePresence transitions */}
+      {/* BACKGROUND SLIDESHOW — from doc 4, exit scale added */}
       <AnimatePresence mode="wait">
         <motion.img
           key={currentImage}
           src={currentImage}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.4, ease: "easeOut" }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 1.4, ease: "easeInOut" }}
           className="absolute inset-0 w-full h-full object-cover"
         />
       </AnimatePresence>
 
-      {/* OVERLAY */}
+      {/* OVERLAY — from doc 5 */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/70" />
 
-      {/* CONTENT */}
+      {/* CONTENT — from doc 5 */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
 
         {/* TITLE */}
@@ -195,13 +193,13 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        {/* SLIDESHOW DOTS — only when multiple slides */}
+        {/* SLIDESHOW DOTS — from doc 4, positioned inside content */}
         {cars.length > 1 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="flex gap-2 mt-5"
+            className="flex gap-1.5 mt-5"
           >
             {cars.map((_, i) => (
               <button
