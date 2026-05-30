@@ -66,9 +66,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
           className="
-            text-[26px] sm:text-[34px] md:text-[44px]
+            text-[24px] sm:text-[30px] md:text-[40px]
             font-semibold leading-tight tracking-tight
-            drop-shadow-[0_2px_20px_rgba(0,0,0,0.55)]
+            drop-shadow-[0_2px_20px_rgba(0,0,0,0.70)]
             mb-6
           "
         >
@@ -93,7 +93,7 @@ const Hero = () => {
           `}
         >
           <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
-            <Search size={17} />
+            <Search size={20} />
           </div>
 
           <input
@@ -122,7 +122,7 @@ const Hero = () => {
             "
           >
             {loading ? (
-              <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="inline-block w-4 h-4 border-2 border-white/80 border-t-white rounded-full animate-spin" />
             ) : (
               "Search"
             )}
@@ -143,7 +143,7 @@ const Hero = () => {
               px-7 py-2.5 rounded-xl
               font-semibold text-sm
               bg-[#0b1b3a] text-white
-              border-2 border-white/50
+              border-2 border-white/90
               shadow-lg shadow-black/30
               hover:bg-[#162d5e] hover:border-white/80 hover:-translate-y-px
               transition-all duration-200
