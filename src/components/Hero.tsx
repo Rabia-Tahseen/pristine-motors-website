@@ -24,7 +24,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
-    }, 4500);
+    }, 5000);
     return () => clearInterval(t);
   }, []);
 
@@ -35,7 +35,7 @@ const Hero = () => {
       setPlaceholder(fullText.slice(0, i + 1));
       i++;
       if (i === fullText.length) clearInterval(interval);
-    }, 60);
+    }, 45);
     return () => clearInterval(interval);
   }, []);
 
