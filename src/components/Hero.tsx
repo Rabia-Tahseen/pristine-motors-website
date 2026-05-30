@@ -12,7 +12,7 @@ const SLIDE_IMAGES = [
 
 const FULL_PLACEHOLDER = "Search cars or parts...";
 const PARTS_OVERRIDE_REGEX =
-  /\b(part|parts|spare|spares|engine|oil|filter|brake|tyre|tire|rim|bumper|mirror|headlight|taillight|sensor|clutch|gearbox|alternator|battery|exhaust|radiator|shock|absorber|suspension|belt|bulb|fuse|wiper|seat|interior|exterior|accessory|accessories)\b/i;
+  /\b(part|parts|spare|spares|engine|oil|filter|brake|tyre|tire|rim|bumper|mirror|mirrors|bonnet|headlight|taillight|backlight|sensor|clutch|battery|exhaust|radiatorinterior|light|interior|exterior|accessory|steeringwheel|accessories)\b/i;
 
 const CAR_REGEX =
   /\b(car|cars|bmw|toyota|honda|suv|suzuki|alto|raize|corolla|daihatsu|sedan|taft|jdm|vehicle|vehicles|buy|used|new|imported)\b/i;
@@ -110,9 +110,10 @@ const Hero = () => {
           transition={{ duration: 0.65 }}
           className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
           style={{
-            textShadow:
-              "0 0 18px rgba(96,165,250,0.8), 0 2px 16px rgba(0,0,0,0.8)",
-          }}
+  textShadow:
+  "0 1px 2px rgba(0,0,0,0.6), 0 0 6px rgba(255,255,255,0.25)"
+
+}}
         >
           Premium Cars & Auto Parts
         </motion.h1>
