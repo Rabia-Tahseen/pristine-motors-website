@@ -99,15 +99,15 @@ const Hero = () => {
             animate={{
               opacity: i === activeIndex ? 1 : 0,
               scale: i === activeIndex ? 1.03 : 1.05,   
-              filter: i === activeIndex ? "blur(0px)" : "blur(4px)", 
+              filter: i === activeIndex ? "blur(0px)" : "blur(6px)", 
             }}
-            transition={{ duration: 1.2, ease: "easeInOut" }} // slightly snappier
+            transition={{ duration: 1.3, ease: "easeInOut" }} // slightly snappier
           />
         ))}
       </div>
 
       {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/65" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
@@ -120,7 +120,7 @@ const Hero = () => {
           className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
           style={{
             textShadow:
-              "0 0 18px rgba(96,165,250,0.65), 0 2px 16px rgba(0,0,0,0.8)",
+              "0 0 18px rgba(96,165,250,0.8), 0 2px 16px rgba(0,0,0,0.8)",
           }}
         >
           Premium Cars & Auto Parts
@@ -181,7 +181,7 @@ const Hero = () => {
         >
           <Link
             to="/cars"
-            className="px-8 py-3 rounded-xl font-semibold text-sm sm:text-base bg-white text-[#0b1b3a] border border-blue-950/80 shadow-lg shadow-black/30 hover:bg-blue-50 hover:-translate-y-px transition-all duration-200"
+            className="px-8 py-3 rounded-xl font-semibold text-sm sm:text-base bg-white text-[#0b1b3a] border border-blue-950 shadow-lg shadow-black/30 hover:bg-blue-50 hover:-translate-y-px transition-all duration-200"
           >
             Explore Cars
           </Link>
