@@ -24,7 +24,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
-    }, 5500);
+    }, 6000);
     return () => clearInterval(t);
   }, []);
 
@@ -35,7 +35,7 @@ const Hero = () => {
       setPlaceholder(fullText.slice(0, i + 1));
       i++;
       if (i === fullText.length) clearInterval(interval);
-    }, 60);
+    }, 70);
     return () => clearInterval(interval);
   }, []);
 
@@ -73,14 +73,14 @@ const Hero = () => {
       initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
       animate={{
         opacity: i === index ? 1 : 0,
-        scale: i === index ? 1.05 : 1.1,
+        scale: i === index ? 1.03 : 1.1,
         filter: i === index ? "blur(0px)" : "blur(8px)",
       }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     />
   ))}
 </div>
-      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
+      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/60" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
