@@ -85,7 +85,7 @@ const Hero = () => {
               flex items-center
               rounded-full overflow-hidden
               h-[42px] sm:h-[48px] md:h-[52px]
-              bg-white
+              bg-white/90
               transition-shadow duration-200
               ${focus
                 ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_6px_24px_rgba(0,0,0,0.35)]"
