@@ -55,22 +55,21 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/75" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25" />
+      {/* OVERLAY — heavier so buttons always read clearly */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white">
 
-        {/* TITLE */}
+        {/* TITLE — all white, clean */}
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
-          className="text-[26px] sm:text-[36px] md:text-[48px] font-bold leading-[1.04] tracking-tight"
+          className="text-[26px] sm:text-[36px] md:text-[48px] font-bold leading-[1.06] tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
         >
-          Premium Cars &{" "}
-          <span className="text-blue-300">Auto Parts</span>
+          Premium Cars &amp; Auto Parts
         </motion.h1>
 
         {/* SEARCH BAR */}
@@ -143,6 +142,7 @@ const Hero = () => {
           transition={{ delay: 0.25, duration: 0.6 }}
           className="flex gap-3 mt-6"
         >
+          {/* Primary — solid white */}
           <Link
             to="/cars"
             className="
@@ -157,14 +157,16 @@ const Hero = () => {
             Explore Cars
           </Link>
 
+          {/* Secondary — visible ghost: white bg at low opacity + solid border */}
           <Link
             to="/parts"
             className="
               px-7 py-2.5 rounded-xl
               font-semibold text-sm
               text-white
-              border border-white/30
-              hover:bg-white/10 hover:border-white/50 hover:-translate-y-px
+              bg-white/15
+              border border-white/60
+              hover:bg-white/25 hover:border-white hover:-translate-y-px
               backdrop-blur-sm
               transition-all duration-200
             "
