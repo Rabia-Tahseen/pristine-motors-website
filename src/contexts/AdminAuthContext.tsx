@@ -5,7 +5,6 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-
 import { supabase } from "@/integrations/supabase/client";
 
 type AuthContextType = {
@@ -25,11 +24,6 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchRole = async (userId: string) => {
-    if (!userId) {
-      setRole("user");
-      return "user";
-    }
-
     const { data, error } = await supabase
       .from("profiles")
       .select("role")
@@ -57,6 +51,8 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
       const currentUser = session?.user ?? null;
       setUser(currentUser);
 
+      // ✅ only fetch role if there's actually a user
+      // if no user, skip the DB call and finish loading immediately
       if (currentUser) {
         await fetchRole(currentUser.id);
       }
@@ -89,10 +85,8 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
     if (error) return { error: error.message };
     if (!data.user) return { error: "Login failed" };
-
     const userRole = await fetchRole(data.user.id);
     return { user: data.user, role: userRole };
   };
@@ -111,7 +105,6 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
     return res;
   };
 
-  // ✅ Fix 1: removed setLoading(true) and the finally block
   const signOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
