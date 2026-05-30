@@ -55,45 +55,49 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY — heavier so buttons always read clearly */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-black/80" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+      {/* OVERLAY — heavier in center where image is lightest */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/65 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white">
 
-        {/* TITLE — all white, clean */}
+        {/* TITLE — smaller, tighter */}
         <motion.h1
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
-          className="text-[26px] sm:text-[36px] md:text-[48px] font-bold leading-[1.06] tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
+          className="
+            text-[22px] sm:text-[30px] md:text-[40px]
+            font-bold leading-[1.1] tracking-tight
+            drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]
+          "
         >
           Premium Cars &amp; Auto Parts
         </motion.h1>
 
-        {/* SEARCH BAR */}
+        {/* SEARCH BAR — narrower, tighter top margin */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6 }}
           className={`
-            mt-6 sm:mt-8
+            mt-5 sm:mt-6
             flex items-center
             rounded-full overflow-hidden
-            w-[94%] sm:w-[88%] md:w-[80%]
-            max-w-[720px]
-            h-[42px] sm:h-[48px] md:h-[52px]
+            w-[92%] sm:w-[80%] md:w-[70%]
+            max-w-[560px]
+            h-[40px] sm:h-[46px] md:h-[50px]
             border transition-all duration-300
             ${
               focus
                 ? "border-blue-400/60 shadow-[0_0_0_3px_rgba(96,165,250,0.15)] bg-white"
-                : "border-white/20 bg-white shadow-lg shadow-black/30"
+                : "border-white/20 bg-white shadow-lg shadow-black/40"
             }
           `}
         >
           <div className="pl-4 pr-2 flex items-center text-gray-400 flex-shrink-0">
-            <Search size={18} />
+            <Search size={16} />
           </div>
 
           <input
@@ -108,7 +112,7 @@ const Hero = () => {
             autoComplete="off"
             className="
               flex-1 h-full px-2
-              text-sm md:text-base
+              text-sm
               text-gray-800
               bg-transparent outline-none
               placeholder:text-gray-400
@@ -118,7 +122,7 @@ const Hero = () => {
           <button
             onClick={handleSearch}
             className="
-              flex-shrink-0 h-full px-5 sm:px-7
+              flex-shrink-0 h-full px-5 sm:px-6
               rounded-r-full
               bg-[#0b1b3a] text-white
               text-sm font-semibold
@@ -137,19 +141,19 @@ const Hero = () => {
 
         {/* CTA BUTTONS */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6 }}
-          className="flex gap-3 mt-6"
+          className="flex gap-3 mt-4 sm:mt-5"
         >
           {/* Primary — solid white */}
           <Link
             to="/cars"
             className="
-              px-7 py-2.5 rounded-xl
+              px-6 py-2 rounded-xl
               font-semibold text-sm
               bg-white text-[#0b1b3a]
-              shadow-md shadow-black/25
+              shadow-md shadow-black/30
               hover:bg-blue-50 hover:-translate-y-px
               transition-all duration-200
             "
@@ -157,16 +161,15 @@ const Hero = () => {
             Explore Cars
           </Link>
 
-          {/* Secondary — visible ghost: white bg at low opacity + solid border */}
+          {/* Secondary — dark ghost so it shows on light bg */}
           <Link
             to="/parts"
             className="
-              px-7 py-2.5 rounded-xl
+              px-6 py-2 rounded-xl
               font-semibold text-sm
-              text-white
-              bg-white/15
-              border border-white/60
-              hover:bg-white/25 hover:border-white hover:-translate-y-px
+              bg-white/20 text-white
+              border border-white/70
+              hover:bg-white/30 hover:border-white hover:-translate-y-px
               backdrop-blur-sm
               transition-all duration-200
             "
@@ -181,3 +184,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
