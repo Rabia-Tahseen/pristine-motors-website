@@ -146,7 +146,7 @@ const Hero = () => {
             className="
               px-8 py-3 rounded-xl
               font-semibold text-sm sm:text-base
-              bg-white/98 text-[#0b1b3a]
+              bg-white text-[#0b1b3a]
               border border-blue-950/80
               shadow-lg shadow-black/30
               hover:bg-blue-50 hover:-translate-y-px
