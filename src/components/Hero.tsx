@@ -20,7 +20,7 @@ const Hero = () => {
   const [query, setQuery] = useState("");
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
-  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   // Preload images
@@ -39,7 +39,7 @@ const Hero = () => {
     return () => clearInterval(t);
   }, []);
 
-  // Typewriter effect
+  // Typewriter effect (runs once)
   useEffect(() => {
     let i = 0;
     setPlaceholder("");
@@ -51,15 +51,14 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Loading removed — navigate() is synchronous, spinner would never show
   const handleSearch = () => {
     const q = query.trim();
-    if (!q || loading) return;
-    setLoading(true);
+    if (!q) return;
     const destination = CAR_REGEX.test(q)
       ? `/cars?search=${encodeURIComponent(q)}`
       : `/parts?search=${encodeURIComponent(q)}`;
     navigate(destination);
-    setLoading(false);
   };
 
   return (
@@ -74,6 +73,8 @@ const Hero = () => {
             key={src}
             src={src}
             alt={`Slide ${i + 1}`}
+            loading="eager"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
             animate={{
               opacity: i === activeIndex ? 1 : 0,
@@ -126,7 +127,7 @@ const Hero = () => {
             `}
           >
             <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
-              <Search size={16} />
+              <Search size={18} />
             </div>
             <input
               id="hero-search"
@@ -142,15 +143,11 @@ const Hero = () => {
               className="flex-1 h-full px-1 text-sm md:text-base text-[#0b1b3a] bg-transparent outline-none placeholder:text-gray-400"
             />
             <button
+              type="button"
               onClick={handleSearch}
-              disabled={loading}
-              className="flex-shrink-0 h-full px-5 sm:px-7 md:px-9 rounded-r-full bg-[#0b1b3a] text-white text-sm font-semibold hover:bg-[#162d5e] disabled:opacity-70 transition-colors duration-200 whitespace-nowrap"
+              className="flex-shrink-0 h-full px-5 sm:px-7 md:px-9 rounded-r-full bg-[#0b1b3a] text-white text-sm font-semibold hover:bg-[#162d5e] transition-colors duration-200 whitespace-nowrap"
             >
-              {loading ? (
-                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                "Search"
-              )}
+              Search
             </button>
           </div>
         </motion.div>
