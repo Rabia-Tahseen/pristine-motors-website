@@ -145,11 +145,21 @@ useEffect(() => {
   };
 
 const signOut = async () => {
-  setLoading(true);
+  try {
+    setLoading(true);
 
-  await supabase.auth.signOut({ scope: "global" });
+    const { error } = await supabase.auth.signOut();
 
-  window.location.replace("/login");
+    if (error) throw error;
+
+    setUser(null);
+    setRole(null);
+  } catch (error) {
+    console.error("Sign out failed:", error);
+    throw error;
+  } finally {
+    setLoading(false);
+  }
 };
   
   return (
