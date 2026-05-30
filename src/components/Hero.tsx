@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const SLIDE_IMAGES = [
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png",
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644736330-txdt5oh8fxf.jpeg",
-  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644887019-4a66l4as62x.jpeg",
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644886610-z4sclqo0agd.jpeg",
   "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774644342791-8xlklgstn5y.jpeg",
 ];
 
