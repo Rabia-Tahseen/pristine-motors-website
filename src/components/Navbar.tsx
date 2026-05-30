@@ -58,16 +58,15 @@ const Navbar = () => {
     return a.slice(0, 6);
   };
 
-  // ✅ Fix 2 & 3: always navigate in finally, so redirect happens even if signOut throws
   const handleLogout = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    } finally {
-      navigate("/login");
-    }
-  };
+  try {
+    await signOut();
+  } catch (error) {
+    console.error("Logout failed:", error);
+  } finally {
+    navigate("/"); 
+  }
+};
 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#081120] via-[#13264a] to-[#081120] backdrop-blur-xl">
