@@ -20,15 +20,13 @@ const Hero = () => {
   const navigate = useNavigate();
   const fullText = "Search cars or parts...";
 
-  // Preload images
   useEffect(() => {
     SLIDE_IMAGES.forEach((src) => {
       const img = new Image();
       img.src = src;
     });
-  }, []); // ✅ moved before slideshow effect, empty deps array
+  }, []);
 
-  // Slideshow auto-advance
   useEffect(() => {
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
@@ -36,7 +34,6 @@ const Hero = () => {
     return () => clearInterval(t);
   }, []);
 
-  // Typewriter placeholder
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -56,7 +53,7 @@ const Hero = () => {
     try {
       navigate(isCar ? `/cars?search=${q}` : `/parts?search=${q}`);
     } finally {
-      setLoading(false); // ✅ always resets, even if navigate throws
+      setLoading(false);
     }
   };
 
@@ -67,23 +64,23 @@ const Hero = () => {
 
       {/* SLIDESHOW */}
       <div className="absolute inset-0">
-          {SLIDE_IMAGES.map((src, i) => {
-  const active = i === index;
-  return (
-    <motion.img
-      key={src}
-      src={src}
-      className="absolute inset-0 w-full h-full object-cover"
-      initial={false}
-      animate={{
-        opacity: active ? 1 : 0,
-        scale: active ? 1.05 : 1.12,
-        filter: active ? "blur(0px)" : "blur(8px)",
-      }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
-    />
-  );
-})}
+        {SLIDE_IMAGES.map((src, i) => {
+          const active = i === index;
+          return (
+            <motion.img
+              key={src}
+              src={src}
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={false}
+              animate={{
+                opacity: active ? 1 : 0,
+                scale: active ? 1.05 : 1.12,
+                filter: active ? "blur(0px)" : "blur(8px)",
+              }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+            />
+          );
+        })}
       </div>
 
       {/* OVERLAY */}
@@ -92,18 +89,18 @@ const Hero = () => {
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
 
-      {/* TITLE */}
-<motion.h1
-  initial={{ opacity: 0, y: 18 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.65 }}
-  className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
-  style={{
-    textShadow: "0 0 18px rgba(96,165,250,0.55), 0 2px 16px rgba(0,0,0,0.7)",
-  }}
->
-  Premium Cars & Auto Parts
-</motion.h1>
+        {/* TITLE */}
+        <motion.h1
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65 }}
+          className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
+          style={{
+            textShadow: "0 0 18px rgba(96,165,250,0.55), 0 2px 16px rgba(0,0,0,0.7)",
+          }}
+        >
+          Premium Cars & Auto Parts
+        </motion.h1>
 
         {/* SEARCH BAR */}
         <motion.div
