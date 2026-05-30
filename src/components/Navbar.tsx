@@ -121,15 +121,12 @@ const Navbar = () => {
           <Link to="/" className={navLink("/")}>Home</Link>
 
           {/* CARS */}
-          <div className="relative group flex items-center">
+         <div className="relative group flex items-center py-4">
             <Link to="/cars" className={navLink("/cars")}>
               Cars <ChevronDown size={14} />
             </Link>
-            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3
-opacity-0 pointer-events-none
-group-hover:opacity-100 group-hover:pointer-events-auto
-transition-opacity duration-200 ease-out z-50">
-              <div className="w-64 rounded-2xl border border-white/20 bg-[#1f315d] shadow-xl">
+           <div className="absolute left-1/2 -translate-x-1/2 top-full mt-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition z-50">
+  <div className="w-64 rounded-2xl border border-white/20 bg-[#1f315d] shadow-xl">
                 <div className="px-5 py-3 border-b border-white/10 text-white text-sm font-semibold">Car Brands</div>
                 {carBrands.map((brand) => (
                   <Link key={brand} to={`/cars?brand=${brand}`} className="block px-5 py-2 text-sm text-white/80 hover:bg-white/10">
@@ -141,15 +138,12 @@ transition-opacity duration-200 ease-out z-50">
           </div>
 
           {/* PARTS */}
-          <div className="relative group flex items-center">
+         <div className="relative group flex items-center py-4">
             <Link to="/parts" className={navLink("/parts")}>
               Parts <ChevronDown size={14} />
             </Link>
-            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3
-opacity-0 pointer-events-none
-group-hover:opacity-100 group-hover:pointer-events-auto
-transition-opacity duration-200 ease-out z-50">
-              <div className="w-64 rounded-2xl border border-white/20 bg-[#1f315d] shadow-xl">
+            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition z-50">
+  <div className="w-64 rounded-2xl border border-white/20 bg-[#1f315d] shadow-xl">
                 <div className="px-5 py-3 border-b border-white/10 text-white text-sm font-semibold">Categories</div>
                 {partCategories.map((cat) => (
                   <Link key={cat} to={`/parts?category=${cat}`} className="block px-5 py-2 text-sm text-white/80 hover:bg-white/10">
