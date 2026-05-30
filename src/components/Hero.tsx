@@ -61,8 +61,8 @@ const Hero = () => {
           src={SLIDE_IMAGES[index]}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 1.4, ease: "easeInOut" }}
+          exit={{ opacity: 0, scale: 0.5 }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
           className="absolute inset-0 w-full h-full object-cover"
         />
       </AnimatePresence>
