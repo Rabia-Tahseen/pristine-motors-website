@@ -63,10 +63,10 @@ const Hero = () => {
 
       {/* BACKGROUND SLIDESHOW */}
       <AnimatePresence mode="wait">
-       <motion.img
+     <motion.img
   key={SLIDE_IMAGES[index]}
   src={SLIDE_IMAGES[index]}
-  initial={{ opacity: 0, scale: 1.08, filter: "blur(10px)" }}
+  initial={{ opacity: 0, scale: 1.03, filter: "blur(6px)" }}
   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
   exit={{ opacity: 0 }}
   transition={{ duration: 0.9, ease: "easeOut" }}
