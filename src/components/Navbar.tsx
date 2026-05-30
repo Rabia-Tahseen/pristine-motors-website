@@ -4,7 +4,6 @@ import { Menu, X, ShoppingCart, User, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import logo from "@/assets/image.png";
 
 const Navbar = () => {
@@ -12,12 +11,30 @@ const Navbar = () => {
   const [carBrands, setCarBrands] = useState<string[]>([]);
   const [partCategories, setPartCategories] = useState<string[]>([]);
 
+  // ✅ own local user state, read directly from Supabase
+  const [user, setUser] = useState<any>(null);
+
   const location = useLocation();
   const navigate = useNavigate();
   const { totalItems } = useCart();
-  const { user, signOut } = useAdminAuth();
 
   const activePath = location.pathname;
+
+  // ✅ listen to Supabase session directly, no AdminAuthContext
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchDropdownData = async () => {
@@ -58,15 +75,16 @@ const Navbar = () => {
     return a.slice(0, 6);
   };
 
+  // ✅ calls Supabase directly, navigates home
   const handleLogout = async () => {
-  try {
-    await signOut();
-  } catch (error) {
-    console.error("Logout failed:", error);
-  } finally {
-    navigate("/"); 
-  }
-};
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      navigate("/");
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#081120] via-[#13264a] to-[#081120] backdrop-blur-xl">
@@ -200,8 +218,7 @@ const Navbar = () => {
                   </Link>
                 </div>
               ) : (
-                // ✅ Fix 4: close menu BEFORE navigating so setMobileOpen
-                //    never runs on an unmounted component
+                // ✅ close menu first, then logout
                 <button
                   onClick={() => {
                     setMobileOpen(false);
