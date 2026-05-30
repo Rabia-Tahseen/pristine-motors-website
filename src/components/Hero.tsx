@@ -69,7 +69,7 @@ const Hero = () => {
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
   exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeOut" } }}
-  transition={{ duration: 1.2, ease: "easeIn" }}
+  transition={{ duration: 1.0, ease: "easeIn" }}
   className="absolute inset-0 w-full h-full object-cover"
 />
       </AnimatePresence>
