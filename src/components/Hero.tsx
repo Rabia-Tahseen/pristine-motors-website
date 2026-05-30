@@ -70,18 +70,19 @@ const Hero = () => {
         {SLIDE_IMAGES.map((src, i) => {
           const active = i === index;
           return (
-            <motion.img
-              key={src}
-              src={src}
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={false}
-              animate={{
-                opacity: active ? 1 : 0,
-                scale: active ? 1.05 : 1.12,
-                filter: active ? "blur(0px)" : "blur(12px)",
-              }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
+            {/* inside SLIDE_IMAGES.map */}
+<motion.img
+  key={src}
+  src={src}
+  className="absolute inset-0 w-full h-full object-cover"
+  initial={false}
+  animate={{
+    opacity: active ? 1 : 0,
+    scale: active ? 1.05 : 1.12,
+    filter: active ? "blur(0px)" : "blur(8px)", // ✅ reduced
+  }}
+  transition={{ duration: 1.5, ease: "easeInOut" }}
+/>
           );
         })}
       </div>
@@ -92,15 +93,18 @@ const Hero = () => {
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
 
-        {/* TITLE */}
-        <motion.h1
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65 }}
-          className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)]"
-        >
-          Premium Cars &amp; Auto Parts {/* ✅ fixed &amp; */}
-        </motion.h1>
+      {/* TITLE */}
+<motion.h1
+  initial={{ opacity: 0, y: 18 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.65 }}
+  className="text-[22px] sm:text-[30px] md:text-[40px] font-semibold leading-[1.05] tracking-tight"
+  style={{
+    textShadow: "0 0 18px rgba(96,165,250,0.55), 0 2px 16px rgba(0,0,0,0.7)",
+  }}
+>
+  Premium Cars & Auto Parts
+</motion.h1>
 
         {/* SEARCH BAR */}
         <motion.div
