@@ -1,28 +1,53 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 
 const Profile = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // ✅ own local user state, read directly from Supabase
   const [user, setUser] = useState<any>(null);
   const [orders, setOrders] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  // ✅ get user from Supabase session directly
+  // ✅ check role — if admin, redirect away from public profile
+  const resolveUser = async (sessionUser: any) => {
+    if (!sessionUser) {
+      setUser(null);
+      setAuthChecked(true);
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", sessionUser.id)
+      .maybeSingle();
+
+    if (profile?.role === "admin") {
+      // admin shouldn't be on public profile page
+      setUser(null);
+      setAuthChecked(true);
+      navigate("/"); // send them back home
+    } else {
+      setUser(sessionUser);
+      setAuthChecked(true);
+    }
+  };
+
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      await resolveUser(user);
     };
 
     getUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      resolveUser(session?.user ?? null);
     });
 
     return () => listener.subscription.unsubscribe();
@@ -66,6 +91,9 @@ const Profile = () => {
 
     return () => { supabase.removeChannel(channel); };
   }, [user?.id]);
+
+  // ✅ wait for auth check before showing anything
+  if (!authChecked) return null;
 
   if (!user) {
     return (
