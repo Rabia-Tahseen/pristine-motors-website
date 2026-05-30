@@ -60,7 +60,7 @@ const Hero = () => {
 
   return (
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-neutral-950">
-  {/* BASE BACKGROUND (always visible, no flicker) */}
+{/* BASE BACKGROUND */}
 <div className="absolute inset-0 bg-gradient-to-br from-[#0b1b3a] via-[#1e3a8a] to-[#0ea5e9]" />
 
 {/* SLIDESHOW */}
@@ -76,12 +76,10 @@ const Hero = () => {
         initial={false}
         animate={{
           opacity: active ? 1 : 0,
-          scale: active ? 1.06 : 1.12,
+          scale: active ? 1.05 : 1.1,
+          filter: active ? "blur(0px)" : "blur(8px)",
         }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{
-          filter: active ? "blur(0px)" : "blur(10px)",
-        }}
+        transition={{ duration: 1.4, ease: "easeOut" }}
       />
     );
   })}
