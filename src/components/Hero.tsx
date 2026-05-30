@@ -21,7 +21,6 @@ const Hero = () => {
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
   // Preload images
