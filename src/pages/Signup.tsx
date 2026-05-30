@@ -62,10 +62,20 @@ const Signup = () => {
       });
 
       if (error) {
-        setGeneralError(error.message);
-        setLoading(false);
-        return;
-      }
+  // Existing account
+  if (
+    error.message.toLowerCase().includes("already") ||
+    error.message.toLowerCase().includes("registered") ||
+    error.message.toLowerCase().includes("exists")
+  ) {
+    navigate(`/login?email=${encodeURIComponent(email.trim())}`);
+    return;
+  }
+
+  setGeneralError(error.message);
+  setLoading(false);
+  return;
+}
 
       if (data.user) {
         setSuccess("Account created successfully!");
