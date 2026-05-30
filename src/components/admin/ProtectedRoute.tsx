@@ -4,10 +4,13 @@ import { useAdminAuth } from "@/contexts/AdminAuthContext";
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, role, loading } = useAdminAuth();
 
-  // ✅ while loading, render nothing but don't redirect yet
+  // ✅ still loading session — wait
   if (loading) return null;
 
+  // ✅ no user at all — go to login immediately, no delay
   if (!user) return <Navigate to="/admin/login" replace />;
+
+  // ✅ user exists but role not admin
   if (role !== "admin") return <Navigate to="/" replace />;
 
   return children;
