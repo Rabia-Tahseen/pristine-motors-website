@@ -2,17 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
-type HeroCar = {
-  images: string[];
-};
-
-const FALLBACK_IMAGE =
-  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png";
+const SLIDE_IMAGES = [
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/ChatGPT%20Image%20May%2017,%202026,%2006_21_53%20PM.png",
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774643340698-4un5ega7765.jpeg",
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774643772275-xm41amkg99a.jpeg",
+  "https://lwmdnsxxwrqqcvmvzqkq.supabase.co/storage/v1/object/public/product-images/products/1774643965283-of0aa48r02.jpeg",
+];
 
 const Hero = () => {
-  const [cars, setCars] = useState<HeroCar[]>([]);
   const [index, setIndex] = useState(0);
   const [query, setQuery] = useState("");
   const [focus, setFocus] = useState(false);
@@ -22,28 +20,13 @@ const Hero = () => {
   const navigate = useNavigate();
   const fullText = "Search cars or parts...";
 
-  // Fetch featured cars for slideshow — exactly from doc 4
+  // Slideshow auto-advance
   useEffect(() => {
-    const fetchCars = async () => {
-      const { data } = await supabase
-        .from("products")
-        .select("images")
-        .eq("product_type", "car")
-        .eq("is_featured", true);
-
-      if (data?.length) setCars(data);
-    };
-    fetchCars();
-  }, []);
-
-  // Slideshow — only runs when we actually have images, exactly from doc 4
-  useEffect(() => {
-    if (cars.length < 2) return;
     const t = setInterval(() => {
-      setIndex((p) => (p + 1) % cars.length);
+      setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
     }, 5500);
     return () => clearInterval(t);
-  }, [cars]);
+  }, []);
 
   // Typewriter placeholder
   useEffect(() => {
@@ -55,10 +38,6 @@ const Hero = () => {
     }, 60);
     return () => clearInterval(interval);
   }, []);
-
-  // Resolve current background — exactly from doc 4
-  const currentImage =
-    cars.length > 0 ? (cars[index].images?.[0] ?? FALLBACK_IMAGE) : FALLBACK_IMAGE;
 
   const handleSearch = () => {
     const q = query.trim();
@@ -75,11 +54,11 @@ const Hero = () => {
   return (
     <section className="relative h-[360px] sm:h-[430px] md:h-[500px] lg:h-[540px] flex items-center justify-center overflow-hidden bg-[#06101f]">
 
-      {/* BACKGROUND SLIDESHOW — from doc 4, exit scale added */}
+      {/* BACKGROUND SLIDESHOW */}
       <AnimatePresence mode="wait">
         <motion.img
-          key={currentImage}
-          src={currentImage}
+          key={SLIDE_IMAGES[index]}
+          src={SLIDE_IMAGES[index]}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
@@ -88,10 +67,10 @@ const Hero = () => {
         />
       </AnimatePresence>
 
-      {/* OVERLAY — from doc 5 */}
+      {/* OVERLAY */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/70" />
 
-      {/* CONTENT — from doc 5 */}
+      {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
 
         {/* TITLE */}
@@ -193,29 +172,27 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        {/* SLIDESHOW DOTS — from doc 4, positioned inside content */}
-        {cars.length > 1 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex gap-1.5 mt-5"
-          >
-            {cars.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setIndex(i)}
-                className={`
-                  rounded-full transition-all duration-300
-                  ${i === index
-                    ? "w-5 h-1.5 bg-white"
-                    : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                  }
-                `}
-              />
-            ))}
-          </motion.div>
-        )}
+        {/* SLIDESHOW DOTS */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex gap-1.5 mt-5"
+        >
+          {SLIDE_IMAGES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`
+                rounded-full transition-all duration-300
+                ${i === index
+                  ? "w-5 h-1.5 bg-white"
+                  : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
+                }
+              `}
+            />
+          ))}
+        </motion.div>
 
       </div>
     </section>
