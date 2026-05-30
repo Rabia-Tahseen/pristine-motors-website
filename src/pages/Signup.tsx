@@ -79,7 +79,7 @@ setSuccess("Account created successfully!");
 setTimeout(() => {
   navigate(`/login?email=${encodeURIComponent(email.trim())}`);
 }, 1200);
-      }
+
     } catch (err) {
       setGeneralError("Something went wrong");
     } finally {
