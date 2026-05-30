@@ -54,7 +54,7 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* OVERLAY — slightly darker than before */}
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
       {/* CONTENT */}
