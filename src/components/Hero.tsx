@@ -24,7 +24,7 @@ const Hero = () => {
   useEffect(() => {
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % SLIDE_IMAGES.length);
-    }, 6000);
+    }, 6500);
     return () => clearInterval(t);
   }, []);
 
@@ -65,20 +65,25 @@ const Hero = () => {
 
 {/* SLIDESHOW */}
 <div className="absolute inset-0">
-  {SLIDE_IMAGES.map((src, i) => (
-    <motion.img
-      key={src}
-      src={src}
-      className="absolute inset-0 w-full h-full object-cover"
-      initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
-      animate={{
-        opacity: i === index ? 1 : 0,
-        scale: i === index ? 1.03 : 1.1,
-        filter: i === index ? "blur(0px)" : "blur(8px)",
-      }}
-      transition={{ duration: 1.5, ease: "easeOut" }}
-    />
-  ))}
+  {SLIDE_IMAGES.map((src, i) => {
+    const active = i === index;
+
+    return (
+      <motion.img
+        key={src}
+        src={src}
+        className="absolute inset-0 w-full h-full object-cover"
+        animate={{
+          opacity: active ? 1 : 0,
+          scale: active ? 1.05 : 1.15,
+        }}
+        transition={{ duration: 1.4, ease: "easeOut" }}
+        style={{
+          filter: active ? "blur(0px)" : "blur(12px)",
+        }}
+      />
+    );
+  })}
 </div>
       {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/60" />
 
