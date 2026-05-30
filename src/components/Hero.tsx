@@ -68,7 +68,7 @@ const Hero = () => {
   src={SLIDE_IMAGES[index]}
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
-  exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeOut" } }}
+  exit={{ opacity: 0, transition: { duration: 0.7, ease: "easeOut" } }}
   transition={{ duration: 0.8, ease: "easeIn" }}
   className="absolute inset-0 w-full h-full object-cover"
 />
@@ -177,28 +177,6 @@ const Hero = () => {
           >
             Explore Parts
           </Link>
-        </motion.div>
-
-        {/* SLIDESHOW DOTS */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="flex gap-1.5 mt-5"
-        >
-          {SLIDE_IMAGES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`
-                rounded-full transition-all duration-300
-                ${i === index
-                  ? "w-5 h-1.5 bg-white"
-                  : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                }
-              `}
-            />
-          ))}
         </motion.div>
 
       </div>
