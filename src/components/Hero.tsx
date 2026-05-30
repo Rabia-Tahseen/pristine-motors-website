@@ -79,13 +79,13 @@ const Hero = () => {
         }}
         transition={{ duration: 1.4, ease: "easeOut" }}
         style={{
-          filter: active ? "blur(0px)" : "blur(12px)",
+          filter: active ? "blur(0px)" : "blur(8px)",
         }}
       />
     );
   })}
 </div>
-      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/60" />
+      {/* OVERLAY */}<div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/60" />
 
       {/* CONTENT */}
       <div className="relative z-10 w-full px-4 flex flex-col items-center text-center text-white -mt-8 sm:-mt-10 md:-mt-12">
