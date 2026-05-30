@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const navigate = useNavigate();
-
+const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(
+  searchParams.get("email") || ""
+);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
