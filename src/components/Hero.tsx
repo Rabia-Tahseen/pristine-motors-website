@@ -57,44 +57,43 @@ const Hero = () => {
       <div className="absolute inset-0 bg-black/50" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
 
-      {/* CONTENT */}
-      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white">
+      {/* CONTENT — shifted up with -mt */}
+      <div className="relative z-10 w-full px-6 flex flex-col items-center text-center text-white -mt-10 sm:-mt-12 md:-mt-14">
 
-        {/* TITLE — lighter weight, more elegant */}
+        {/* TITLE */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
           className="
             text-[26px] sm:text-[34px] md:text-[44px]
-            font-semibold
-            leading-tight tracking-tight
-            drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]
-            mb-7
+            font-semibold leading-tight tracking-tight
+            drop-shadow-[0_2px_20px_rgba(0,0,0,0.55)]
+            mb-6
           "
         >
           Premium Cars &amp; Auto Parts
         </motion.h1>
 
-        {/* SEARCH BAR — taller, more spacious */}
+        {/* SEARCH BAR — pill shape, search button flush inside */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6 }}
           className={`
             flex items-center
-            rounded-2xl overflow-hidden
+            rounded-full overflow-hidden
             w-full max-w-[600px]
-            h-[56px] sm:h-[60px]
+            h-[52px] sm:h-[56px]
             transition-all duration-300
             ${focus
-              ? "shadow-[0_0_0_3px_rgba(96,165,250,0.35),0_8px_32px_rgba(0,0,0,0.4)] bg-white"
-              : "shadow-[0_4px_32px_rgba(0,0,0,0.45)] bg-white"
+              ? "shadow-[0_0_0_3px_rgba(96,165,250,0.4),0_8px_32px_rgba(0,0,0,0.4)] bg-white"
+              : "shadow-[0_4px_28px_rgba(0,0,0,0.5)] bg-white"
             }
           `}
         >
-          <div className="pl-5 pr-3 flex items-center text-gray-400 flex-shrink-0">
-            <Search size={18} />
+          <div className="pl-5 pr-2 flex items-center text-gray-400 flex-shrink-0">
+            <Search size={17} />
           </div>
 
           <input
@@ -110,26 +109,24 @@ const Hero = () => {
             className="flex-1 h-full px-1 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
           />
 
-          <div className="pr-2 flex-shrink-0">
-            <button
-              onClick={handleSearch}
-              className="
-                h-[44px] px-6
-                rounded-xl
-                bg-[#0b1b3a] text-white
-                text-sm font-semibold
-                hover:bg-[#162d5e]
-                transition-colors duration-200
-                whitespace-nowrap
-              "
-            >
-              {loading ? (
-                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                "Search"
-              )}
-            </button>
-          </div>
+          <button
+            onClick={handleSearch}
+            className="
+              flex-shrink-0 h-full px-6 sm:px-8
+              rounded-r-full
+              bg-[#0b1b3a] text-white
+              text-sm font-semibold
+              hover:bg-[#162d5e]
+              transition-colors duration-200
+              whitespace-nowrap
+            "
+          >
+            {loading ? (
+              <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              "Search"
+            )}
+          </button>
         </motion.div>
 
         {/* CTA BUTTONS */}
@@ -139,23 +136,23 @@ const Hero = () => {
           transition={{ delay: 0.25, duration: 0.6 }}
           className="flex gap-3 mt-5"
         >
-          {/* Primary — navy with white border so it pops off the dark overlay */}
+          {/* Primary — navy with white border outline */}
           <Link
             to="/cars"
             className="
               px-7 py-2.5 rounded-xl
               font-semibold text-sm
               bg-[#0b1b3a] text-white
-              border-2 border-white/40
+              border-2 border-white/50
               shadow-lg shadow-black/30
-              hover:bg-[#162d5e] hover:border-white/70 hover:-translate-y-px
+              hover:bg-[#162d5e] hover:border-white/80 hover:-translate-y-px
               transition-all duration-200
             "
           >
             Explore Cars
           </Link>
 
-          {/* Secondary — white, clearly different */}
+          {/* Secondary — solid white */}
           <Link
             to="/parts"
             className="
